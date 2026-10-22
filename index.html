@@ -133,6 +133,11 @@
     display: inline-block; min-width: 42px; text-align: center; padding: 6px 8px; border-radius: 3px;
     font: 500 13px var(--mono); border: 1px solid var(--line); color: var(--muted);
   }
+  .chip-botao {
+    min-width: 42px; text-align: center; padding: 6px 10px; border-radius: 3px; cursor: pointer;
+    font: 500 13px var(--mono); border: 1px solid var(--line); color: var(--muted); background: none;
+  }
+  .chip-botao[aria-pressed="true"] { background: var(--brass-soft); border-color: var(--brass); color: var(--ink); }
   .chip input:checked + span { background: var(--brass-soft); border-color: var(--brass); color: var(--ink); }
 
   .aviso { font-size: 14px; color: var(--warn); margin: 0; }
@@ -163,6 +168,7 @@
   <nav class="modos" role="tablist">
     <button role="tab" id="modeNote" aria-selected="true">Nota</button>
     <button role="tab" id="modeInterval" aria-selected="false">Intervalo</button>
+    <button role="tab" id="modeMelody" aria-selected="false">Melodia</button>
   </nav>
 
   <section class="palco">
@@ -217,8 +223,14 @@
     <div class="grupo">
       <span class="rotulo">Som</span>
       <label class="linha"><input type="checkbox" id="drone"> Som contínuo</label>
-      <p class="nota-rodape" id="droneHelp">A nota de referência fica soando enquanto você toca: bom pra ouvir a afinação batendo. No modo Intervalo, quem fica soando é a primeira nota.</p>
+      <p class="nota-rodape" id="droneHelp">A nota de referência fica soando enquanto você toca: bom pra ouvir a afinação batendo. No Intervalo, quem fica soando é a primeira nota; na Melodia, a tônica.</p>
       <p class="aviso" id="droneWarn" hidden>Use fone de ouvido. Sem fone, o microfone pode ouvir a caixa de som e marcar acerto sozinho.</p>
+    </div>
+
+    <div class="grupo" id="melodySettings" hidden>
+      <span class="rotulo">Notas na melodia</span>
+      <div class="chips" id="lengthChips"></div>
+      <p class="nota-rodape">A melodia fica num tom maior, anda mais por notas vizinhas e termina na tônica. A primeira nota aparece na pauta; as outras surgem conforme você acerta.</p>
     </div>
 
     <div class="grupo" id="intervalSettings" hidden>
@@ -256,14 +268,14 @@ const SVGNS = "http://www.w3.org/2000/svg";
 const $ = id => document.getElementById(id);
 const settings = {
   offset: 9, range: "60-84", naturals: false, anyOctave: true, drone: false,
-  mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up",
+  mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
 };
 try { Object.assign(settings, JSON.parse(localStorage.getItem("ouvido-sax") || "{}")); } catch {}
 const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.stringify(settings)); } catch {} };
 
 let ctx = null, analyser = null, stream = null, source = null, buf = null;
 let round = null, solved = false, revealed = false, mutedUntil = 0, holdStart = 0;
-let drone = null, nextTimer = 0, heard = null;
+let drone = null, nextTimer = 0, heard = null, follower = null;
 let hits = 0, streak = 0, skips = 0;
 
 const letter = midi => `${LETTERS[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
@@ -370,7 +382,12 @@ function playRound() {
   if (!round || !ctx) return;
   stopDrone();
   const now = ctx.currentTime + 0.05;
-  if (round.base === null) {
+  if (round.melody) {
+    let end = now;
+    round.melody.forEach((n, i) => { end = tone(n, end, i === round.melody.length - 1 ? 0.9 : 0.48) + 0.04; });
+    mutedUntil = performance.now() + (end - ctx.currentTime) * 1000 + 350;
+    if (settings.drone) startDrone(round.tonic, end + 0.15);
+  } else if (round.base === null) {
     if (settings.drone) { startDrone(round.target, now); mutedUntil = performance.now() + 400; }
     else mutedUntil = performance.now() + (tone(round.target, now, 1.3) - ctx.currentTime) * 1000 + 350;
   } else {
@@ -394,6 +411,67 @@ async function openMic() {
   source.connect(analyser);
 }
 
+/* ---------- Melodia ---------- */
+
+const MAJOR = [0, 2, 4, 5, 7, 9, 11];
+const MELODY_KEYS = [0, 7, 2, 9, 4];   // Dó, Sol, Ré, Lá e Mi maior: só sustenidos na armadura
+const degreeToSemitones = d => { const o = Math.floor(d / 7); return 12 * o + MAJOR[d - 7 * o]; };
+const pick = list => list[Math.floor(Math.random() * list.length)];
+
+/* Inventa uma melodia curta que soa como melodia: anda mais por nota vizinha
+   do que por salto, volta depois de um salto grande e termina na tônica. Não
+   repete nota seguida, para cada nota ser uma resposta separada. Devolve null
+   se a melodia não couber na faixa. */
+function generateMelody(low, high, length, onlyNaturals) {
+  const steps = [1, 1, 1, 1, 2, 2, 3, 4];
+  for (let attempt = 0; attempt < 60; attempt++) {
+    const degrees = [pick([0, 2, 4])];
+    let lastMove = 0;
+    while (degrees.length < length - 2) {
+      const prev = degrees[degrees.length - 1];
+      const leapBefore = Math.abs(lastMove) >= 3;
+      const next = prev + (leapBefore ? -Math.sign(lastMove) : pick([1, -1])) * (leapBefore ? 1 : pick(steps));
+      if (next < -3 || next > 9) continue;
+      degrees.push(next);
+      lastMove = next - prev;
+    }
+    const beforeLast = degrees[degrees.length - 1];
+    const penultimate = [-1, 1, 4, 6, 8].filter(d => d !== beforeLast)
+      .reduce((a, b) => Math.abs(b - beforeLast) < Math.abs(a - beforeLast) ? b : a);
+    degrees.push(penultimate, Math.abs(penultimate) <= Math.abs(penultimate - 7) ? 0 : 7);
+
+    const offsets = degrees.map(degreeToSemitones);
+    const tonics = [];
+    for (let t = low - Math.min(...offsets); t <= high - Math.max(...offsets); t++) {
+      if (onlyNaturals ? t % 12 === 0 : MELODY_KEYS.includes(t % 12)) tonics.push(t);
+    }
+    if (tonics.length) { const tonic = pick(tonics); return { notes: offsets.map(o => tonic + o), tonic }; }
+  }
+  return null;
+}
+
+/* Confere uma melodia tocada nota por nota. A nota só conta quando fica
+   firme por um instante, e errar não volta ao começo: tenta-se de novo a
+   mesma posição. */
+function makeFollower(notes) {
+  let stable = null, since = 0, counted = null;
+  const f = { progress: 0 };
+  f.hear = (written, now) => {
+    if (f.progress >= notes.length) return null;
+    if (written === null) { stable = null; counted = null; return null; }
+    const nearest = Math.round(written);
+    if (Math.abs(written - nearest) > 0.4) return null;
+    if (nearest !== stable) { stable = nearest; since = now; return null; }
+    if (now - since < 120 || nearest === counted) return null;
+    counted = nearest;
+    let diff = nearest - notes[f.progress];
+    if (settings.anyOctave) diff = ((diff % 12) + 18) % 12 - 6;
+    if (diff === 0) { f.progress++; return "certa"; }
+    return "errada";
+  };
+  return f;
+}
+
 /* ---------- Rodadas ---------- */
 
 function rangeBounds() { return settings.range.split("-").map(Number); }
@@ -409,6 +487,10 @@ function pickRound() {
     let t;
     do { t = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && round && t === round.target);
     return { base: null, target: t, interval: null };
+  }
+  if (settings.mode === "melody") {
+    const m = generateMelody(lo, hi, settings.melodyLength, settings.naturals);
+    return m && { base: null, melody: m.notes, tonic: m.tonic, target: m.notes[0] };
   }
   const chosen = INTERVALS.filter(i => settings.intervals.includes(i.st));
   const options = [];
@@ -427,9 +509,13 @@ function newRound() {
   round = pickRound();
   solved = false; revealed = false; holdStart = 0;
   setStatus("");
+  follower = round?.melody ? makeFollower(round.melody) : null;
   if (!round) {
-    $("targetName").textContent = "Sem intervalo";
-    $("targetHint").textContent = "Marque pelo menos um intervalo que caiba na faixa de notas.";
+    const melody = settings.mode === "melody";
+    $("targetName").textContent = melody ? "Sem melodia" : "Sem intervalo";
+    $("targetHint").textContent = melody
+      ? "Nenhuma melodia coube nessa faixa de notas."
+      : "Marque pelo menos um intervalo que caiba na faixa de notas.";
     drawStaff();
     return;
   }
@@ -454,7 +540,14 @@ function setStatus(text, kind = "") {
 
 function renderTarget() {
   const r = round;
-  if (r.base === null) {
+  if (r.melody) {
+    $("staffLabel").textContent = "Melodia";
+    const done = follower ? follower.progress : 0;
+    $("targetName").textContent = revealed ? "Melodia completa" : `${done} de ${r.melody.length}`;
+    $("targetHint").textContent = revealed
+      ? r.melody.map(n => NAMES[n % 12]).join(" · ")
+      : `Começa em ${NAMES[r.melody[0] % 12]}. Toque a melodia inteira, na ordem.`;
+  } else if (r.base === null) {
     $("staffLabel").textContent = "Nota pedida";
     $("targetName").textContent = revealed ? `${NAMES[r.target % 12]} · ${letter(r.target)}` : "?";
     $("targetHint").textContent = revealed ? "Resposta" : "Ouça e toque a mesma nota";
@@ -506,6 +599,16 @@ function drawStaff() {
   svg.append(el("text", { x: 12, y: 142, class: "clave" }, "𝄞"));
   if (!round) return;
 
+  if (round.melody) {
+    const n = round.melody.length, done = follower ? follower.progress : 0;
+    const xs = round.melody.map((_, i) => 140 + i * (195 / (n - 1)));
+    round.melody.forEach((note, i) => {
+      if (i === 0 || i < done || revealed) drawNote(svg, note, xs[i], i < done || revealed ? "alvo" : "");
+      else svg.append(el("text", { x: xs[i], y: 40, "text-anchor": "middle", class: "interrogacao", style: "font-size:30px" }, "?"));
+    });
+    if (!revealed && done < n && heard !== null && heard >= 50 && heard <= 96) drawNote(svg, heard, xs[done], "escuta");
+    return;
+  }
   const single = round.base === null;
   const targetX = single ? 220 : 270;
   if (!single) {
@@ -583,7 +686,17 @@ function listen() {
   if (newHeard !== heard) { heard = newHeard; if (round && !revealed) drawStaff(); }
 
   let held = 0;
-  if (written !== null && round && !solved) {
+  if (follower && !solved) {
+    const result = follower.hear(written, now);
+    if (result === "certa") {
+      setStatus("");
+      renderTarget();
+      if (follower.progress >= round.melody.length) markSolved();
+    } else if (result === "errada") {
+      setStatus(`Errou a ${follower.progress + 1}ª nota`, "quase");
+    }
+    held = follower.progress / round.melody.length;
+  } else if (written !== null && round && !solved) {
     let diff = written - round.target;
     if (settings.anyOctave) diff = ((diff % 12) + 18) % 12 - 6;
     const right = Math.abs(diff * 100) <= TOLERANCE;
@@ -613,13 +726,24 @@ function applySettingsToForm() {
   $("drone").checked = settings.drone;
   $("direction").value = settings.direction;
   $("droneWarn").hidden = !settings.drone;
-  const interval = settings.mode === "interval";
-  $("modeNote").setAttribute("aria-selected", String(!interval));
-  $("modeInterval").setAttribute("aria-selected", String(interval));
-  $("intervalSettings").hidden = !interval;
+  for (const [id, mode] of MODES) $(id).setAttribute("aria-selected", String(settings.mode === mode));
+  $("intervalSettings").hidden = settings.mode !== "interval";
+  $("melodySettings").hidden = settings.mode !== "melody";
+  for (const b of $("lengthChips").children) b.setAttribute("aria-pressed", String(Number(b.dataset.n) === settings.melodyLength));
 }
 
+const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"]];
+
 function buildChips() {
+  for (const n of [4, 5, 6]) {
+    const b = document.createElement("button");
+    b.className = "chip-botao"; b.dataset.n = n; b.textContent = `${n} notas`;
+    b.addEventListener("click", () => {
+      settings.melodyLength = n; saveSettings(); applySettingsToForm();
+      if (ctx) newRound();
+    });
+    $("lengthChips").append(b);
+  }
   for (const iv of INTERVALS) {
     const wrap = document.createElement("label");
     wrap.className = "chip"; wrap.title = iv.name;
@@ -657,7 +781,7 @@ $("drone").addEventListener("change", async e => {
   saveSettings(); applySettingsToForm();
   if (ctx) { try { await openMic(); } catch {} playRound(); }
 });
-for (const [id, mode] of [["modeNote", "note"], ["modeInterval", "interval"]]) {
+for (const [id, mode] of MODES) {
   $(id).addEventListener("click", () => {
     if (settings.mode === mode) return;
     settings.mode = mode; saveSettings(); applySettingsToForm();
