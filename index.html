@@ -2,288 +2,714 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Treino de Ouvido Sax</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ouvido · treino no sax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Noto+Music&display=swap">
 <style>
-  /* Layout: uma coluna central, a nota-alvo em destaque e o afinador logo abaixo */
+  /* Layout: palco em duas colunas (pauta | mostrador) que vira uma coluna no
+     celular; ajustes ficam abaixo, agrupados por assunto. */
   :root {
-    --bg: #f3f5f4; --surface: #ffffff; --fg: #18221e; --muted: #5d6b65;
-    --accent: #b8860b; --ok: #1f8a4c; --bad: #b3402f; --line: #d6ddd9;
-    --font: "Segoe UI", system-ui, sans-serif;
-    --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    --bg: #eceee9; --surface: #fbfbf8; --ink: #14201c; --muted: #5a6963;
+    --line: #d2d8d3; --brass: #9a710d; --brass-soft: #f0e2b6; --ok: #1d8a52; --warn: #b4601a;
+    --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+    --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    --music: "Noto Music", "Segoe UI Symbol", serif;
+    color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #121815; --surface: #1b2420; --fg: #e8eeeb; --muted: #95a39c;
-      --accent: #e0b44a; --ok: #4cc283; --bad: #ec7a66; --line: #2c3833; color-scheme: dark; }
+    :root:not([data-theme="light"]) {
+      --bg: #0c1413; --surface: #141f1d; --ink: #ebeee6; --muted: #8d9e98;
+      --line: #25332f; --brass: #e2b443; --brass-soft: #3a3118; --ok: #52d18c; --warn: #f0a35a;
+      color-scheme: dark;
+    }
   }
+  :root[data-theme="dark"] {
+    --bg: #0c1413; --surface: #141f1d; --ink: #ebeee6; --muted: #8d9e98;
+    --line: #25332f; --brass: #e2b443; --brass-soft: #3a3118; --ok: #52d18c; --warn: #f0a35a;
+    color-scheme: dark;
+  }
+
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--font); }
-  main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; display: grid; gap: 20px; }
-  h1 { font-size: 1.4rem; margin: 0; text-wrap: balance; }
-  .sub { color: var(--muted); margin: 0; font-size: .92rem; }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 16px; }
-  .settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-  label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-  select, button { font: inherit; }
-  select { padding: 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
-  .check { display: flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-size: .92rem; color: var(--fg); }
-  .target { text-align: center; display: grid; gap: 4px; }
-  .target .big { font-size: 3.2rem; font-weight: 700; line-height: 1.1; min-height: 3.5rem; }
-  .target .hint { color: var(--muted); font-size: .9rem; min-height: 1.4em; }
-  .status { text-align: center; font-weight: 600; min-height: 1.5em; }
-  .status.ok { color: var(--ok); } .status.bad { color: var(--bad); }
-  .heard { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
-  .heard .note { font-family: var(--mono); font-size: 1.4rem; min-width: 5.5ch; }
-  .meter { position: relative; height: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 5px; }
-  .meter::after { content: ""; position: absolute; left: 50%; top: -4px; bottom: -4px; width: 2px; background: var(--muted); }
-  .needle { position: absolute; top: -5px; width: 6px; height: 18px; margin-left: -3px; border-radius: 3px; background: var(--accent); left: 50%; transition: left .08s; }
-  .cents { font-family: var(--mono); font-size: .8rem; color: var(--muted); text-align: right; }
-  .buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; }
-  button.primary { background: var(--accent); border-color: var(--accent); color: #18120a; font-weight: 600; }
-  button:disabled { opacity: .45; cursor: default; }
-  button:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .score { display: flex; justify-content: center; gap: 24px; font-family: var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-  .score b { color: var(--fg); }
-  .tip { font-size: .85rem; color: var(--muted); margin: 0; }
+  html { padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px); }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.5 var(--body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 980px; margin: 0 auto; padding-block: 28px 56px; display: grid; gap: 22px; }
+
+  header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
+  .marca { display: grid; gap: 2px; }
+  .marca h1 {
+    margin: 0; font: 800 clamp(56px, 11vw, 104px)/0.82 var(--display);
+    letter-spacing: 0.01em; text-transform: uppercase; color: var(--brass);
+  }
+  .marca p { margin: 0; color: var(--muted); max-width: 46ch; }
+
+  .instrumento { display: grid; gap: 4px; min-width: 0; }
+
+  .rotulo {
+    font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  }
+  select {
+    font: inherit; padding: 9px 10px; border-radius: 4px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  }
+
+  .modos { display: flex; gap: 0; border-bottom: 1px solid var(--line); }
+  .modos button {
+    font: 700 22px/1 var(--display); letter-spacing: 0.06em; text-transform: uppercase;
+    background: none; border: 0; color: var(--muted); cursor: pointer;
+    padding: 10px 18px 12px; border-bottom: 3px solid transparent; margin-bottom: -1px;
+  }
+  .modos button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brass); }
+
+  .palco { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .palco { grid-template-columns: 1fr; } }
+  .painel {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+    padding: 18px; display: grid; gap: 12px; min-width: 0; align-content: start;
+  }
+  .painel-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+
+  svg { display: block; width: 100%; height: auto; max-width: 100%; }
+  .pauta line { stroke: var(--ink); stroke-width: 1.3; }
+  .pauta .suplementar { stroke-width: 1.6; }
+  .pauta .clave { font: 92px var(--music); fill: var(--ink); }
+  .pauta .cabeca { fill: var(--ink); }
+  .pauta .cabeca.alvo { fill: var(--brass); }
+  .pauta .cabeca.escuta { fill: var(--brass); opacity: 0.35; }
+  .pauta .acidente { font: 30px var(--music); fill: currentColor; }
+  .pauta .interrogacao { font: 800 46px var(--display); fill: var(--brass); }
+  .pauta .nome { font: 600 13px var(--body); fill: var(--muted); }
+
+  .nota-alvo { text-align: center; display: grid; gap: 2px; }
+  .nota-alvo .grande { font: 800 clamp(40px, 7vw, 58px)/1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; }
+  .nota-alvo .pequena { color: var(--muted); font-size: 14px; min-height: 1.5em; }
+
+  .mostrador .trilho { fill: none; stroke: var(--line); stroke-width: 14; stroke-linecap: round; }
+  .mostrador .zona { fill: none; stroke: var(--brass-soft); stroke-width: 14; }
+  .mostrador .centro { fill: none; stroke: var(--brass); stroke-width: 14; }
+  .mostrador .marca-cents { stroke: var(--muted); stroke-width: 1.4; }
+  .mostrador .ponteiro { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; transition: transform 90ms linear; }
+  .mostrador .ponteiro.certo { stroke: var(--ok); }
+  .mostrador .eixo { fill: var(--ink); }
+  .mostrador .ouvida { font: 800 44px var(--display); fill: var(--ink); text-anchor: middle; }
+  .mostrador .cents { font: 500 13px var(--mono); fill: var(--muted); text-anchor: middle; }
+  .mostrador .escala { font: 500 10px var(--mono); fill: var(--muted); text-anchor: middle; }
+
+  .segurar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .segurar div { height: 100%; width: 0; background: var(--ok); transition: width 60ms linear; }
+
+  .status { text-align: center; font: 700 26px/1.1 var(--display); letter-spacing: 0.04em; text-transform: uppercase; min-height: 30px; }
+  .status.ok { color: var(--ok); }
+  .status.quase { color: var(--warn); }
+
+  .acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  button.acao {
+    font: 600 15px/1 var(--body); padding: 12px 18px; border-radius: 4px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  }
+  button.acao.principal { background: var(--brass); border-color: var(--brass); color: var(--bg); font-weight: 600; }
+  button.acao:disabled { opacity: 0.4; cursor: default; }
+  button:focus-visible, select:focus-visible, input:focus-visible + span { outline: 2px solid var(--brass); outline-offset: 2px; }
+  kbd { font: 500 11px var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 1px 4px; margin-left: 6px; }
+
+  .placar { display: flex; justify-content: center; gap: 28px; font: 500 14px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .placar b { color: var(--ink); font-size: 18px; margin-left: 6px; }
+
+  .ajustes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .grupo { display: grid; gap: 10px; align-content: start; }
+  .linha { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+  .linha input { width: 18px; height: 18px; accent-color: var(--brass); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { position: relative; }
+  .chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .chip span {
+    display: inline-block; min-width: 42px; text-align: center; padding: 6px 8px; border-radius: 3px;
+    font: 500 13px var(--mono); border: 1px solid var(--line); color: var(--muted);
+  }
+  .chip input:checked + span { background: var(--brass-soft); border-color: var(--brass); color: var(--ink); }
+
+  .aviso { font-size: 14px; color: var(--warn); margin: 0; }
+  .nota-rodape { font-size: 13px; color: var(--muted); margin: 0; max-width: 70ch; }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
 <main>
   <header>
-    <h1>Treino de ouvido no sax</h1>
-    <p class="sub">A página toca uma nota. Toque a mesma no sax e segure até ela confirmar.</p>
-  </header>
-
-  <section class="card settings">
-    <label>Instrumento
+    <div class="marca">
+      <h1>Ouvido</h1>
+      <p>A página toca, você responde no sax. O microfone escuta e confere a nota.</p>
+    </div>
+    <label class="instrumento">
+      <span class="rotulo">Instrumento</span>
       <select id="instrument">
-        <option value="9" selected>Sax alto (Mi♭)</option>
+        <option value="9">Sax alto (Mi♭)</option>
         <option value="14">Sax tenor (Si♭)</option>
         <option value="2">Sax soprano (Si♭)</option>
         <option value="21">Sax barítono (Mi♭)</option>
         <option value="0">Instrumento em Dó</option>
       </select>
     </label>
-    <label>Notas sorteadas
-      <select id="range">
-        <option value="62-74">Fácil: Ré a Ré (1 oitava)</option>
-        <option value="60-84" selected>Médio: Dó grave a Dó agudo</option>
-        <option value="58-89">Extensão toda: Si♭ a Fá</option>
-      </select>
-    </label>
-    <label>Tipo de nota
-      <select id="scale">
-        <option value="natural">Só naturais (sem #/♭)</option>
-        <option value="all" selected>Todas, com sustenidos</option>
-      </select>
-    </label>
-    <label class="check"><input type="checkbox" id="anyOctave" checked> Aceitar a nota em qualquer oitava</label>
-  </section>
+  </header>
 
-  <section class="card">
-    <div class="target">
-      <div class="big" id="targetName">?</div>
-      <div class="hint" id="targetHint">Clique em Começar e permita o microfone.</div>
-    </div>
-    <div class="status" id="status"></div>
-    <div class="heard">
-      <div class="note" id="heardNote">—</div>
-      <div>
-        <div class="meter"><div class="needle" id="needle"></div></div>
-        <div class="cents" id="heardCents">&nbsp;</div>
+  <nav class="modos" role="tablist">
+    <button role="tab" id="modeNote" aria-selected="true">Nota</button>
+    <button role="tab" id="modeInterval" aria-selected="false">Intervalo</button>
+  </nav>
+
+  <section class="palco">
+    <div class="painel">
+      <div class="painel-topo">
+        <span class="rotulo" id="staffLabel">Nota pedida</span>
+        <span class="rotulo">Escrita pro seu sax</span>
+      </div>
+      <svg class="pauta" id="staff" viewBox="0 0 360 190" role="img" aria-label="Pauta com a nota pedida"></svg>
+      <div class="nota-alvo">
+        <div class="grande" id="targetName">Pronto?</div>
+        <div class="pequena" id="targetHint">Clique em Começar e permita o microfone.</div>
       </div>
     </div>
-    <div class="buttons">
-      <button class="primary" id="startBtn">Começar</button>
-      <button id="replayBtn" disabled>Ouvir de novo</button>
-      <button id="revealBtn" disabled>Mostrar resposta</button>
-      <button id="nextBtn" disabled>Próxima</button>
-    </div>
-    <div class="score">
-      <span>Acertos <b id="hits">0</b></span>
-      <span>Puladas <b id="skips">0</b></span>
+
+    <div class="painel">
+      <div class="painel-topo">
+        <span class="rotulo">O que o microfone ouve</span>
+        <span class="rotulo" id="micState">desligado</span>
+      </div>
+      <svg class="mostrador" id="gauge" viewBox="0 0 260 200" aria-hidden="true"></svg>
+      <div class="segurar" title="Segure a nota certa até encher"><div id="holdBar"></div></div>
+      <div class="status" id="status"></div>
     </div>
   </section>
 
-  <p class="tip">As notas aparecem como você lê na partitura do seu sax, não no som real. Use fone de ouvido, ou deixe o volume baixo, para o microfone não confundir a caixa de som com o sax.</p>
+  <div class="acoes">
+    <button class="acao principal" id="startBtn">Começar</button>
+    <button class="acao" id="replayBtn" disabled>Ouvir de novo<kbd>espaço</kbd></button>
+    <button class="acao" id="revealBtn" disabled>Mostrar resposta<kbd>R</kbd></button>
+    <button class="acao" id="nextBtn" disabled>Próxima<kbd>enter</kbd></button>
+  </div>
+
+  <div class="placar">
+    <span>acertos<b id="hits">0</b></span>
+    <span>em sequência<b id="streak">0</b></span>
+    <span>puladas<b id="skips">0</b></span>
+  </div>
+
+  <section class="painel ajustes">
+    <div class="grupo">
+      <span class="rotulo">Notas</span>
+      <select id="range" aria-label="Faixa de notas">
+        <option value="62-74">Fácil: Ré a Ré (1 oitava)</option>
+        <option value="60-84">Médio: Dó grave a Dó agudo</option>
+        <option value="58-89">Extensão toda: Si♭ a Fá</option>
+      </select>
+      <label class="linha"><input type="checkbox" id="naturals"> Só notas naturais (sem # e ♭)</label>
+      <label class="linha"><input type="checkbox" id="anyOctave"> Aceitar em qualquer oitava</label>
+    </div>
+
+    <div class="grupo">
+      <span class="rotulo">Som</span>
+      <label class="linha"><input type="checkbox" id="drone"> Som contínuo</label>
+      <p class="nota-rodape" id="droneHelp">A nota de referência fica soando enquanto você toca: bom pra ouvir a afinação batendo. No modo Intervalo, quem fica soando é a primeira nota.</p>
+      <p class="aviso" id="droneWarn" hidden>Use fone de ouvido. Sem fone, o microfone pode ouvir a caixa de som e marcar acerto sozinho.</p>
+    </div>
+
+    <div class="grupo" id="intervalSettings" hidden>
+      <span class="rotulo">Intervalos sorteados</span>
+      <div class="chips" id="intervalChips"></div>
+      <select id="direction" aria-label="Direção do intervalo">
+        <option value="up">Subindo</option>
+        <option value="down">Descendo</option>
+        <option value="both">Subindo e descendo</option>
+      </select>
+    </div>
+  </section>
+
+  <p class="nota-rodape">As notas aparecem como você lê na partitura do seu sax; o som tocado é o som real que ele produz. Funciona melhor no Chrome. Atalhos: espaço ouve de novo, R mostra a resposta, enter passa pra próxima.</p>
 </main>
 
 <script>
 const NAMES = ["Dó", "Dó#", "Ré", "Ré#", "Mi", "Fá", "Fá#", "Sol", "Sol#", "Lá", "Lá#", "Si"];
 const LETTERS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const NATURAL = [0, 2, 4, 5, 7, 9, 11];
-const HOLD_MS = 350;      // quanto tempo a nota precisa ficar certa para contar
-const TOLERANCE = 40;     // folga de afinação, em cents
+const LETTER_STEP = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
+const IS_SHARP = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
+const INTERVALS = [
+  { st: 1, short: "2m", name: "2ª menor" }, { st: 2, short: "2M", name: "2ª maior" },
+  { st: 3, short: "3m", name: "3ª menor" }, { st: 4, short: "3M", name: "3ª maior" },
+  { st: 5, short: "4J", name: "4ª justa" }, { st: 6, short: "TT", name: "trítono" },
+  { st: 7, short: "5J", name: "5ª justa" }, { st: 8, short: "6m", name: "6ª menor" },
+  { st: 9, short: "6M", name: "6ª maior" }, { st: 10, short: "7m", name: "7ª menor" },
+  { st: 11, short: "7M", name: "7ª maior" }, { st: 12, short: "8J", name: "8ª justa" },
+];
+const HOLD_MS = 350;       // quanto tempo a nota precisa ficar certa para contar
+const TOLERANCE = 40;      // folga de afinação, em cents
+const SVGNS = "http://www.w3.org/2000/svg";
 
 const $ = id => document.getElementById(id);
-let ctx, analyser, buf, target = null, solved = false, mutedUntil = 0, holdStart = 0;
-let hits = 0, skips = 0;
+const settings = {
+  offset: 9, range: "60-84", naturals: false, anyOctave: true, drone: false,
+  mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up",
+};
+try { Object.assign(settings, JSON.parse(localStorage.getItem("ouvido-sax") || "{}")); } catch {}
+const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.stringify(settings)); } catch {} };
 
-const noteLabel = midi => `${NAMES[midi % 12]} (${LETTERS[midi % 12]}${Math.floor(midi / 12) - 1})`;
-const transpose = () => Number($("instrument").value);
-const freqToMidi = f => 69 + 12 * Math.log2(f / 440);
+let ctx = null, analyser = null, stream = null, source = null, buf = null;
+let round = null, solved = false, revealed = false, mutedUntil = 0, holdStart = 0;
+let drone = null, nextTimer = 0, heard = null;
+let hits = 0, streak = 0, skips = 0;
 
-/* Detecta a frequência fundamental de um trecho de áudio pelo método de McLeod.
-   Ele procura de quanto em quanto tempo a onda se repete e escolhe o primeiro
-   ciclo forte, o que evita confundir a nota com a oitava acima por causa dos
-   harmônicos do sax. Devolve null quando há silêncio ou ruído sem nota clara. */
+const letter = midi => `${LETTERS[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
+const freqOf = midi => 440 * Math.pow(2, (midi - 69) / 12);
+const concertFreq = written => freqOf(written - settings.offset);
+
+/* ---------- Reconhecimento da nota ---------- */
+
+/* Descobre a frequência da nota num trecho curto do microfone pelo método de
+   McLeod: mede de quanto em quanto tempo a onda se repete e fica com o
+   primeiro ciclo forte, o que evita confundir a nota com a oitava acima (no
+   sax ela costuma soar mais alto que a própria nota). Devolve null em
+   silêncio ou em ruído sem nota clara. */
 function detectPitch(data, sampleRate) {
   const n = data.length;
-  let rms = 0;
-  for (let i = 0; i < n; i++) rms += data[i] * data[i];
-  if (Math.sqrt(rms / n) < 0.01) return null;
+  let power = 0;
+  for (let i = 0; i < n; i++) power += data[i] * data[i];
+  if (Math.sqrt(power / n) < 0.01) return null;
 
-  const maxTau = Math.min(Math.floor(sampleRate / 70), n - 1);
-  const nsdf = new Float32Array(maxTau);
-  for (let tau = 0; tau < maxTau; tau++) {
+  const maxLag = Math.min(Math.floor(sampleRate / 70), n - 1);
+  const nsdf = new Float32Array(maxLag);
+  for (let lag = 0; lag < maxLag; lag++) {
     let acf = 0, energy = 0;
-    for (let i = 0; i < n - tau; i++) {
-      acf += data[i] * data[i + tau];
-      energy += data[i] * data[i] + data[i + tau] * data[i + tau];
+    for (let i = 0; i < n - lag; i++) {
+      acf += data[i] * data[i + lag];
+      energy += data[i] * data[i] + data[i + lag] * data[i + lag];
     }
-    nsdf[tau] = energy > 0 ? 2 * acf / energy : 0;
+    nsdf[lag] = energy > 0 ? 2 * acf / energy : 0;
   }
 
   const peaks = [];
-  let tau = 1;
-  while (tau < maxTau && nsdf[tau] > 0) tau++;
-  while (tau < maxTau - 1) {
-    while (tau < maxTau - 1 && nsdf[tau] <= 0) tau++;
-    let best = tau;
-    while (tau < maxTau - 1 && nsdf[tau] > 0) {
-      if (nsdf[tau] > nsdf[best]) best = tau;
-      tau++;
+  let lag = 1;
+  while (lag < maxLag && nsdf[lag] > 0) lag++;
+  while (lag < maxLag - 1) {
+    while (lag < maxLag - 1 && nsdf[lag] <= 0) lag++;
+    let best = lag;
+    while (lag < maxLag - 1 && nsdf[lag] > 0) {
+      if (nsdf[lag] > nsdf[best]) best = lag;
+      lag++;
     }
-    if (best > 0 && best < maxTau - 1) peaks.push(best);
+    if (best > 0 && best < maxLag - 1) peaks.push(best);
   }
   if (!peaks.length) return null;
 
   const highest = Math.max(...peaks.map(p => nsdf[p]));
   if (highest < 0.6) return null;
   const chosen = peaks.find(p => nsdf[p] >= 0.9 * highest);
-
   const a = nsdf[chosen - 1], b = nsdf[chosen], c = nsdf[chosen + 1];
   const shift = (a - c) / (2 * (a - 2 * b + c)) || 0;
   return sampleRate / (chosen + shift);
 }
 
-/* Toca a nota de referência no som real que o sax produz para aquela nota
-   escrita. O microfone fica surdo enquanto ela soa, senão a própria caixa de
-   som seria contada como resposta. */
-function playTarget() {
-  if (!target) return;
-  const concert = target - transpose();
-  const freq = 440 * Math.pow(2, (concert - 69) / 12);
-  const now = ctx.currentTime, dur = 1.3;
+/* ---------- Som ---------- */
+
+/* Monta uma voz suave (triângulo com um pouco de brilho) ligada à saída. */
+function makeVoice(freq, when) {
   const gain = ctx.createGain();
   const filter = ctx.createBiquadFilter();
-  filter.type = "lowpass"; filter.frequency.value = 2500;
-  gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(0.35, now + 0.04);
-  gain.gain.setValueAtTime(0.35, now + dur - 0.25);
-  gain.gain.linearRampToValueAtTime(0, now + dur);
-  for (const [type, level] of [["triangle", 1], ["sawtooth", 0.15]]) {
+  filter.type = "lowpass"; filter.frequency.value = 2400;
+  gain.gain.setValueAtTime(0, when);
+  const oscs = [["triangle", 1], ["sawtooth", 0.12]].map(([type, level]) => {
     const osc = ctx.createOscillator(), g = ctx.createGain();
     osc.type = type; osc.frequency.value = freq; g.gain.value = level;
     osc.connect(g).connect(filter);
-    osc.start(now); osc.stop(now + dur);
-  }
+    osc.start(when);
+    return osc;
+  });
   filter.connect(gain).connect(ctx.destination);
-  mutedUntil = performance.now() + dur * 1000 + 350;
+  return { gain, oscs };
 }
 
-function pickNote() {
-  const [lo, hi] = $("range").value.split("-").map(Number);
-  const pool = [];
-  for (let m = lo; m <= hi; m++) {
-    if ($("scale").value === "all" || NATURAL.includes(m % 12)) pool.push(m);
+/* Toca uma nota curta. Devolve o instante em que ela termina. */
+function tone(written, when, dur) {
+  const v = makeVoice(concertFreq(written), when);
+  v.gain.gain.linearRampToValueAtTime(0.32, when + 0.04);
+  v.gain.gain.setValueAtTime(0.32, when + dur - 0.2);
+  v.gain.gain.linearRampToValueAtTime(0, when + dur);
+  v.oscs.forEach(o => o.stop(when + dur + 0.05));
+  return when + dur;
+}
+
+/* Liga uma nota que fica soando até stopDrone. */
+function startDrone(written, when) {
+  stopDrone();
+  const v = makeVoice(concertFreq(written), when);
+  v.gain.gain.linearRampToValueAtTime(0.22, when + 0.25);
+  drone = v;
+}
+
+function stopDrone() {
+  if (!drone) return;
+  const now = ctx.currentTime;
+  drone.gain.gain.cancelScheduledValues(now);
+  drone.gain.gain.setValueAtTime(drone.gain.gain.value, now);
+  drone.gain.gain.linearRampToValueAtTime(0, now + 0.15);
+  drone.oscs.forEach(o => o.stop(now + 0.2));
+  drone = null;
+}
+
+/* Toca a rodada. O microfone fica surdo enquanto uma nota curta soa, senão
+   a caixa de som contaria como resposta. No som contínuo a nota não para,
+   então quem protege é o fone e o cancelamento de eco. */
+function playRound() {
+  if (!round || !ctx) return;
+  stopDrone();
+  const now = ctx.currentTime + 0.05;
+  if (round.base === null) {
+    if (settings.drone) { startDrone(round.target, now); mutedUntil = performance.now() + 400; }
+    else mutedUntil = performance.now() + (tone(round.target, now, 1.3) - ctx.currentTime) * 1000 + 350;
+  } else {
+    const end = tone(round.target, tone(round.base, now, 0.9) + 0.1, 0.9);
+    mutedUntil = performance.now() + (end - ctx.currentTime) * 1000 + 350;
+    if (settings.drone) startDrone(round.base, end + 0.15);
   }
-  let next;
-  do { next = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && next === target);
-  return next;
+}
+
+/* ---------- Microfone ---------- */
+
+/* Abre o microfone. O cancelamento de eco só liga no som contínuo: nos
+   outros modos ele atrapalha, porque o navegador trata o sax como barulho. */
+async function openMic() {
+  stream?.getTracks().forEach(t => t.stop());
+  source?.disconnect();
+  stream = await navigator.mediaDevices.getUserMedia({
+    audio: { echoCancellation: settings.drone, noiseSuppression: false, autoGainControl: false },
+  });
+  source = ctx.createMediaStreamSource(stream);
+  source.connect(analyser);
+}
+
+/* ---------- Rodadas ---------- */
+
+function rangeBounds() { return settings.range.split("-").map(Number); }
+
+/* Sorteia a próxima rodada. No modo Intervalo, a primeira nota é escolhida
+   de um jeito que a segunda também caia dentro da faixa. */
+function pickRound() {
+  const [lo, hi] = rangeBounds();
+  const allowed = m => !settings.naturals || NATURAL.includes(m % 12);
+  if (settings.mode === "note") {
+    const pool = [];
+    for (let m = lo; m <= hi; m++) if (allowed(m)) pool.push(m);
+    let t;
+    do { t = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && round && t === round.target);
+    return { base: null, target: t, interval: null };
+  }
+  const chosen = INTERVALS.filter(i => settings.intervals.includes(i.st));
+  const options = [];
+  for (const iv of chosen) {
+    const dirs = settings.direction === "both" ? [1, -1] : [settings.direction === "up" ? 1 : -1];
+    for (const d of dirs) for (let b = lo; b <= hi; b++) {
+      const t = b + d * iv.st;
+      if (allowed(b) && t >= lo && t <= hi) options.push({ base: b, target: t, interval: iv, dir: d });
+    }
+  }
+  return options[Math.floor(Math.random() * options.length)] || null;
 }
 
 function newRound() {
-  target = pickNote();
-  solved = false; holdStart = 0;
-  $("targetName").textContent = "?";
-  $("targetHint").textContent = "Ouça e toque a mesma nota";
-  $("status").textContent = ""; $("status").className = "status";
-  playTarget();
-}
-
-function reveal() {
-  $("targetName").textContent = noteLabel(target);
-  $("targetHint").textContent = "Resposta";
+  clearTimeout(nextTimer);
+  round = pickRound();
+  solved = false; revealed = false; holdStart = 0;
+  setStatus("");
+  if (!round) {
+    $("targetName").textContent = "Sem intervalo";
+    $("targetHint").textContent = "Marque pelo menos um intervalo que caiba na faixa de notas.";
+    drawStaff();
+    return;
+  }
+  renderTarget();
+  playRound();
 }
 
 function markSolved() {
-  solved = true; hits++;
-  $("hits").textContent = hits;
-  $("status").textContent = "Acertou!"; $("status").className = "status ok";
-  reveal();
-  setTimeout(newRound, 1400);
+  solved = true; revealed = true;
+  hits++; streak++;
+  $("hits").textContent = hits; $("streak").textContent = streak;
+  stopDrone();
+  setStatus("Acertou!", "ok");
+  renderTarget();
+  nextTimer = setTimeout(newRound, 1500);
 }
+
+function setStatus(text, kind = "") {
+  $("status").textContent = text;
+  $("status").className = `status ${kind}`;
+}
+
+function renderTarget() {
+  const r = round;
+  if (r.base === null) {
+    $("staffLabel").textContent = "Nota pedida";
+    $("targetName").textContent = revealed ? `${NAMES[r.target % 12]} · ${letter(r.target)}` : "?";
+    $("targetHint").textContent = revealed ? "Resposta" : "Ouça e toque a mesma nota";
+  } else {
+    $("staffLabel").textContent = "Intervalo";
+    const dir = r.dir > 0 ? "subindo" : "descendo";
+    $("targetName").textContent = revealed ? `${r.interval.name} ${r.dir > 0 ? "↑" : "↓"}` : "?";
+    $("targetHint").textContent = revealed
+      ? `De ${NAMES[r.base % 12]} pra ${NAMES[r.target % 12]} (${letter(r.target)})`
+      : `Começa em ${NAMES[r.base % 12]}. Toque a segunda nota, ${dir}.`;
+  }
+  drawStaff();
+}
+
+/* ---------- Desenho: pauta ---------- */
+
+const BOTTOM_LINE = 130, HALF = 7.5;   // posição da linha do Mi e meio espaço
+const staffPos = midi => LETTER_STEP[midi % 12] + 7 * (Math.floor(midi / 12) - 1);
+const staffY = pos => BOTTOM_LINE - (pos - 30) * HALF;
+
+function el(tag, attrs, text) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function drawNote(svg, midi, x, cls) {
+  const pos = staffPos(midi), y = staffY(pos);
+  const ledger = [];
+  for (let p = 28; p >= pos; p -= 2) ledger.push(p);
+  for (let p = 40; p <= pos; p += 2) ledger.push(p);
+  for (const p of ledger) svg.append(el("line", { x1: x - 16, x2: x + 16, y1: staffY(p), y2: staffY(p), class: "suplementar" }));
+  if (IS_SHARP[midi % 12]) {
+    const acc = el("text", { x: x - 32, y: y + 10, class: "acidente" }, "♯");
+    acc.style.color = cls === "alvo" || cls === "escuta" ? "var(--brass)" : "var(--ink)";
+    svg.append(acc);
+  }
+  svg.append(el("ellipse", { cx: x, cy: y, rx: 10, ry: 7, transform: `rotate(-20 ${x} ${y})`, class: `cabeca ${cls}` }));
+}
+
+function drawStaff() {
+  const svg = $("staff");
+  svg.replaceChildren();
+  for (let i = 0; i < 5; i++) {
+    const y = BOTTOM_LINE - i * 2 * HALF;
+    svg.append(el("line", { x1: 8, x2: 352, y1: y, y2: y }));
+  }
+  svg.append(el("text", { x: 12, y: 142, class: "clave" }, "𝄞"));
+  if (!round) return;
+
+  const single = round.base === null;
+  const targetX = single ? 220 : 270;
+  if (!single) {
+    drawNote(svg, round.base, 160, "");
+    svg.append(el("text", { x: 160, y: 182, "text-anchor": "middle", class: "nome" }, NAMES[round.base % 12]));
+  }
+  if (revealed) {
+    drawNote(svg, round.target, targetX, "alvo");
+    svg.append(el("text", { x: targetX, y: 182, "text-anchor": "middle", class: "nome" }, NAMES[round.target % 12]));
+  } else {
+    if (heard !== null && heard >= 50 && heard <= 96) drawNote(svg, heard, targetX, "escuta");
+    svg.append(el("text", { x: targetX, y: 40, "text-anchor": "middle", class: "interrogacao" }, "?"));
+  }
+}
+
+/* ---------- Desenho: mostrador de afinação ---------- */
+
+const CX = 130, CY = 120, R = 100, SPAN = 62;   // graus pra cada lado no extremo de ±50 cents
+const angleOf = cents => (cents / 50) * SPAN;
+function arcPoint(deg, r = R) {
+  const rad = (deg - 90) * Math.PI / 180;
+  return [CX + r * Math.cos(rad), CY + r * Math.sin(rad)];
+}
+function arc(fromCents, toCents) {
+  const [x1, y1] = arcPoint(angleOf(fromCents)), [x2, y2] = arcPoint(angleOf(toCents));
+  return `M ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2}`;
+}
+
+function buildGauge() {
+  const svg = $("gauge");
+  svg.append(el("path", { d: arc(-50, 50), class: "trilho" }));
+  svg.append(el("path", { d: arc(-TOLERANCE, TOLERANCE), class: "zona" }));
+  svg.append(el("path", { d: arc(-8, 8), class: "centro" }));
+  for (let c = -50; c <= 50; c += 10) {
+    const [x1, y1] = arcPoint(angleOf(c), R - 16), [x2, y2] = arcPoint(angleOf(c), R - (c % 50 === 0 ? 28 : 22));
+    svg.append(el("line", { x1, y1, x2, y2, class: "marca-cents" }));
+  }
+  for (const c of [-50, 0, 50]) {
+    const [x, y] = arcPoint(angleOf(c), R + 18);
+    svg.append(el("text", { x, y: y + 4, class: "escala" }, c > 0 ? `+${c}` : `${c}`));
+  }
+  svg.append(el("line", { x1: CX, y1: CY, x2: CX, y2: CY - R + 6, class: "ponteiro", id: "needle" }));
+  svg.append(el("circle", { cx: CX, cy: CY, r: 6, class: "eixo" }));
+  svg.append(el("text", { x: CX, y: CY + 52, class: "ouvida", id: "heardNote" }, "—"));
+  svg.append(el("text", { x: CX, y: CY + 74, class: "cents", id: "heardCents" }, " "));
+}
+
+function showHeard(written) {
+  const needle = $("needle");
+  if (written === null) {
+    $("heardNote").textContent = "—";
+    $("heardCents").textContent = " ";
+    needle.style.transform = "rotate(0deg)";
+    needle.classList.remove("certo");
+    return;
+  }
+  const nearest = Math.round(written);
+  const cents = Math.round((written - nearest) * 100);
+  $("heardNote").textContent = letter(nearest);
+  $("heardCents").textContent = `${cents > 0 ? "+" : ""}${cents} cents`;
+  needle.style.transformOrigin = `${CX}px ${CY}px`;
+  needle.style.transform = `rotate(${angleOf(cents)}deg)`;
+}
+
+/* ---------- Laço de escuta ---------- */
 
 function listen() {
   analyser.getFloatTimeDomainData(buf);
   const now = performance.now();
   const freq = now > mutedUntil ? detectPitch(buf, ctx.sampleRate) : null;
+  const written = freq ? 69 + 12 * Math.log2(freq / 440) + settings.offset : null;
+  showHeard(written);
 
-  if (freq) {
-    const written = freqToMidi(freq) + transpose();
-    const nearest = Math.round(written);
-    const cents = Math.round((written - nearest) * 100);
-    $("heardNote").textContent = `${LETTERS[((nearest % 12) + 12) % 12]}${Math.floor(nearest / 12) - 1}`;
-    $("heardCents").textContent = `${cents > 0 ? "+" : ""}${cents} cents`;
-    $("needle").style.left = `${50 + cents}%`;
+  const newHeard = written === null ? null : Math.round(written);
+  if (newHeard !== heard) { heard = newHeard; if (round && !revealed) drawStaff(); }
 
-    if (target && !solved) {
-      let diff = written - target;
-      if ($("anyOctave").checked) diff = ((diff % 12) + 18) % 12 - 6;
-      if (Math.abs(diff * 100) <= TOLERANCE) {
-        holdStart = holdStart || now;
-        if (now - holdStart >= HOLD_MS) markSolved();
-      } else {
-        holdStart = 0;
-        $("status").textContent = "Ainda não..."; $("status").className = "status bad";
-      }
+  let held = 0;
+  if (written !== null && round && !solved) {
+    let diff = written - round.target;
+    if (settings.anyOctave) diff = ((diff % 12) + 18) % 12 - 6;
+    const right = Math.abs(diff * 100) <= TOLERANCE;
+    $("needle").classList.toggle("certo", right);
+    if (right) {
+      holdStart = holdStart || now;
+      held = Math.min(1, (now - holdStart) / HOLD_MS);
+      if (held >= 1) markSolved();
+    } else {
+      holdStart = 0;
+      setStatus("Ainda não…", "quase");
     }
-  } else {
+  } else if (!solved) {
     holdStart = 0;
-    $("heardNote").textContent = "—";
-    $("heardCents").innerHTML = "&nbsp;";
-    $("needle").style.left = "50%";
   }
+  $("holdBar").style.width = `${(solved ? 1 : held) * 100}%`;
   requestAnimationFrame(listen);
+}
+
+/* ---------- Controles ---------- */
+
+function applySettingsToForm() {
+  $("instrument").value = String(settings.offset);
+  $("range").value = settings.range;
+  $("naturals").checked = settings.naturals;
+  $("anyOctave").checked = settings.anyOctave;
+  $("drone").checked = settings.drone;
+  $("direction").value = settings.direction;
+  $("droneWarn").hidden = !settings.drone;
+  const interval = settings.mode === "interval";
+  $("modeNote").setAttribute("aria-selected", String(!interval));
+  $("modeInterval").setAttribute("aria-selected", String(interval));
+  $("intervalSettings").hidden = !interval;
+}
+
+function buildChips() {
+  for (const iv of INTERVALS) {
+    const wrap = document.createElement("label");
+    wrap.className = "chip"; wrap.title = iv.name;
+    const input = document.createElement("input");
+    input.type = "checkbox"; input.id = `iv-${iv.st}`;
+    input.checked = settings.intervals.includes(iv.st);
+    input.addEventListener("change", () => {
+      settings.intervals = INTERVALS.filter(i => $(`iv-${i.st}`).checked).map(i => i.st);
+      saveSettings();
+      if (ctx && settings.mode === "interval") newRound();
+    });
+    const span = document.createElement("span");
+    span.textContent = iv.short;
+    wrap.append(input, span);
+    $("intervalChips").append(wrap);
+  }
+}
+
+function onSettingChange(apply) {
+  return e => {
+    apply(e.target);
+    saveSettings();
+    applySettingsToForm();
+    if (ctx) newRound(); else drawStaff();
+  };
+}
+
+$("instrument").addEventListener("change", onSettingChange(t => settings.offset = Number(t.value)));
+$("range").addEventListener("change", onSettingChange(t => settings.range = t.value));
+$("naturals").addEventListener("change", onSettingChange(t => settings.naturals = t.checked));
+$("anyOctave").addEventListener("change", e => { settings.anyOctave = e.target.checked; saveSettings(); });
+$("direction").addEventListener("change", onSettingChange(t => settings.direction = t.value));
+$("drone").addEventListener("change", async e => {
+  settings.drone = e.target.checked;
+  saveSettings(); applySettingsToForm();
+  if (ctx) { try { await openMic(); } catch {} playRound(); }
+});
+for (const [id, mode] of [["modeNote", "note"], ["modeInterval", "interval"]]) {
+  $(id).addEventListener("click", () => {
+    if (settings.mode === mode) return;
+    settings.mode = mode; saveSettings(); applySettingsToForm();
+    if (ctx) newRound();
+  });
 }
 
 $("startBtn").addEventListener("click", async () => {
   try {
     ctx = new AudioContext();
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
-    });
     analyser = ctx.createAnalyser();
     analyser.fftSize = 2048;
     buf = new Float32Array(analyser.fftSize);
-    ctx.createMediaStreamSource(stream).connect(analyser);
-  } catch (err) {
-    $("targetHint").textContent = "Não consegui abrir o microfone. Libere o acesso no ícone ao lado do endereço e recarregue a página.";
+    await openMic();
+  } catch {
+    ctx = null;
+    $("targetHint").textContent = window.isSecureContext
+      ? "Não consegui abrir o microfone. Libere o acesso no ícone ao lado do endereço e tente de novo."
+      : "O navegador só libera o microfone em endereço https.";
     return;
   }
   $("startBtn").hidden = true;
+  $("micState").textContent = "ouvindo";
   for (const id of ["replayBtn", "revealBtn", "nextBtn"]) $(id).disabled = false;
   listen();
   newRound();
 });
-$("replayBtn").addEventListener("click", playTarget);
+$("replayBtn").addEventListener("click", playRound);
 $("revealBtn").addEventListener("click", reveal);
-$("nextBtn").addEventListener("click", () => {
-  if (!solved) { skips++; $("skips").textContent = skips; }
+$("nextBtn").addEventListener("click", next);
+
+function reveal() {
+  if (!round || revealed) return;
+  revealed = true; streak = 0; $("streak").textContent = 0;
+  renderTarget();
+}
+function next() {
+  if (!solved) { skips++; streak = 0; $("skips").textContent = skips; $("streak").textContent = 0; }
   newRound();
+}
+
+document.addEventListener("keydown", e => {
+  if (!ctx || e.target.closest("select, input")) return;
+  if (e.key === " ") { e.preventDefault(); playRound(); }
+  else if (e.key === "Enter") { e.preventDefault(); next(); }
+  else if (e.key.toLowerCase() === "r") reveal();
 });
+
+buildChips();
+buildGauge();
+applySettingsToForm();
+drawStaff();
 </script>
 </body>
 </html>
