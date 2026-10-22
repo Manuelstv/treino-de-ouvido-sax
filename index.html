@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Treino de Ouvido Sax</title>
+<style>
+  /* Layout: uma coluna central, a nota-alvo em destaque e o afinador logo abaixo */
+  :root {
+    --bg: #f3f5f4; --surface: #ffffff; --fg: #18221e; --muted: #5d6b65;
+    --accent: #b8860b; --ok: #1f8a4c; --bad: #b3402f; --line: #d6ddd9;
+    --font: "Segoe UI", system-ui, sans-serif;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121815; --surface: #1b2420; --fg: #e8eeeb; --muted: #95a39c;
+      --accent: #e0b44a; --ok: #4cc283; --bad: #ec7a66; --line: #2c3833; color-scheme: dark; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--font); }
+  main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; display: grid; gap: 20px; }
+  h1 { font-size: 1.4rem; margin: 0; text-wrap: balance; }
+  .sub { color: var(--muted); margin: 0; font-size: .92rem; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 16px; }
+  .settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  select, button { font: inherit; }
+  select { padding: 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+  .check { display: flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-size: .92rem; color: var(--fg); }
+  .target { text-align: center; display: grid; gap: 4px; }
+  .target .big { font-size: 3.2rem; font-weight: 700; line-height: 1.1; min-height: 3.5rem; }
+  .target .hint { color: var(--muted); font-size: .9rem; min-height: 1.4em; }
+  .status { text-align: center; font-weight: 600; min-height: 1.5em; }
+  .status.ok { color: var(--ok); } .status.bad { color: var(--bad); }
+  .heard { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
+  .heard .note { font-family: var(--mono); font-size: 1.4rem; min-width: 5.5ch; }
+  .meter { position: relative; height: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 5px; }
+  .meter::after { content: ""; position: absolute; left: 50%; top: -4px; bottom: -4px; width: 2px; background: var(--muted); }
+  .needle { position: absolute; top: -5px; width: 6px; height: 18px; margin-left: -3px; border-radius: 3px; background: var(--accent); left: 50%; transition: left .08s; }
+  .cents { font-family: var(--mono); font-size: .8rem; color: var(--muted); text-align: right; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  button { padding: 10px 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #18120a; font-weight: 600; }
+  button:disabled { opacity: .45; cursor: default; }
+  button:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .score { display: flex; justify-content: center; gap: 24px; font-family: var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .score b { color: var(--fg); }
+  .tip { font-size: .85rem; color: var(--muted); margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Treino de ouvido no sax</h1>
+    <p class="sub">A página toca uma nota. Toque a mesma no sax e segure até ela confirmar.</p>
+  </header>
+
+  <section class="card settings">
+    <label>Instrumento
+      <select id="instrument">
+        <option value="9" selected>Sax alto (Mi♭)</option>
+        <option value="14">Sax tenor (Si♭)</option>
+        <option value="2">Sax soprano (Si♭)</option>
+        <option value="21">Sax barítono (Mi♭)</option>
+        <option value="0">Instrumento em Dó</option>
+      </select>
+    </label>
+    <label>Notas sorteadas
+      <select id="range">
+        <option value="62-74">Fácil: Ré a Ré (1 oitava)</option>
+        <option value="60-84" selected>Médio: Dó grave a Dó agudo</option>
+        <option value="58-89">Extensão toda: Si♭ a Fá</option>
+      </select>
+    </label>
+    <label>Tipo de nota
+      <select id="scale">
+        <option value="natural">Só naturais (sem #/♭)</option>
+        <option value="all" selected>Todas, com sustenidos</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="anyOctave" checked> Aceitar a nota em qualquer oitava</label>
+  </section>
+
+  <section class="card">
+    <div class="target">
+      <div class="big" id="targetName">?</div>
+      <div class="hint" id="targetHint">Clique em Começar e permita o microfone.</div>
+    </div>
+    <div class="status" id="status"></div>
+    <div class="heard">
+      <div class="note" id="heardNote">—</div>
+      <div>
+        <div class="meter"><div class="needle" id="needle"></div></div>
+        <div class="cents" id="heardCents">&nbsp;</div>
+      </div>
+    </div>
+    <div class="buttons">
+      <button class="primary" id="startBtn">Começar</button>
+      <button id="replayBtn" disabled>Ouvir de novo</button>
+      <button id="revealBtn" disabled>Mostrar resposta</button>
+      <button id="nextBtn" disabled>Próxima</button>
+    </div>
+    <div class="score">
+      <span>Acertos <b id="hits">0</b></span>
+      <span>Puladas <b id="skips">0</b></span>
+    </div>
+  </section>
+
+  <p class="tip">As notas aparecem como você lê na partitura do seu sax, não no som real. Use fone de ouvido, ou deixe o volume baixo, para o microfone não confundir a caixa de som com o sax.</p>
+</main>
+
+<script>
+const NAMES = ["Dó", "Dó#", "Ré", "Ré#", "Mi", "Fá", "Fá#", "Sol", "Sol#", "Lá", "Lá#", "Si"];
+const LETTERS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const NATURAL = [0, 2, 4, 5, 7, 9, 11];
+const HOLD_MS = 350;      // quanto tempo a nota precisa ficar certa para contar
+const TOLERANCE = 40;     // folga de afinação, em cents
+
+const $ = id => document.getElementById(id);
+let ctx, analyser, buf, target = null, solved = false, mutedUntil = 0, holdStart = 0;
+let hits = 0, skips = 0;
+
+const noteLabel = midi => `${NAMES[midi % 12]} (${LETTERS[midi % 12]}${Math.floor(midi / 12) - 1})`;
+const transpose = () => Number($("instrument").value);
+const freqToMidi = f => 69 + 12 * Math.log2(f / 440);
+
+/* Detecta a frequência fundamental de um trecho de áudio pelo método de McLeod.
+   Ele procura de quanto em quanto tempo a onda se repete e escolhe o primeiro
+   ciclo forte, o que evita confundir a nota com a oitava acima por causa dos
+   harmônicos do sax. Devolve null quando há silêncio ou ruído sem nota clara. */
+function detectPitch(data, sampleRate) {
+  const n = data.length;
+  let rms = 0;
+  for (let i = 0; i < n; i++) rms += data[i] * data[i];
+  if (Math.sqrt(rms / n) < 0.01) return null;
+
+  const maxTau = Math.min(Math.floor(sampleRate / 70), n - 1);
+  const nsdf = new Float32Array(maxTau);
+  for (let tau = 0; tau < maxTau; tau++) {
+    let acf = 0, energy = 0;
+    for (let i = 0; i < n - tau; i++) {
+      acf += data[i] * data[i + tau];
+      energy += data[i] * data[i] + data[i + tau] * data[i + tau];
+    }
+    nsdf[tau] = energy > 0 ? 2 * acf / energy : 0;
+  }
+
+  const peaks = [];
+  let tau = 1;
+  while (tau < maxTau && nsdf[tau] > 0) tau++;
+  while (tau < maxTau - 1) {
+    while (tau < maxTau - 1 && nsdf[tau] <= 0) tau++;
+    let best = tau;
+    while (tau < maxTau - 1 && nsdf[tau] > 0) {
+      if (nsdf[tau] > nsdf[best]) best = tau;
+      tau++;
+    }
+    if (best > 0 && best < maxTau - 1) peaks.push(best);
+  }
+  if (!peaks.length) return null;
+
+  const highest = Math.max(...peaks.map(p => nsdf[p]));
+  if (highest < 0.6) return null;
+  const chosen = peaks.find(p => nsdf[p] >= 0.9 * highest);
+
+  const a = nsdf[chosen - 1], b = nsdf[chosen], c = nsdf[chosen + 1];
+  const shift = (a - c) / (2 * (a - 2 * b + c)) || 0;
+  return sampleRate / (chosen + shift);
+}
+
+/* Toca a nota de referência no som real que o sax produz para aquela nota
+   escrita. O microfone fica surdo enquanto ela soa, senão a própria caixa de
+   som seria contada como resposta. */
+function playTarget() {
+  if (!target) return;
+  const concert = target - transpose();
+  const freq = 440 * Math.pow(2, (concert - 69) / 12);
+  const now = ctx.currentTime, dur = 1.3;
+  const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass"; filter.frequency.value = 2500;
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(0.35, now + 0.04);
+  gain.gain.setValueAtTime(0.35, now + dur - 0.25);
+  gain.gain.linearRampToValueAtTime(0, now + dur);
+  for (const [type, level] of [["triangle", 1], ["sawtooth", 0.15]]) {
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.type = type; osc.frequency.value = freq; g.gain.value = level;
+    osc.connect(g).connect(filter);
+    osc.start(now); osc.stop(now + dur);
+  }
+  filter.connect(gain).connect(ctx.destination);
+  mutedUntil = performance.now() + dur * 1000 + 350;
+}
+
+function pickNote() {
+  const [lo, hi] = $("range").value.split("-").map(Number);
+  const pool = [];
+  for (let m = lo; m <= hi; m++) {
+    if ($("scale").value === "all" || NATURAL.includes(m % 12)) pool.push(m);
+  }
+  let next;
+  do { next = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && next === target);
+  return next;
+}
+
+function newRound() {
+  target = pickNote();
+  solved = false; holdStart = 0;
+  $("targetName").textContent = "?";
+  $("targetHint").textContent = "Ouça e toque a mesma nota";
+  $("status").textContent = ""; $("status").className = "status";
+  playTarget();
+}
+
+function reveal() {
+  $("targetName").textContent = noteLabel(target);
+  $("targetHint").textContent = "Resposta";
+}
+
+function markSolved() {
+  solved = true; hits++;
+  $("hits").textContent = hits;
+  $("status").textContent = "Acertou!"; $("status").className = "status ok";
+  reveal();
+  setTimeout(newRound, 1400);
+}
+
+function listen() {
+  analyser.getFloatTimeDomainData(buf);
+  const now = performance.now();
+  const freq = now > mutedUntil ? detectPitch(buf, ctx.sampleRate) : null;
+
+  if (freq) {
+    const written = freqToMidi(freq) + transpose();
+    const nearest = Math.round(written);
+    const cents = Math.round((written - nearest) * 100);
+    $("heardNote").textContent = `${LETTERS[((nearest % 12) + 12) % 12]}${Math.floor(nearest / 12) - 1}`;
+    $("heardCents").textContent = `${cents > 0 ? "+" : ""}${cents} cents`;
+    $("needle").style.left = `${50 + cents}%`;
+
+    if (target && !solved) {
+      let diff = written - target;
+      if ($("anyOctave").checked) diff = ((diff % 12) + 18) % 12 - 6;
+      if (Math.abs(diff * 100) <= TOLERANCE) {
+        holdStart = holdStart || now;
+        if (now - holdStart >= HOLD_MS) markSolved();
+      } else {
+        holdStart = 0;
+        $("status").textContent = "Ainda não..."; $("status").className = "status bad";
+      }
+    }
+  } else {
+    holdStart = 0;
+    $("heardNote").textContent = "—";
+    $("heardCents").innerHTML = "&nbsp;";
+    $("needle").style.left = "50%";
+  }
+  requestAnimationFrame(listen);
+}
+
+$("startBtn").addEventListener("click", async () => {
+  try {
+    ctx = new AudioContext();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+    });
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 2048;
+    buf = new Float32Array(analyser.fftSize);
+    ctx.createMediaStreamSource(stream).connect(analyser);
+  } catch (err) {
+    $("targetHint").textContent = "Não consegui abrir o microfone. Libere o acesso no ícone ao lado do endereço e recarregue a página.";
+    return;
+  }
+  $("startBtn").hidden = true;
+  for (const id of ["replayBtn", "revealBtn", "nextBtn"]) $(id).disabled = false;
+  listen();
+  newRound();
+});
+$("replayBtn").addEventListener("click", playTarget);
+$("revealBtn").addEventListener("click", reveal);
+$("nextBtn").addEventListener("click", () => {
+  if (!solved) { skips++; $("skips").textContent = skips; }
+  newRound();
+});
+</script>
+</body>
+</html>
