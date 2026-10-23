@@ -13,6 +13,7 @@
   :root {
     --bg: #eceee9; --surface: #fbfbf8; --ink: #14201c; --muted: #5a6963;
     --line: #d2d8d3; --brass: #9a710d; --brass-soft: #f0e2b6; --ok: #1d8a52; --warn: #b4601a;
+    --key-white: #fdfdf9; --key-black: #1a2320; --key-label: #6b7873;
     --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
     --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
@@ -23,12 +24,14 @@
     :root:not([data-theme="light"]) {
       --bg: #0c1413; --surface: #141f1d; --ink: #ebeee6; --muted: #8d9e98;
       --line: #25332f; --brass: #e2b443; --brass-soft: #3a3118; --ok: #52d18c; --warn: #f0a35a;
+      --key-white: #dcdfd4; --key-black: #050908; --key-label: #5d6a65;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
     --bg: #0c1413; --surface: #141f1d; --ink: #ebeee6; --muted: #8d9e98;
     --line: #25332f; --brass: #e2b443; --brass-soft: #3a3118; --ok: #52d18c; --warn: #f0a35a;
+      --key-white: #dcdfd4; --key-black: #050908; --key-label: #5d6a65;
     color-scheme: dark;
   }
 
@@ -120,6 +123,26 @@
   button:focus-visible, select:focus-visible, input:focus-visible + span { outline: 2px solid var(--brass); outline-offset: 2px; }
   kbd { font: 500 11px var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 1px 4px; margin-left: 6px; }
 
+  .teclado-painel { padding-bottom: 14px; }
+  .teclado-rolagem { overflow-x: auto; }
+  .teclado { position: relative; display: flex; height: 150px; min-width: 100%; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  .tecla { border: 0; padding: 0; cursor: pointer; font: inherit; }
+  .tecla:disabled { cursor: default; }
+  .tecla-branca {
+    flex: 1 1 0; min-width: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px;
+    background: var(--key-white); border: 1px solid var(--line); border-radius: 0 0 4px 4px; color: var(--key-label);
+    font: 500 10px var(--mono);
+  }
+  .tecla-preta {
+    position: absolute; top: 0; height: 60%; z-index: 1;
+    background: var(--key-black); border-radius: 0 0 3px 3px; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  }
+  .tecla.tocando { background: var(--brass-soft); }
+  .tecla-preta.tocando { background: var(--brass); }
+  .tecla.certa { background: var(--ok); color: var(--bg); }
+  .tecla.errada { background: var(--warn); color: var(--bg); }
+  .teclado.desligado .tecla { opacity: 0.55; }
+  @media (max-width: 560px) { .tecla-branca { font-size: 8px; padding-bottom: 6px; letter-spacing: -0.03em; } .tecla-branca .oitava-fora { display: none; } }
   .placar { display: flex; justify-content: center; gap: 28px; font: 500 14px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
   .placar b { color: var(--ink); font-size: 18px; margin-left: 6px; }
 
@@ -202,7 +225,7 @@
   <header>
     <div class="marca">
       <h1>Ouvido</h1>
-      <p>A página toca, você responde no sax. O microfone escuta e confere a nota.</p>
+      <p>A página toca, você responde no sax. O microfone escuta e confere a nota. Sem instrumento, responda pelo teclado.</p>
     </div>
     <label class="instrumento">
       <span class="rotulo">Instrumento</span>
@@ -249,6 +272,14 @@
       <div class="segurar" title="Segure a nota certa até encher"><div id="holdBar"></div></div>
       <div class="status" id="status"></div>
     </div>
+  </section>
+
+  <section class="painel teclado-painel">
+    <div class="painel-topo">
+      <span class="rotulo">Teclado</span>
+      <span class="rotulo" id="keyboardHint">Toque as teclas pra responder sem instrumento</span>
+    </div>
+    <div class="teclado-rolagem"><div class="teclado desligado" id="keyboard"></div></div>
   </section>
 
   <div class="acoes">
@@ -333,7 +364,7 @@ const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.strin
 
 let ctx = null, analyser = null, stream = null, source = null, buf = null;
 let round = null, solved = false, revealed = false, mutedUntil = 0, holdStart = 0;
-let drone = null, nextTimer = 0, heard = null, follower = null;
+let drone = null, nextTimer = 0, heard = null, follower = null, micOk = false;
 let hits = 0, streak = 0, skips = 0;
 
 const letter = midi => `${LETTERS[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
@@ -561,6 +592,14 @@ function makeFollower(notes) {
     if (diff === 0) { f.progress++; return "certa"; }
     return "errada";
   };
+  /* Uma tecla do teclado conta na hora: não há som pra esperar firmar. */
+  f.press = note => {
+    if (f.progress >= notes.length) return null;
+    let diff = note - notes[f.progress];
+    if (settings.anyOctave) diff = ((diff % 12) + 18) % 12 - 6;
+    if (diff === 0) { f.progress++; return "certa"; }
+    return "errada";
+  };
   return f;
 }
 
@@ -613,6 +652,17 @@ function newRound() {
   }
   renderTarget();
   playRound();
+}
+
+/* Mostra o resultado de uma nota da melodia, venha ela do microfone ou do teclado. */
+function handleMelodyResult(result) {
+  if (result === "certa") {
+    setStatus("");
+    renderTarget();
+    if (follower.progress >= round.melody.length) markSolved();
+  } else if (result === "errada") {
+    setStatus(`Errou a ${follower.progress + 1}ª nota`, "quase");
+  }
 }
 
 function markSolved() {
@@ -779,14 +829,7 @@ function listen() {
 
   let held = 0;
   if (follower && !solved) {
-    const result = follower.hear(written, now);
-    if (result === "certa") {
-      setStatus("");
-      renderTarget();
-      if (follower.progress >= round.melody.length) markSolved();
-    } else if (result === "errada") {
-      setStatus(`Errou a ${follower.progress + 1}ª nota`, "quase");
-    }
+    handleMelodyResult(follower.hear(written, now));
     held = follower.progress / round.melody.length;
   } else if (written !== null && round && !solved) {
     let diff = written - round.target;
@@ -857,11 +900,72 @@ function buildChips() {
   }
 }
 
+/* ---------- Teclado ---------- */
+
+/* Monta o teclado cobrindo a faixa de notas escolhida, sempre começando e
+   terminando numa tecla branca. As notas são as escritas pro seu sax. */
+function buildKeyboard() {
+  let [lo, hi] = rangeBounds();
+  if (IS_SHARP[lo % 12]) lo--;
+  if (IS_SHARP[hi % 12]) hi++;
+  const box = $("keyboard");
+  box.replaceChildren();
+  const whites = [];
+  for (let m = lo; m <= hi; m++) if (!IS_SHARP[m % 12]) whites.push(m);
+  const w = 100 / whites.length;
+  for (let m = lo; m <= hi; m++) {
+    const key = document.createElement("button");
+    key.className = "tecla";
+    key.dataset.midi = m;
+    key.disabled = !ctx;
+    key.setAttribute("aria-label", letter(m));
+    if (IS_SHARP[m % 12]) {
+      key.classList.add("tecla-preta");
+      const before = whites.indexOf(m - 1);
+      key.style.left = `${(before + 1) * w - w * 0.3}%`;
+      key.style.width = `${w * 0.6}%`;
+    } else {
+      key.classList.add("tecla-branca");
+      const label = document.createElement("span");
+      label.textContent = m % 12 === 0 ? `${NAMES[0]}${Math.floor(m / 12) - 1}` : NAMES[m % 12];
+      if (m % 12 !== 0) label.className = "oitava-fora";
+      key.append(label);
+    }
+    key.addEventListener("pointerdown", e => { e.preventDefault(); pressKey(m, key); });
+    box.append(key);
+  }
+}
+
+/* Toca a tecla e, se houver rodada em jogo, usa a nota como resposta. O
+   microfone fica surdo enquanto a tecla soa, pra não contar a mesma nota
+   duas vezes. */
+function pressKey(m, key) {
+  if (!ctx) return;
+  const end = tone(m, ctx.currentTime + 0.01, 0.6);
+  mutedUntil = Math.max(mutedUntil, performance.now() + (end - ctx.currentTime) * 1000 + 350);
+  let result = null;
+  if (round && !solved) {
+    if (follower) {
+      result = follower.press(m);
+      handleMelodyResult(result);
+    } else {
+      let diff = m - round.target;
+      if (settings.anyOctave) diff = ((diff % 12) + 18) % 12 - 6;
+      result = diff === 0 ? "certa" : "errada";
+      if (result === "certa") markSolved(); else setStatus("Ainda não…", "quase");
+    }
+  }
+  const cls = result === "certa" ? "certa" : result === "errada" ? "errada" : "tocando";
+  key.classList.add(cls);
+  setTimeout(() => key.classList.remove(cls), 350);
+}
+
 function onSettingChange(apply) {
   return e => {
     apply(e.target);
     saveSettings();
     applySettingsToForm();
+    buildKeyboard();
     if (ctx && settings.mode !== "theory") newRound(); else drawStaff();
   };
 }
@@ -874,7 +978,7 @@ $("direction").addEventListener("change", onSettingChange(t => settings.directio
 $("drone").addEventListener("change", async e => {
   settings.drone = e.target.checked;
   saveSettings(); applySettingsToForm();
-  if (ctx) { try { await openMic(); } catch {} playRound(); }
+  if (ctx) { if (micOk) { try { await openMic(); } catch {} } playRound(); }
 });
 for (const [id, mode] of MODES) {
   $(id).addEventListener("click", () => {
@@ -885,24 +989,21 @@ for (const [id, mode] of MODES) {
   });
 }
 
+/* Começa o jogo. Sem microfone (recusado, ausente ou fora de https), o jogo
+   segue só com o teclado da tela. */
 $("startBtn").addEventListener("click", async () => {
-  try {
-    ctx = new AudioContext();
-    analyser = ctx.createAnalyser();
-    analyser.fftSize = 2048;
-    buf = new Float32Array(analyser.fftSize);
-    await openMic();
-  } catch {
-    ctx = null;
-    $("targetHint").textContent = window.isSecureContext
-      ? "Não consegui abrir o microfone. Libere o acesso no ícone ao lado do endereço e tente de novo."
-      : "O navegador só libera o microfone em endereço https.";
-    return;
-  }
+  ctx = new AudioContext();
+  analyser = ctx.createAnalyser();
+  analyser.fftSize = 2048;
+  buf = new Float32Array(analyser.fftSize);
+  try { await openMic(); micOk = true; } catch { micOk = false; }
   $("startBtn").hidden = true;
   $("targetHint").textContent = "Carregando o som do sax…";
   await loadSax();
-  $("micState").textContent = "ouvindo";
+  $("micState").textContent = micOk ? "ouvindo" : "sem microfone";
+  if (!micOk) $("keyboardHint").textContent = "Sem microfone: responda pelo teclado";
+  $("keyboard").classList.remove("desligado");
+  for (const key of $("keyboard").children) key.disabled = false;
   for (const id of ["replayBtn", "revealBtn", "nextBtn"]) $(id).disabled = false;
   listen();
   newRound();
@@ -1054,6 +1155,7 @@ async function renderTheory() {
 
 buildChips();
 buildGauge();
+buildKeyboard();
 applySettingsToForm();
 drawStaff();
 </script>
