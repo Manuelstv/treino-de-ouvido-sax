@@ -1,598 +1,2108 @@
 [
   {
-    "id": "menor-harmonica",
-    "titulo": "Escala menor harmônica",
-    "resumo": "A menor natural não tinha força pra voltar pra casa. Subir uma nota resolveu, e criou um som exótico de quebra.",
-    "paragrafos": [
-      "Toque Lá menor natural: Lá, Si, Dó, Ré, Mi, Fá, Sol, Lá. Repare no fim: de Sol pra Lá a distância é de um tom inteiro. Na escala maior, a penúltima nota fica a só meio tom da tônica (Si para Dó, em Dó maior), e esse meio tom puxa o ouvido pra casa. É a nota chamada sensível. A menor natural não tem sensível, e a frase termina meio frouxa.",
-      "O problema aparece ainda mais na harmonia. O acorde montado no 5º grau de Lá menor natural é Mi menor (Mi, Sol, Si). Ele é um acorde menor, sem a tensão de um dominante, e por isso não empurra a música de volta pro Lá menor com a mesma força que um Sol7 empurra pro Dó maior.",
-      "A saída que os compositores encontraram foi subir o 7º grau meio tom: o Sol vira Sol#. Duas coisas acontecem de uma vez. A melodia ganha sensível (Sol# para Lá, meio tom), e o acorde do 5º grau vira Mi maior, ou Mi7 com a sétima (Mi, Sol#, Si, Ré). Agora o V7 da tonalidade menor resolve com a mesma força que na maior. O nome harmônica vem daí: ela nasceu pra resolver um problema da harmonia.",
-      "O conserto tem um efeito colateral. Entre o Fá e o Sol# ficou um buraco de três semitons, uma segunda aumentada. Esse salto não existe nas escalas maiores, e é ele que dá à menor harmônica o sabor de música flamenca, árabe ou klezmer. No sax, vale passar devagar por esse trecho pra o dedo e o ouvido se acostumarem com o salto.",
-      "Na prática, você usa a menor harmônica principalmente sobre o acorde dominante de uma tonalidade menor: sobre Mi7 indo pra Lá menor, tocar a menor harmônica de Lá faz a melodia apontar pro destino. A fórmula, em tons (T) e semitons (S), é T S T T S T+S S."
-    ],
-    "exemplo": {
-      "rotulo": "Lá menor harmônica",
-      "notas": [
-        "Lá",
-        "Si",
-        "Dó",
-        "Ré",
-        "Mi",
-        "Fá",
-        "Sol#",
-        "Lá"
-      ]
-    },
-    "perguntas": [
+    "id": "modulo-1",
+    "titulo": "Escalas e modos",
+    "resumo": "As escalas menores, os modos mais usados e as escalas do dominante, até o II–V–I.",
+    "textos": [
       {
-        "enunciado": "O que muda da menor natural para a menor harmônica?",
-        "opcoes": [
-          "O 7º grau sobe meio tom",
-          "O 3º grau sobe meio tom",
-          "O 6º e o 7º graus descem meio tom",
-          "O 5º grau desce meio tom"
+        "id": "menor-harmonica",
+        "titulo": "Escala menor harmônica",
+        "resumo": "A menor natural não tinha força pra voltar pra casa. Subir uma nota resolveu, e criou um som exótico de quebra.",
+        "paragrafos": [
+          "Toque Lá menor natural: Lá, Si, Dó, Ré, Mi, Fá, Sol, Lá. Repare no fim: de Sol pra Lá a distância é de um tom inteiro. Na escala maior, a penúltima nota fica a só meio tom da tônica (Si para Dó, em Dó maior), e esse meio tom puxa o ouvido pra casa. É a nota chamada sensível. A menor natural não tem sensível, e a frase termina meio frouxa.",
+          "O problema aparece ainda mais na harmonia. O acorde montado no 5º grau de Lá menor natural é Mi menor (Mi, Sol, Si). Ele é um acorde menor, sem a tensão de um dominante, e por isso não empurra a música de volta pro Lá menor com a mesma força que um Sol7 empurra pro Dó maior.",
+          "A saída que os compositores encontraram foi subir o 7º grau meio tom: o Sol vira Sol#. Duas coisas acontecem de uma vez. A melodia ganha sensível (Sol# para Lá, meio tom), e o acorde do 5º grau vira Mi maior, ou Mi7 com a sétima (Mi, Sol#, Si, Ré). Agora o V7 da tonalidade menor resolve com a mesma força que na maior. O nome harmônica vem daí: ela nasceu pra resolver um problema da harmonia.",
+          "O conserto tem um efeito colateral. Entre o Fá e o Sol# ficou um buraco de três semitons, uma segunda aumentada. Esse salto não existe nas escalas maiores, e é ele que dá à menor harmônica o sabor de música flamenca, árabe ou klezmer. No sax, vale passar devagar por esse trecho pra o dedo e o ouvido se acostumarem com o salto.",
+          "Na prática, você usa a menor harmônica principalmente sobre o acorde dominante de uma tonalidade menor: sobre Mi7 indo pra Lá menor, tocar a menor harmônica de Lá faz a melodia apontar pro destino. A fórmula, em tons (T) e semitons (S), é T S T T S T+S S."
         ],
-        "correta": 0,
-        "explicacao": "Só o 7º grau sobe: em Lá menor, o Sol vira Sol#, criando a sensível."
+        "exemplo": {
+          "rotulo": "Lá menor harmônica",
+          "notas": [
+            "Lá",
+            "Si",
+            "Dó",
+            "Ré",
+            "Mi",
+            "Fá",
+            "Sol#",
+            "Lá"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "O que muda da menor natural para a menor harmônica?",
+            "opcoes": [
+              "O 7º grau sobe meio tom",
+              "O 3º grau sobe meio tom",
+              "O 6º e o 7º graus descem meio tom",
+              "O 5º grau desce meio tom"
+            ],
+            "correta": 0,
+            "explicacao": "Só o 7º grau sobe: em Lá menor, o Sol vira Sol#, criando a sensível."
+          },
+          {
+            "enunciado": "Que intervalo característico aparece entre o 6º e o 7º grau da menor harmônica?",
+            "opcoes": [
+              "Uma segunda menor (1 semitom)",
+              "Uma terça maior (4 semitons)",
+              "Um tom inteiro (2 semitons)",
+              "Uma segunda aumentada (3 semitons)"
+            ],
+            "correta": 3,
+            "explicacao": "De Fá a Sol# são três semitons, uma segunda aumentada. É ela que dá o sabor exótico da escala."
+          },
+          {
+            "enunciado": "Por que os compositores alteraram a menor natural?",
+            "opcoes": [
+              "Para deixar a escala mais fácil de tocar",
+              "Para a escala ficar igual à maior",
+              "Para ter sensível e um acorde dominante no 5º grau",
+              "Para evitar a segunda aumentada"
+            ],
+            "correta": 2,
+            "explicacao": "Com o Sol#, o acorde do 5º grau vira Mi7, que resolve com força em Lá menor. A segunda aumentada foi consequência, não objetivo."
+          }
+        ]
       },
       {
-        "enunciado": "Que intervalo característico aparece entre o 6º e o 7º grau da menor harmônica?",
-        "opcoes": [
-          "Uma segunda menor (1 semitom)",
-          "Uma terça maior (4 semitons)",
-          "Um tom inteiro (2 semitons)",
-          "Uma segunda aumentada (3 semitons)"
+        "id": "menor-melodica",
+        "titulo": "Escala menor melódica",
+        "resumo": "A harmônica resolveu o acorde, mas criou um salto difícil de cantar. Subir mais uma nota alisou a melodia.",
+        "paragrafos": [
+          "A menor harmônica deixou um presente difícil: o salto de três semitons entre Fá e Sol#. Num acorde ninguém repara, mas numa melodia cantada ele soa estranho e é difícil de afinar. Os cantores e compositores queriam a sensível (o Sol#) sem aquele buraco.",
+          "A solução foi subir também o 6º grau: o Fá vira Fá#. Lá menor melódica fica Lá, Si, Dó, Ré, Mi, Fá#, Sol#, Lá. O caminho até a tônica virou uma sequência de passos normais (Mi, Fá#, Sol#, Lá), sem nenhum salto. O nome melódica vem daí: ela nasceu pra resolver um problema da melodia.",
+          "Na música clássica a escala tem uma regra curiosa: sobe com o 6º e o 7º altos, mas desce como menor natural (Sol, Fá, sem sustenidos). Descendo, não há sensível a respeitar, então a escala volta ao jeito antigo. No jazz essa regra caiu. A menor melódica é a mesma subindo e descendo, e por isso muita gente a chama de menor jazz.",
+          "Um jeito fácil de lembrar: a menor melódica é a escala maior com a terça abaixada. Compare Lá maior (Lá, Si, Dó#, Ré, Mi, Fá#, Sol#) com Lá menor melódica: só o Dó# virou Dó. Ela começa menor e termina como maior, e esse contraste é o som dela. O acorde da tônica que combina com ela é Lá menor com sétima maior, Am(maj7), ou Lá menor com sexta, Am6.",
+          "O motivo de o jazz gostar tanto dela vai além da tônica. Começando a mesma escala em outras notas, saem sons muito usados: a partir do 4º grau sai o lídio dominante, ótimo sobre acordes 7(#11); a partir do 7º grau sai a escala alterada, que tem um texto só dela mais adiante."
         ],
-        "correta": 3,
-        "explicacao": "De Fá a Sol# são três semitons, uma segunda aumentada. É ela que dá o sabor exótico da escala."
+        "exemplo": {
+          "rotulo": "Lá menor melódica (versão jazz)",
+          "notas": [
+            "Lá",
+            "Si",
+            "Dó",
+            "Ré",
+            "Mi",
+            "Fá#",
+            "Sol#",
+            "Lá"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Quais graus da menor natural sobem na menor melódica?",
+            "opcoes": [
+              "Só o 7º",
+              "O 6º e o 7º",
+              "O 3º e o 7º",
+              "O 2º e o 6º"
+            ],
+            "correta": 1,
+            "explicacao": "O 6º e o 7º sobem meio tom: Fá vira Fá# e Sol vira Sol#, eliminando a segunda aumentada da harmônica."
+          },
+          {
+            "enunciado": "Qual a diferença entre o uso clássico e o uso no jazz da menor melódica?",
+            "opcoes": [
+              "No jazz ela desce como menor natural; no clássico é igual nos dois sentidos",
+              "Não há diferença",
+              "No clássico ela desce como menor natural; no jazz é igual subindo e descendo",
+              "No jazz ela tem 6 notas"
+            ],
+            "correta": 2,
+            "explicacao": "A tradição clássica só usa o 6º e o 7º altos subindo. O jazz mantém a escala igual nos dois sentidos."
+          },
+          {
+            "enunciado": "Comparada à escala maior da mesma tônica, a menor melódica difere em quantas notas?",
+            "opcoes": [
+              "Uma: a terça é menor",
+              "Nenhuma",
+              "Duas: a terça e a sexta",
+              "Três: a terça, a sexta e a sétima"
+            ],
+            "correta": 0,
+            "explicacao": "É a escala maior com a terça abaixada. Lá maior tem Dó#; Lá menor melódica tem Dó, e o resto é igual."
+          }
+        ]
       },
       {
-        "enunciado": "Por que os compositores alteraram a menor natural?",
-        "opcoes": [
-          "Para deixar a escala mais fácil de tocar",
-          "Para a escala ficar igual à maior",
-          "Para ter sensível e um acorde dominante no 5º grau",
-          "Para evitar a segunda aumentada"
+        "id": "modo-dorico",
+        "titulo": "Modo dórico",
+        "resumo": "As mesmas notas de Dó maior, começando em Ré, dão um menor mais claro. É o som de So What.",
+        "paragrafos": [
+          "Toque as teclas brancas de Dó a Dó: escala maior. Agora toque as mesmas notas indo de Ré a Ré: Ré, Mi, Fá, Sol, Lá, Si, Dó, Ré. As notas são as mesmas, mas o som muda completamente, porque o centro mudou. Cada ponto de partida da escala maior cria um modo, e esse é o dórico.",
+          "O dórico é um som menor: de Ré a Fá há uma terça menor. Mas ele não soa igual à menor natural. Compare com Ré menor natural, que tem Si♭: no dórico o 6º grau é Si natural, uma sexta maior. Essa única nota deixa o menor mais claro e menos dramático. Ela é a nota característica do dórico, a que você deve fazer soar pra o modo aparecer.",
+          "O exemplo mais famoso é So What, de Miles Davis, no disco Kind of Blue: dezesseis compassos em Ré dórico, oito em Mi♭ dórico e a volta. Antes disso, o improvisador no jazz corria atrás de acordes que mudavam a cada dois tempos. Ali o acorde ficava parado e o solista tinha um modo inteiro pra explorar. Oye Como Va, de Santana, e muito funk e soul também vivem no dórico.",
+          "Na harmonia, o dórico é o modo natural do acorde m7 que aparece no 2º grau da escala maior. Em Dó maior, o acorde do 2º grau é Dm7 (Ré, Fá, Lá, Dó), e as notas de Dó maior tocadas sobre ele soam como Ré dórico. É por isso que o dórico vai aparecer de novo no texto do II–V–I.",
+          "Pra achar qualquer dórico sem decorar: ele é o 2º modo da escala maior que fica um tom abaixo. Sol dórico usa as notas de Fá maior; Lá dórico usa as notas de Sol maior. Ou pense pela fórmula: menor natural com a sexta maior."
         ],
-        "correta": 2,
-        "explicacao": "Com o Sol#, o acorde do 5º grau vira Mi7, que resolve com força em Lá menor. A segunda aumentada foi consequência, não objetivo."
+        "exemplo": {
+          "rotulo": "Ré dórico",
+          "notas": [
+            "Ré",
+            "Mi",
+            "Fá",
+            "Sol",
+            "Lá",
+            "Si",
+            "Dó",
+            "Ré"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "O que diferencia o dórico da menor natural?",
+            "opcoes": [
+              "A 3ª maior",
+              "A 7ª maior",
+              "A 4ª aumentada",
+              "A 6ª maior"
+            ],
+            "correta": 3,
+            "explicacao": "O dórico é menor natural com a sexta maior: em Ré, o Si♭ vira Si. É a nota característica do modo."
+          },
+          {
+            "enunciado": "Ré dórico tem exatamente as mesmas notas de qual escala maior?",
+            "opcoes": [
+              "Ré maior",
+              "Dó maior",
+              "Fá maior",
+              "Sol maior"
+            ],
+            "correta": 1,
+            "explicacao": "Ré dórico é Dó maior começando no 2º grau: todas teclas brancas."
+          },
+          {
+            "enunciado": "Sobre qual acorde o dórico soa naturalmente?",
+            "opcoes": [
+              "Acorde menor com sétima (m7)",
+              "Acorde maior com sétima maior (maj7)",
+              "Acorde dominante (7)",
+              "Acorde diminuto"
+            ],
+            "correta": 0,
+            "explicacao": "O dórico combina com o m7, especialmente o do 2º grau, como o Dm7 em Dó maior."
+          }
+        ]
+      },
+      {
+        "id": "modo-mixolidio",
+        "titulo": "Modo mixolídio",
+        "resumo": "A escala maior com a sétima abaixada. É o som do acorde dominante, do rock e do baião.",
+        "paragrafos": [
+          "Toque as teclas brancas começando em Sol: Sol, Lá, Si, Dó, Ré, Mi, Fá, Sol. A terça (Si) é maior, então o som é maior. Mas a sétima é Fá, um tom abaixo da tônica, e não Fá#, que seria a sensível de Sol maior. Esse é o modo mixolídio: escala maior com a sétima menor.",
+          "Lembra que a sensível puxa pra tônica? Sem ela, a escala para de pedir resolução. O mixolídio soa maior, mas solto, sem a sensação de que precisa ir pra casa. É exatamente o som do acorde dominante (Sol7 é Sol, Si, Ré, Fá), e por isso o mixolídio é a escala padrão pra tocar sobre um acorde 7.",
+          "Ele também é a base de muita música que não tem nada de jazz. O rock e o blues usam acordes dominantes como acorde de casa, sem resolver em lugar nenhum. E o baião de Luiz Gonzaga vive no mixolídio: a sétima abaixada é parte do sotaque nordestino. Às vezes ela aparece junto com a quarta aumentada, numa escala que alguns chamam de nordestina.",
+          "A nota característica é a sétima menor. Pra fazer o modo aparecer num solo, passe por ela e repouse perto dela. Se você trocar por engano pela sétima maior, o som volta a ser de escala maior comum.",
+          "Pra achar qualquer mixolídio: ele é o 5º modo de uma escala maior. Sol mixolídio usa as notas de Dó maior, Ré mixolídio usa as de Sol maior, Lá mixolídio usa as de Ré maior. Pensando em acordes: sobre um acorde 7, toque a escala maior que fica uma quinta abaixo, ou uma quarta acima."
+        ],
+        "exemplo": {
+          "rotulo": "Sol mixolídio",
+          "notas": [
+            "Sol",
+            "Lá",
+            "Si",
+            "Dó",
+            "Ré",
+            "Mi",
+            "Fá",
+            "Sol"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "O que diferencia o mixolídio da escala maior?",
+            "opcoes": [
+              "A 3ª menor",
+              "A 4ª aumentada",
+              "A 7ª menor",
+              "A 6ª menor"
+            ],
+            "correta": 2,
+            "explicacao": "O mixolídio é a escala maior com a sétima abaixada: em Sol, o Fá# vira Fá."
+          },
+          {
+            "enunciado": "Sobre que tipo de acorde o mixolídio é a escolha padrão?",
+            "opcoes": [
+              "Menor com sétima (m7)",
+              "Maior com sétima maior (maj7)",
+              "Meio-diminuto (m7♭5)",
+              "Dominante (7)"
+            ],
+            "correta": 3,
+            "explicacao": "As notas do acorde dominante (fundamental, 3ª maior, 5ª e 7ª menor) estão todas no mixolídio."
+          },
+          {
+            "enunciado": "Lá mixolídio tem as mesmas notas de qual escala maior?",
+            "opcoes": [
+              "Lá maior",
+              "Ré maior",
+              "Mi maior",
+              "Dó maior"
+            ],
+            "correta": 1,
+            "explicacao": "O mixolídio é o 5º modo da maior. Lá é o 5º grau de Ré maior, então Lá mixolídio usa as notas de Ré maior."
+          }
+        ]
+      },
+      {
+        "id": "modo-lidio",
+        "titulo": "Modo lídio",
+        "resumo": "A escala maior com a quarta aumentada. Resolve uma nota que esbarra no acorde e soa como trilha de cinema.",
+        "paragrafos": [
+          "Toque Dó maior por cima de um acorde Cmaj7 (Dó, Mi, Sol, Si) e pare na quarta nota, o Fá. Ela incomoda: o Fá fica a meio tom do Mi, a terça do acorde, e as duas notas se esbarram. Por isso os músicos de jazz chamam o Fá de nota a evitar sobre esse acorde. Passar por ela tudo bem; repousar nela soa como erro.",
+          "O lídio resolve isso subindo a quarta meio tom. Dó lídio é Dó, Ré, Mi, Fá#, Sol, Lá, Si, Dó. O Fá# não esbarra em nada do acorde e, empilhado sobre ele, vira a tensão #11. O resultado é um maior que não tem nenhuma nota a evitar, e por isso soa aberto, flutuante, quase luminoso.",
+          "Esse brilho fez do lídio o som preferido de trilhas de cinema pra cenas de encantamento e voo, como o tema de voo de E.T., de John Williams. No jazz, ele é a escolha comum sobre acordes maj7, principalmente quando o acorde aparece com a indicação maj7(#11).",
+          "As mesmas notas de Dó maior, começando em Fá, dão Fá lídio: Fá, Sol, Lá, Si, Dó, Ré, Mi, Fá. Ele é o 4º modo da escala maior. Pra achar Dó lídio, então, use as notas de Sol maior, que é a escala que tem o Fá#.",
+          "A nota característica é a quarta aumentada. Um exercício bom no sax é tocar arpejos do acorde maior e terminar as frases no #11: o ouvido aprende rápido a reconhecer o brilho do modo."
+        ],
+        "exemplo": {
+          "rotulo": "Dó lídio",
+          "notas": [
+            "Dó",
+            "Ré",
+            "Mi",
+            "Fá#",
+            "Sol",
+            "Lá",
+            "Si",
+            "Dó"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "O que diferencia o lídio da escala maior?",
+            "opcoes": [
+              "A 7ª menor",
+              "A 4ª aumentada",
+              "A 2ª menor",
+              "A 6ª menor"
+            ],
+            "correta": 1,
+            "explicacao": "O lídio é a escala maior com a quarta elevada: em Dó, o Fá vira Fá#."
+          },
+          {
+            "enunciado": "Por que o lídio funciona bem sobre um acorde maj7?",
+            "opcoes": [
+              "Porque tem a 7ª menor do acorde",
+              "Porque tem menos notas",
+              "Porque não tem a 5ª",
+              "Porque troca a 4ª, que esbarra na 3ª do acorde, por uma nota que não esbarra"
+            ],
+            "correta": 3,
+            "explicacao": "A 4ª justa fica meio tom acima da 3ª do acorde e soa como choque. A 4ª aumentada vira a tensão #11, que soa bem."
+          },
+          {
+            "enunciado": "Fá lídio tem as mesmas notas de qual escala maior?",
+            "opcoes": [
+              "Dó maior",
+              "Fá maior",
+              "Si♭ maior",
+              "Sol maior"
+            ],
+            "correta": 0,
+            "explicacao": "O lídio é o 4º modo da maior. Fá é o 4º grau de Dó maior, então Fá lídio usa só teclas brancas."
+          }
+        ]
+      },
+      {
+        "id": "escala-blues",
+        "titulo": "Escala de blues",
+        "resumo": "A pentatônica menor com uma nota a mais, a blue note. Uma nota que, pela teoria, não deveria caber.",
+        "paragrafos": [
+          "O blues nasceu cantado, entre os afro-americanos do sul dos Estados Unidos, numa tradição que não seguia a afinação do piano. Os cantores entoavam certas notas num lugar entre a terça menor e a maior, e entre a quinta justa e a diminuta. Quando essa música encontrou instrumentos de afinação fixa, essas notas do meio precisaram de um endereço.",
+          "A escala de blues é a forma escrita dessa solução. Ela parte da pentatônica menor (Lá, Dó, Ré, Mi, Sol) e acrescenta a quinta diminuta, o Mi♭: Lá, Dó, Ré, Mi♭, Mi, Sol, Lá. São seis notas. O Mi♭ quase nunca é ponto de parada: ele aparece de passagem, escorregando pro Mi ou pro Ré. Essa nota é a mais famosa das blue notes.",
+          "O estranho é onde ela é usada. Um blues em Lá tem acordes maiores com sétima: Lá7, Ré7, Mi7. A escala de blues tem terça menor (Dó), e o acorde de Lá7 tem terça maior (Dó#). Pela teoria das escalas, as duas não combinariam. Mas é justamente esse atrito entre a terça menor da melodia e a terça maior do acorde que dá o som do blues.",
+          "No sax, a graça está no meio do caminho. Instrumentos de sopro podem fazer o que o piano não faz: entoar a terça um pouco acima do Dó, sem chegar ao Dó#, ou chegar na nota escorregando de baixo. Os grandes do blues e do jazz quase nunca tocam a blue note limpa e parada.",
+          "Uma escala só funciona sobre os três acordes do blues de doze compassos, e por isso é a primeira coisa que muita gente aprende pra improvisar. O cuidado é não ficar só nela: misturar com o mixolídio de cada acorde (que tem a terça maior) é o que dá variedade ao solo."
+        ],
+        "exemplo": {
+          "rotulo": "Lá blues",
+          "notas": [
+            "Lá",
+            "Dó",
+            "Ré",
+            "Mi♭",
+            "Mi",
+            "Sol",
+            "Lá"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Que nota a escala de blues acrescenta à pentatônica menor?",
+            "opcoes": [
+              "A 2ª maior",
+              "A 6ª maior",
+              "A 5ª diminuta",
+              "A 7ª maior"
+            ],
+            "correta": 2,
+            "explicacao": "Em Lá, a pentatônica menor ganha o Mi♭, a quinta diminuta, a blue note mais conhecida."
+          },
+          {
+            "enunciado": "Quantas notas diferentes tem a escala de blues?",
+            "opcoes": [
+              "Cinco",
+              "Sete",
+              "Oito",
+              "Seis"
+            ],
+            "correta": 3,
+            "explicacao": "As cinco da pentatônica menor mais a quinta diminuta."
+          },
+          {
+            "enunciado": "Por que a terça menor da escala de blues soa bem sobre o acorde Lá7, que tem terça maior?",
+            "opcoes": [
+              "Porque o atrito entre as duas terças é o som característico do blues",
+              "Porque o acorde não tem terça",
+              "Porque a escala de blues tem terça maior",
+              "Porque Lá7 é um acorde menor"
+            ],
+            "correta": 0,
+            "explicacao": "Pela teoria das escalas não combinariam, mas o choque entre terça menor e maior é a assinatura do blues."
+          }
+        ]
+      },
+      {
+        "id": "campo-harmonico-tetrades",
+        "titulo": "Campo harmônico com tétrades",
+        "resumo": "Empilhando terças sobre cada nota da escala maior saem sete acordes de sétima, de quatro tipos. É o mapa de quase todo standard.",
+        "paragrafos": [
+          "Um acorde básico, a tríade, é feito de três notas empilhadas de terça em terça: Dó, Mi, Sol. Empilhando mais uma terça você chega à sétima, e o acorde passa a ter quatro notas: uma tétrade. No jazz, a tétrade é o acorde normal. A tríade sozinha soa crua demais.",
+          "Agora faça isso sobre cada nota de Dó maior usando só as notas da escala. Saem sete acordes: Cmaj7, Dm7, Em7, Fmaj7, G7, Am7 e Bm7(♭5). Esses sete acordes são o campo harmônico de Dó maior. Quase toda música em Dó maior é feita com eles.",
+          "Repare que só aparecem quatro tipos de acorde, cada um com sua fórmula. Maior com sétima maior, maj7: fundamental, 3ª maior, 5ª justa e 7ª maior (Dó, Mi, Sol, Si). Dominante, 7: 3ª maior, 5ª justa e 7ª menor (Sol, Si, Ré, Fá). Menor com sétima, m7: 3ª menor, 5ª justa e 7ª menor (Ré, Fá, Lá, Dó). Meio-diminuto, m7(♭5): 3ª menor, 5ª diminuta e 7ª menor (Si, Ré, Fá, Lá).",
+          "A ordem dos tipos é sempre a mesma em qualquer tom maior: I maj7, II m7, III m7, IV maj7, V 7, VI m7, VII m7(♭5). E há um detalhe importante: só existe um acorde dominante, o do 5º grau. Ele é o único que tem ao mesmo tempo a sensível (Si) e o Fá, e por isso é o acorde que define a tonalidade.",
+          "No sax você não toca acordes, mas toca arpejos. Arpejar as sete tétrades de um tom, subindo e descendo, é um dos exercícios mais úteis pra improvisar: o ouvido aprende o som de cada tipo e os dedos aprendem onde estão as notas do acorde. E é desse campo que sai a progressão mais comum do jazz, assunto do próximo texto."
+        ],
+        "exemplo": {
+          "rotulo": "Campo harmônico de Dó maior",
+          "notas": [
+            "Cmaj7",
+            "Dm7",
+            "Em7",
+            "Fmaj7",
+            "G7",
+            "Am7",
+            "Bm7(♭5)"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Em qual grau do campo harmônico maior aparece o único acorde dominante (7)?",
+            "opcoes": [
+              "No I",
+              "No IV",
+              "No V",
+              "No VII"
+            ],
+            "correta": 2,
+            "explicacao": "Só o acorde do 5º grau tem 3ª maior e 7ª menor. Em Dó maior, é o G7."
+          },
+          {
+            "enunciado": "Que tipo de acorde se forma no 7º grau?",
+            "opcoes": [
+              "Menor com sétima (m7)",
+              "Meio-diminuto (m7♭5)",
+              "Diminuto (°7)",
+              "Dominante (7)"
+            ],
+            "correta": 1,
+            "explicacao": "Em Dó maior, Si, Ré, Fá e Lá formam Bm7(♭5): 3ª menor, 5ª diminuta e 7ª menor."
+          },
+          {
+            "enunciado": "Quais são as notas de Dm7?",
+            "opcoes": [
+              "Ré, Fá, Lá, Dó",
+              "Ré, Fá#, Lá, Dó",
+              "Ré, Fá, Lá♭, Dó",
+              "Ré, Fá, Lá, Dó#"
+            ],
+            "correta": 0,
+            "explicacao": "Fundamental Ré, 3ª menor Fá, 5ª justa Lá e 7ª menor Dó."
+          }
+        ]
+      },
+      {
+        "id": "ii-v-i",
+        "titulo": "II–V–I maior e menor",
+        "resumo": "Três acordes que aparecem em quase todo standard. A menor harmônica volta pra explicar a versão menor.",
+        "paragrafos": [
+          "Do campo harmônico de Dó maior, pegue o acorde do 2º grau, o do 5º e o do 1º: Dm7, G7, Cmaj7. Essa sequência, o II–V–I, é a frase mais comum do jazz. Autumn Leaves, All the Things You Are e centenas de standards são, em boa parte, II–V–Is encadeados em tons diferentes.",
+          "Por que ela soa tão bem? A fundamental de cada acorde cai uma quinta (Ré para Sol, Sol para Dó), o movimento mais forte da harmonia tonal. E por dentro dos acordes as notas quase não se mexem. Olhe a 3ª e a 7ª de cada um: no Dm7 são Fá e Dó; no G7, Si e Fá; no Cmaj7, Mi e Si. De um acorde pro outro, essas notas andam no máximo meio tom. Elas são as notas-guia, e são elas que contam ao ouvido que o acorde mudou.",
+          "Pra improvisar, as notas-guia são um mapa: uma frase que cai na 3ª ou na 7ª do acorde novo no tempo forte soa como quem sabe onde está. Um exercício clássico no sax é tocar só as notas-guia de um II–V–I, uma nota por acorde, e depois ir enfeitando em volta delas.",
+          "Agora o menor. Em Lá menor, o II–V–I é Bm7(♭5), E7, Am. O primeiro acorde é meio-diminuto porque a menor tem Fá natural. O segundo é um Mi7, com Sol#, e esse Sol# não está na menor natural. Ele vem da menor harmônica, aquela do primeiro texto, criada justamente pra o 5º grau ter um dominante de verdade.",
+          "O acorde final pode ser Am7, Am6 ou Am(maj7), conforme a escala que você quer ouvir sobre ele. Pra tocar sobre o E7, a menor harmônica de Lá é a escolha direta, e nos próximos textos aparecem duas opções mais tensas: a diminuta e a alterada."
+        ],
+        "exemplo": {
+          "rotulo": "II–V–I em Dó maior, depois em Lá menor",
+          "notas": [
+            "Dm7",
+            "G7",
+            "Cmaj7",
+            "Bm7(♭5)",
+            "E7",
+            "Am"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Qual é o II–V–I de Fá maior?",
+            "opcoes": [
+              "Dm7, G7, Cmaj7",
+              "Gm7, C7, Fmaj7",
+              "Am7, D7, Gmaj7",
+              "Gm7, C7, Fm7"
+            ],
+            "correta": 1,
+            "explicacao": "Em Fá maior, o 2º grau é Sol (Gm7), o 5º é Dó (C7) e o 1º é Fá (Fmaj7)."
+          },
+          {
+            "enunciado": "No II–V–I de Lá menor, de onde vem o Sol# do acorde E7?",
+            "opcoes": [
+              "Da menor natural",
+              "Do modo dórico",
+              "Da escala de blues",
+              "Da menor harmônica"
+            ],
+            "correta": 3,
+            "explicacao": "A menor harmônica sobe o 7º grau (Sol para Sol#) justamente pra o acorde do 5º grau ser dominante."
+          },
+          {
+            "enunciado": "Quais notas de cada acorde são chamadas de notas-guia?",
+            "opcoes": [
+              "Fundamental e 5ª",
+              "5ª e 9ª",
+              "3ª e 7ª",
+              "Fundamental e 3ª"
+            ],
+            "correta": 2,
+            "explicacao": "A 3ª e a 7ª definem o tipo do acorde e andam no máximo meio tom de um acorde pro próximo."
+          }
+        ]
+      },
+      {
+        "id": "escala-diminuta",
+        "titulo": "Escala diminuta",
+        "resumo": "Tom e semitom alternados, oito notas e só três escalas diferentes no total. A simetria que vira tensão sobre o dominante.",
+        "paragrafos": [
+          "As escalas que vimos até aqui têm sete notas e um desenho irregular de tons e semitons, e é essa irregularidade que dá a cada uma seu centro. A diminuta faz o oposto: alterna tom e semitom sem parar até voltar ao começo. O resultado tem oito notas e é perfeitamente simétrico.",
+          "A simetria tem uma consequência estranha. Começando a escala em qualquer outra de suas notas, o desenho se repete a cada três semitons, e por isso só existem três escalas diminutas diferentes. Aprendendo três, você tem todas. Elas também não têm um centro claro: soam como se estivessem sempre a caminho de algum lugar.",
+          "Há duas formas de ler a escala, conforme a nota de partida. A diminuta tom-semitom começa com um tom e combina com o acorde diminuto (°7). A diminuta semitom-tom começa com um semitom e combina com o acorde dominante, por isso também é chamada de dominante diminuta. Sol semitom-tom é Sol, Lá♭, Si♭, Si, Ré♭, Ré, Mi, Fá, Sol.",
+          "Sobre um Sol7, essa escala traz as notas do acorde (Sol, Si, Ré, Fá) e mais três tensões: a 9ª menor (Lá♭), a 9ª aumentada (Si♭) e a 11ª aumentada (Ré♭), além da 13ª (Mi). É o som de acordes escritos como 7(♭9) ou 13(♭9). No II–V–I, tocar a dominante diminuta no V deixa a resolução no I muito mais forte.",
+          "No sax, o jeito mais rápido de fazer a escala soar como música é trabalhar padrões que aproveitam a simetria: um motivo de três ou quatro notas tocado, e depois repetido três semitons acima. Como a escala se repete a cada três semitons, o motivo deslocado continua dentro dela."
+        ],
+        "exemplo": {
+          "rotulo": "Sol diminuta semitom-tom",
+          "notas": [
+            "Sol",
+            "Lá♭",
+            "Si♭",
+            "Si",
+            "Ré♭",
+            "Ré",
+            "Mi",
+            "Fá",
+            "Sol"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Quantas notas diferentes tem a escala diminuta?",
+            "opcoes": [
+              "Seis",
+              "Sete",
+              "Oito",
+              "Nove"
+            ],
+            "correta": 2,
+            "explicacao": "Alternando tom e semitom, a escala fecha a oitava com oito notas diferentes."
+          },
+          {
+            "enunciado": "Quantas escalas diminutas diferentes existem?",
+            "opcoes": [
+              "Três",
+              "Doze",
+              "Seis",
+              "Quatro"
+            ],
+            "correta": 0,
+            "explicacao": "Como o desenho se repete a cada três semitons, começar em outra nota da escala não cria escala nova. Sobram só três."
+          },
+          {
+            "enunciado": "Sobre um acorde G7(♭9), qual diminuta usar?",
+            "opcoes": [
+              "Sol tom-semitom",
+              "Sol semitom-tom",
+              "Lá♭ semitom-tom",
+              "Qualquer diminuta serve"
+            ],
+            "correta": 1,
+            "explicacao": "A semitom-tom a partir da fundamental tem as notas do dominante e a 9ª menor. É a dominante diminuta."
+          }
+        ]
+      },
+      {
+        "id": "escala-alterada",
+        "titulo": "Escala alterada",
+        "resumo": "O 7º modo da menor melódica. Mantém só o essencial do acorde dominante e altera todo o resto.",
+        "paragrafos": [
+          "O acorde dominante existe pra criar tensão e resolver. O mixolídio toca o dominante de um jeito tranquilo. Os músicos de bebop queriam o contrário: o máximo de tensão possível no V, pra que a chegada no I soasse como alívio. A escala alterada é a resposta mais radical a esse desejo.",
+          "A ideia é guardar só o que define o acorde dominante, a fundamental, a 3ª maior e a 7ª menor, e alterar todas as outras notas. A 9ª aparece de dois jeitos, menor e aumentada. A 5ª também, diminuta e aumentada. Sobre Sol7, a escala fica Sol, Lá♭, Si♭, Si, Ré♭, Mi♭, Fá, Sol. Nos acordes cifrados, esse som aparece como 7alt ou 7(♭9 #9 ♭13).",
+          "Agora o atalho, e é aqui que a menor melódica volta. Toque Lá♭ menor melódica: Lá♭, Si♭, Dó♭, Ré♭, Mi♭, Fá, Sol. Dó♭ é o mesmo que Si. São exatamente as notas de Sol alterada. A alterada é o 7º modo da menor melódica, e a regra prática é: sobre um dominante alterado, toque a menor melódica que fica meio tom acima da fundamental.",
+          "Isso economiza estudo. Quem já conhece as doze menores melódicas não precisa decorar doze escalas alteradas: sobre G7alt pensa em Lá♭ menor melódica, sobre C7alt em Ré♭ menor melódica, sobre E7alt em Fá menor melódica.",
+          "Um cuidado: a alterada só faz sentido quando resolve. Toque-a sobre o V e chegue no I numa nota do acorde, de preferência uma nota-guia. Sem a resolução, o som parece só fora do tom. Com ela, parece que você sabia exatamente o que estava fazendo."
+        ],
+        "exemplo": {
+          "rotulo": "Sol alterada (= Lá♭ menor melódica)",
+          "notas": [
+            "Sol",
+            "Lá♭",
+            "Si♭",
+            "Si",
+            "Ré♭",
+            "Mi♭",
+            "Fá",
+            "Sol"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "A escala alterada é o 7º modo de qual escala?",
+            "opcoes": [
+              "Escala maior",
+              "Menor harmônica",
+              "Escala diminuta",
+              "Menor melódica"
+            ],
+            "correta": 3,
+            "explicacao": "Começando a menor melódica no 7º grau, sai a alterada. Sol alterada tem as notas de Lá♭ menor melódica."
+          },
+          {
+            "enunciado": "Sobre um acorde C7alt, qual menor melódica você pode tocar?",
+            "opcoes": [
+              "Dó menor melódica",
+              "Ré♭ menor melódica",
+              "Si menor melódica",
+              "Fá menor melódica"
+            ],
+            "correta": 1,
+            "explicacao": "A regra é a menor melódica meio tom acima da fundamental: Dó mais meio tom é Ré♭."
+          },
+          {
+            "enunciado": "Quais notas do acorde dominante a escala alterada mantém sem alteração?",
+            "opcoes": [
+              "Fundamental, 5ª e 9ª",
+              "Só a fundamental",
+              "Fundamental, 3ª e 7ª",
+              "3ª, 5ª e 7ª"
+            ],
+            "correta": 2,
+            "explicacao": "Fundamental, 3ª maior e 7ª menor definem o dominante e ficam. A 5ª e a 9ª aparecem alteradas."
+          }
+        ]
       }
-    ]
-  },
-  {
-    "id": "menor-melodica",
-    "titulo": "Escala menor melódica",
-    "resumo": "A harmônica resolveu o acorde, mas criou um salto difícil de cantar. Subir mais uma nota alisou a melodia.",
-    "paragrafos": [
-      "A menor harmônica deixou um presente difícil: o salto de três semitons entre Fá e Sol#. Num acorde ninguém repara, mas numa melodia cantada ele soa estranho e é difícil de afinar. Os cantores e compositores queriam a sensível (o Sol#) sem aquele buraco.",
-      "A solução foi subir também o 6º grau: o Fá vira Fá#. Lá menor melódica fica Lá, Si, Dó, Ré, Mi, Fá#, Sol#, Lá. O caminho até a tônica virou uma sequência de passos normais (Mi, Fá#, Sol#, Lá), sem nenhum salto. O nome melódica vem daí: ela nasceu pra resolver um problema da melodia.",
-      "Na música clássica a escala tem uma regra curiosa: sobe com o 6º e o 7º altos, mas desce como menor natural (Sol, Fá, sem sustenidos). Descendo, não há sensível a respeitar, então a escala volta ao jeito antigo. No jazz essa regra caiu. A menor melódica é a mesma subindo e descendo, e por isso muita gente a chama de menor jazz.",
-      "Um jeito fácil de lembrar: a menor melódica é a escala maior com a terça abaixada. Compare Lá maior (Lá, Si, Dó#, Ré, Mi, Fá#, Sol#) com Lá menor melódica: só o Dó# virou Dó. Ela começa menor e termina como maior, e esse contraste é o som dela. O acorde da tônica que combina com ela é Lá menor com sétima maior, Am(maj7), ou Lá menor com sexta, Am6.",
-      "O motivo de o jazz gostar tanto dela vai além da tônica. Começando a mesma escala em outras notas, saem sons muito usados: a partir do 4º grau sai o lídio dominante, ótimo sobre acordes 7(#11); a partir do 7º grau sai a escala alterada, que tem um texto só dela mais adiante."
     ],
-    "exemplo": {
-      "rotulo": "Lá menor melódica (versão jazz)",
-      "notas": [
-        "Lá",
-        "Si",
-        "Dó",
-        "Ré",
-        "Mi",
-        "Fá#",
-        "Sol#",
-        "Lá"
-      ]
-    },
-    "perguntas": [
+    "questionario": [
       {
-        "enunciado": "Quais graus da menor natural sobem na menor melódica?",
+        "enunciado": "Qual escala tem a segunda aumentada entre o 6º e o 7º grau?",
         "opcoes": [
-          "Só o 7º",
-          "O 6º e o 7º",
-          "O 3º e o 7º",
-          "O 2º e o 6º"
+          "Menor melódica",
+          "Menor harmônica",
+          "Dórico",
+          "Mixolídio"
         ],
         "correta": 1,
-        "explicacao": "O 6º e o 7º sobem meio tom: Fá vira Fá# e Sol vira Sol#, eliminando a segunda aumentada da harmônica."
+        "explicacao": "Subir só o 7º grau cria o salto de três semitons entre o 6º e o 7º."
       },
       {
-        "enunciado": "Qual a diferença entre o uso clássico e o uso no jazz da menor melódica?",
+        "enunciado": "Qual modo é uma escala menor com a 6ª maior?",
         "opcoes": [
-          "No jazz ela desce como menor natural; no clássico é igual nos dois sentidos",
-          "Não há diferença",
-          "No clássico ela desce como menor natural; no jazz é igual subindo e descendo",
-          "No jazz ela tem 6 notas"
-        ],
-        "correta": 2,
-        "explicacao": "A tradição clássica só usa o 6º e o 7º altos subindo. O jazz mantém a escala igual nos dois sentidos."
-      },
-      {
-        "enunciado": "Comparada à escala maior da mesma tônica, a menor melódica difere em quantas notas?",
-        "opcoes": [
-          "Uma: a terça é menor",
-          "Nenhuma",
-          "Duas: a terça e a sexta",
-          "Três: a terça, a sexta e a sétima"
-        ],
-        "correta": 0,
-        "explicacao": "É a escala maior com a terça abaixada. Lá maior tem Dó#; Lá menor melódica tem Dó, e o resto é igual."
-      }
-    ]
-  },
-  {
-    "id": "modo-dorico",
-    "titulo": "Modo dórico",
-    "resumo": "As mesmas notas de Dó maior, começando em Ré, dão um menor mais claro. É o som de So What.",
-    "paragrafos": [
-      "Toque as teclas brancas de Dó a Dó: escala maior. Agora toque as mesmas notas indo de Ré a Ré: Ré, Mi, Fá, Sol, Lá, Si, Dó, Ré. As notas são as mesmas, mas o som muda completamente, porque o centro mudou. Cada ponto de partida da escala maior cria um modo, e esse é o dórico.",
-      "O dórico é um som menor: de Ré a Fá há uma terça menor. Mas ele não soa igual à menor natural. Compare com Ré menor natural, que tem Si♭: no dórico o 6º grau é Si natural, uma sexta maior. Essa única nota deixa o menor mais claro e menos dramático. Ela é a nota característica do dórico, a que você deve fazer soar pra o modo aparecer.",
-      "O exemplo mais famoso é So What, de Miles Davis, no disco Kind of Blue: dezesseis compassos em Ré dórico, oito em Mi♭ dórico e a volta. Antes disso, o improvisador no jazz corria atrás de acordes que mudavam a cada dois tempos. Ali o acorde ficava parado e o solista tinha um modo inteiro pra explorar. Oye Como Va, de Santana, e muito funk e soul também vivem no dórico.",
-      "Na harmonia, o dórico é o modo natural do acorde m7 que aparece no 2º grau da escala maior. Em Dó maior, o acorde do 2º grau é Dm7 (Ré, Fá, Lá, Dó), e as notas de Dó maior tocadas sobre ele soam como Ré dórico. É por isso que o dórico vai aparecer de novo no texto do II–V–I.",
-      "Pra achar qualquer dórico sem decorar: ele é o 2º modo da escala maior que fica um tom abaixo. Sol dórico usa as notas de Fá maior; Lá dórico usa as notas de Sol maior. Ou pense pela fórmula: menor natural com a sexta maior."
-    ],
-    "exemplo": {
-      "rotulo": "Ré dórico",
-      "notas": [
-        "Ré",
-        "Mi",
-        "Fá",
-        "Sol",
-        "Lá",
-        "Si",
-        "Dó",
-        "Ré"
-      ]
-    },
-    "perguntas": [
-      {
-        "enunciado": "O que diferencia o dórico da menor natural?",
-        "opcoes": [
-          "A 3ª maior",
-          "A 7ª maior",
-          "A 4ª aumentada",
-          "A 6ª maior"
+          "Frígio",
+          "Eólio",
+          "Lócrio",
+          "Dórico"
         ],
         "correta": 3,
-        "explicacao": "O dórico é menor natural com a sexta maior: em Ré, o Si♭ vira Si. É a nota característica do modo."
+        "explicacao": "O dórico é a menor natural com a sexta maior, a nota característica dele."
       },
       {
-        "enunciado": "Ré dórico tem exatamente as mesmas notas de qual escala maior?",
+        "enunciado": "Sobre um G7 que resolve em Cmaj7, que escala soa sem nenhuma tensão alterada?",
         "opcoes": [
-          "Ré maior",
-          "Dó maior",
-          "Fá maior",
-          "Sol maior"
-        ],
-        "correta": 1,
-        "explicacao": "Ré dórico é Dó maior começando no 2º grau: todas teclas brancas."
-      },
-      {
-        "enunciado": "Sobre qual acorde o dórico soa naturalmente?",
-        "opcoes": [
-          "Acorde menor com sétima (m7)",
-          "Acorde maior com sétima maior (maj7)",
-          "Acorde dominante (7)",
-          "Acorde diminuto"
+          "Sol mixolídio",
+          "Sol alterada",
+          "Sol diminuta semitom-tom",
+          "Sol menor harmônica"
         ],
         "correta": 0,
-        "explicacao": "O dórico combina com o m7, especialmente o do 2º grau, como o Dm7 em Dó maior."
-      }
-    ]
-  },
-  {
-    "id": "modo-mixolidio",
-    "titulo": "Modo mixolídio",
-    "resumo": "A escala maior com a sétima abaixada. É o som do acorde dominante, do rock e do baião.",
-    "paragrafos": [
-      "Toque as teclas brancas começando em Sol: Sol, Lá, Si, Dó, Ré, Mi, Fá, Sol. A terça (Si) é maior, então o som é maior. Mas a sétima é Fá, um tom abaixo da tônica, e não Fá#, que seria a sensível de Sol maior. Esse é o modo mixolídio: escala maior com a sétima menor.",
-      "Lembra que a sensível puxa pra tônica? Sem ela, a escala para de pedir resolução. O mixolídio soa maior, mas solto, sem a sensação de que precisa ir pra casa. É exatamente o som do acorde dominante (Sol7 é Sol, Si, Ré, Fá), e por isso o mixolídio é a escala padrão pra tocar sobre um acorde 7.",
-      "Ele também é a base de muita música que não tem nada de jazz. O rock e o blues usam acordes dominantes como acorde de casa, sem resolver em lugar nenhum. E o baião de Luiz Gonzaga vive no mixolídio: a sétima abaixada é parte do sotaque nordestino. Às vezes ela aparece junto com a quarta aumentada, numa escala que alguns chamam de nordestina.",
-      "A nota característica é a sétima menor. Pra fazer o modo aparecer num solo, passe por ela e repouse perto dela. Se você trocar por engano pela sétima maior, o som volta a ser de escala maior comum.",
-      "Pra achar qualquer mixolídio: ele é o 5º modo de uma escala maior. Sol mixolídio usa as notas de Dó maior, Ré mixolídio usa as de Sol maior, Lá mixolídio usa as de Ré maior. Pensando em acordes: sobre um acorde 7, toque a escala maior que fica uma quinta abaixo, ou uma quarta acima."
-    ],
-    "exemplo": {
-      "rotulo": "Sol mixolídio",
-      "notas": [
-        "Sol",
-        "Lá",
-        "Si",
-        "Dó",
-        "Ré",
-        "Mi",
-        "Fá",
-        "Sol"
-      ]
-    },
-    "perguntas": [
+        "explicacao": "O mixolídio tem as notas do acorde com 9ª e 13ª naturais. As outras opções trazem alterações."
+      },
       {
-        "enunciado": "O que diferencia o mixolídio da escala maior?",
+        "enunciado": "Em Ré maior, qual é o acorde do 7º grau?",
         "opcoes": [
-          "A 3ª menor",
-          "A 4ª aumentada",
-          "A 7ª menor",
-          "A 6ª menor"
+          "C#m7",
+          "C#7",
+          "C#m7(♭5)",
+          "Cmaj7"
         ],
         "correta": 2,
-        "explicacao": "O mixolídio é a escala maior com a sétima abaixada: em Sol, o Fá# vira Fá."
+        "explicacao": "O 7º grau do campo harmônico maior é sempre meio-diminuto. Em Ré maior, é Dó#."
       },
       {
-        "enunciado": "Sobre que tipo de acorde o mixolídio é a escolha padrão?",
+        "enunciado": "Qual escala é igual à escala maior com a terça abaixada?",
         "opcoes": [
-          "Menor com sétima (m7)",
-          "Maior com sétima maior (maj7)",
-          "Meio-diminuto (m7♭5)",
-          "Dominante (7)"
-        ],
-        "correta": 3,
-        "explicacao": "As notas do acorde dominante (fundamental, 3ª maior, 5ª e 7ª menor) estão todas no mixolídio."
-      },
-      {
-        "enunciado": "Lá mixolídio tem as mesmas notas de qual escala maior?",
-        "opcoes": [
-          "Lá maior",
-          "Ré maior",
-          "Mi maior",
-          "Dó maior"
-        ],
-        "correta": 1,
-        "explicacao": "O mixolídio é o 5º modo da maior. Lá é o 5º grau de Ré maior, então Lá mixolídio usa as notas de Ré maior."
-      }
-    ]
-  },
-  {
-    "id": "modo-lidio",
-    "titulo": "Modo lídio",
-    "resumo": "A escala maior com a quarta aumentada. Resolve uma nota que esbarra no acorde e soa como trilha de cinema.",
-    "paragrafos": [
-      "Toque Dó maior por cima de um acorde Cmaj7 (Dó, Mi, Sol, Si) e pare na quarta nota, o Fá. Ela incomoda: o Fá fica a meio tom do Mi, a terça do acorde, e as duas notas se esbarram. Por isso os músicos de jazz chamam o Fá de nota a evitar sobre esse acorde. Passar por ela tudo bem; repousar nela soa como erro.",
-      "O lídio resolve isso subindo a quarta meio tom. Dó lídio é Dó, Ré, Mi, Fá#, Sol, Lá, Si, Dó. O Fá# não esbarra em nada do acorde e, empilhado sobre ele, vira a tensão #11. O resultado é um maior que não tem nenhuma nota a evitar, e por isso soa aberto, flutuante, quase luminoso.",
-      "Esse brilho fez do lídio o som preferido de trilhas de cinema pra cenas de encantamento e voo, como o tema de voo de E.T., de John Williams. No jazz, ele é a escolha comum sobre acordes maj7, principalmente quando o acorde aparece com a indicação maj7(#11).",
-      "As mesmas notas de Dó maior, começando em Fá, dão Fá lídio: Fá, Sol, Lá, Si, Dó, Ré, Mi, Fá. Ele é o 4º modo da escala maior. Pra achar Dó lídio, então, use as notas de Sol maior, que é a escala que tem o Fá#.",
-      "A nota característica é a quarta aumentada. Um exercício bom no sax é tocar arpejos do acorde maior e terminar as frases no #11: o ouvido aprende rápido a reconhecer o brilho do modo."
-    ],
-    "exemplo": {
-      "rotulo": "Dó lídio",
-      "notas": [
-        "Dó",
-        "Ré",
-        "Mi",
-        "Fá#",
-        "Sol",
-        "Lá",
-        "Si",
-        "Dó"
-      ]
-    },
-    "perguntas": [
-      {
-        "enunciado": "O que diferencia o lídio da escala maior?",
-        "opcoes": [
-          "A 7ª menor",
-          "A 4ª aumentada",
-          "A 2ª menor",
-          "A 6ª menor"
-        ],
-        "correta": 1,
-        "explicacao": "O lídio é a escala maior com a quarta elevada: em Dó, o Fá vira Fá#."
-      },
-      {
-        "enunciado": "Por que o lídio funciona bem sobre um acorde maj7?",
-        "opcoes": [
-          "Porque tem a 7ª menor do acorde",
-          "Porque tem menos notas",
-          "Porque não tem a 5ª",
-          "Porque troca a 4ª, que esbarra na 3ª do acorde, por uma nota que não esbarra"
-        ],
-        "correta": 3,
-        "explicacao": "A 4ª justa fica meio tom acima da 3ª do acorde e soa como choque. A 4ª aumentada vira a tensão #11, que soa bem."
-      },
-      {
-        "enunciado": "Fá lídio tem as mesmas notas de qual escala maior?",
-        "opcoes": [
-          "Dó maior",
-          "Fá maior",
-          "Si♭ maior",
-          "Sol maior"
-        ],
-        "correta": 0,
-        "explicacao": "O lídio é o 4º modo da maior. Fá é o 4º grau de Dó maior, então Fá lídio usa só teclas brancas."
-      }
-    ]
-  },
-  {
-    "id": "escala-blues",
-    "titulo": "Escala de blues",
-    "resumo": "A pentatônica menor com uma nota a mais, a blue note. Uma nota que, pela teoria, não deveria caber.",
-    "paragrafos": [
-      "O blues nasceu cantado, entre os afro-americanos do sul dos Estados Unidos, numa tradição que não seguia a afinação do piano. Os cantores entoavam certas notas num lugar entre a terça menor e a maior, e entre a quinta justa e a diminuta. Quando essa música encontrou instrumentos de afinação fixa, essas notas do meio precisaram de um endereço.",
-      "A escala de blues é a forma escrita dessa solução. Ela parte da pentatônica menor (Lá, Dó, Ré, Mi, Sol) e acrescenta a quinta diminuta, o Mi♭: Lá, Dó, Ré, Mi♭, Mi, Sol, Lá. São seis notas. O Mi♭ quase nunca é ponto de parada: ele aparece de passagem, escorregando pro Mi ou pro Ré. Essa nota é a mais famosa das blue notes.",
-      "O estranho é onde ela é usada. Um blues em Lá tem acordes maiores com sétima: Lá7, Ré7, Mi7. A escala de blues tem terça menor (Dó), e o acorde de Lá7 tem terça maior (Dó#). Pela teoria das escalas, as duas não combinariam. Mas é justamente esse atrito entre a terça menor da melodia e a terça maior do acorde que dá o som do blues.",
-      "No sax, a graça está no meio do caminho. Instrumentos de sopro podem fazer o que o piano não faz: entoar a terça um pouco acima do Dó, sem chegar ao Dó#, ou chegar na nota escorregando de baixo. Os grandes do blues e do jazz quase nunca tocam a blue note limpa e parada.",
-      "Uma escala só funciona sobre os três acordes do blues de doze compassos, e por isso é a primeira coisa que muita gente aprende pra improvisar. O cuidado é não ficar só nela: misturar com o mixolídio de cada acorde (que tem a terça maior) é o que dá variedade ao solo."
-    ],
-    "exemplo": {
-      "rotulo": "Lá blues",
-      "notas": [
-        "Lá",
-        "Dó",
-        "Ré",
-        "Mi♭",
-        "Mi",
-        "Sol",
-        "Lá"
-      ]
-    },
-    "perguntas": [
-      {
-        "enunciado": "Que nota a escala de blues acrescenta à pentatônica menor?",
-        "opcoes": [
-          "A 2ª maior",
-          "A 6ª maior",
-          "A 5ª diminuta",
-          "A 7ª maior"
+          "Menor harmônica",
+          "Dórico",
+          "Menor melódica",
+          "Escala de blues"
         ],
         "correta": 2,
-        "explicacao": "Em Lá, a pentatônica menor ganha o Mi♭, a quinta diminuta, a blue note mais conhecida."
+        "explicacao": "Lá maior e Lá menor melódica só diferem no Dó#, que vira Dó."
       },
       {
-        "enunciado": "Quantas notas diferentes tem a escala de blues?",
+        "enunciado": "Sobre Fmaj7, que modo evita a nota que esbarra na 3ª do acorde?",
         "opcoes": [
-          "Cinco",
-          "Sete",
-          "Oito",
-          "Seis"
-        ],
-        "correta": 3,
-        "explicacao": "As cinco da pentatônica menor mais a quinta diminuta."
-      },
-      {
-        "enunciado": "Por que a terça menor da escala de blues soa bem sobre o acorde Lá7, que tem terça maior?",
-        "opcoes": [
-          "Porque o atrito entre as duas terças é o som característico do blues",
-          "Porque o acorde não tem terça",
-          "Porque a escala de blues tem terça maior",
-          "Porque Lá7 é um acorde menor"
+          "Fá lídio",
+          "Fá jônio",
+          "Fá mixolídio",
+          "Fá dórico"
         ],
         "correta": 0,
-        "explicacao": "Pela teoria das escalas não combinariam, mas o choque entre terça menor e maior é a assinatura do blues."
-      }
-    ]
-  },
-  {
-    "id": "campo-harmonico-tetrades",
-    "titulo": "Campo harmônico com tétrades",
-    "resumo": "Empilhando terças sobre cada nota da escala maior saem sete acordes de sétima, de quatro tipos. É o mapa de quase todo standard.",
-    "paragrafos": [
-      "Um acorde básico, a tríade, é feito de três notas empilhadas de terça em terça: Dó, Mi, Sol. Empilhando mais uma terça você chega à sétima, e o acorde passa a ter quatro notas: uma tétrade. No jazz, a tétrade é o acorde normal. A tríade sozinha soa crua demais.",
-      "Agora faça isso sobre cada nota de Dó maior usando só as notas da escala. Saem sete acordes: Cmaj7, Dm7, Em7, Fmaj7, G7, Am7 e Bm7(♭5). Esses sete acordes são o campo harmônico de Dó maior. Quase toda música em Dó maior é feita com eles.",
-      "Repare que só aparecem quatro tipos de acorde, cada um com sua fórmula. Maior com sétima maior, maj7: fundamental, 3ª maior, 5ª justa e 7ª maior (Dó, Mi, Sol, Si). Dominante, 7: 3ª maior, 5ª justa e 7ª menor (Sol, Si, Ré, Fá). Menor com sétima, m7: 3ª menor, 5ª justa e 7ª menor (Ré, Fá, Lá, Dó). Meio-diminuto, m7(♭5): 3ª menor, 5ª diminuta e 7ª menor (Si, Ré, Fá, Lá).",
-      "A ordem dos tipos é sempre a mesma em qualquer tom maior: I maj7, II m7, III m7, IV maj7, V 7, VI m7, VII m7(♭5). E há um detalhe importante: só existe um acorde dominante, o do 5º grau. Ele é o único que tem ao mesmo tempo a sensível (Si) e o Fá, e por isso é o acorde que define a tonalidade.",
-      "No sax você não toca acordes, mas toca arpejos. Arpejar as sete tétrades de um tom, subindo e descendo, é um dos exercícios mais úteis pra improvisar: o ouvido aprende o som de cada tipo e os dedos aprendem onde estão as notas do acorde. E é desse campo que sai a progressão mais comum do jazz, assunto do próximo texto."
-    ],
-    "exemplo": {
-      "rotulo": "Campo harmônico de Dó maior",
-      "notas": [
-        "Cmaj7",
-        "Dm7",
-        "Em7",
-        "Fmaj7",
-        "G7",
-        "Am7",
-        "Bm7(♭5)"
-      ]
-    },
-    "perguntas": [
-      {
-        "enunciado": "Em qual grau do campo harmônico maior aparece o único acorde dominante (7)?",
-        "opcoes": [
-          "No I",
-          "No IV",
-          "No V",
-          "No VII"
-        ],
-        "correta": 2,
-        "explicacao": "Só o acorde do 5º grau tem 3ª maior e 7ª menor. Em Dó maior, é o G7."
+        "explicacao": "O lídio troca o Si♭, que fica meio tom acima do Lá, por Si natural, a #11."
       },
       {
-        "enunciado": "Que tipo de acorde se forma no 7º grau?",
-        "opcoes": [
-          "Menor com sétima (m7)",
-          "Meio-diminuto (m7♭5)",
-          "Diminuto (°7)",
-          "Dominante (7)"
-        ],
-        "correta": 1,
-        "explicacao": "Em Dó maior, Si, Ré, Fá e Lá formam Bm7(♭5): 3ª menor, 5ª diminuta e 7ª menor."
-      },
-      {
-        "enunciado": "Quais são as notas de Dm7?",
-        "opcoes": [
-          "Ré, Fá, Lá, Dó",
-          "Ré, Fá#, Lá, Dó",
-          "Ré, Fá, Lá♭, Dó",
-          "Ré, Fá, Lá, Dó#"
-        ],
-        "correta": 0,
-        "explicacao": "Fundamental Ré, 3ª menor Fá, 5ª justa Lá e 7ª menor Dó."
-      }
-    ]
-  },
-  {
-    "id": "ii-v-i",
-    "titulo": "II–V–I maior e menor",
-    "resumo": "Três acordes que aparecem em quase todo standard. A menor harmônica volta pra explicar a versão menor.",
-    "paragrafos": [
-      "Do campo harmônico de Dó maior, pegue o acorde do 2º grau, o do 5º e o do 1º: Dm7, G7, Cmaj7. Essa sequência, o II–V–I, é a frase mais comum do jazz. Autumn Leaves, All the Things You Are e centenas de standards são, em boa parte, II–V–Is encadeados em tons diferentes.",
-      "Por que ela soa tão bem? A fundamental de cada acorde cai uma quinta (Ré para Sol, Sol para Dó), o movimento mais forte da harmonia tonal. E por dentro dos acordes as notas quase não se mexem. Olhe a 3ª e a 7ª de cada um: no Dm7 são Fá e Dó; no G7, Si e Fá; no Cmaj7, Mi e Si. De um acorde pro outro, essas notas andam no máximo meio tom. Elas são as notas-guia, e são elas que contam ao ouvido que o acorde mudou.",
-      "Pra improvisar, as notas-guia são um mapa: uma frase que cai na 3ª ou na 7ª do acorde novo no tempo forte soa como quem sabe onde está. Um exercício clássico no sax é tocar só as notas-guia de um II–V–I, uma nota por acorde, e depois ir enfeitando em volta delas.",
-      "Agora o menor. Em Lá menor, o II–V–I é Bm7(♭5), E7, Am. O primeiro acorde é meio-diminuto porque a menor tem Fá natural. O segundo é um Mi7, com Sol#, e esse Sol# não está na menor natural. Ele vem da menor harmônica, aquela do primeiro texto, criada justamente pra o 5º grau ter um dominante de verdade.",
-      "O acorde final pode ser Am7, Am6 ou Am(maj7), conforme a escala que você quer ouvir sobre ele. Pra tocar sobre o E7, a menor harmônica de Lá é a escolha direta, e nos próximos textos aparecem duas opções mais tensas: a diminuta e a alterada."
-    ],
-    "exemplo": {
-      "rotulo": "II–V–I em Dó maior, depois em Lá menor",
-      "notas": [
-        "Dm7",
-        "G7",
-        "Cmaj7",
-        "Bm7(♭5)",
-        "E7",
-        "Am"
-      ]
-    },
-    "perguntas": [
-      {
-        "enunciado": "Qual é o II–V–I de Fá maior?",
+        "enunciado": "Qual é o II–V–I de Sol maior?",
         "opcoes": [
           "Dm7, G7, Cmaj7",
-          "Gm7, C7, Fmaj7",
-          "Am7, D7, Gmaj7",
-          "Gm7, C7, Fm7"
-        ],
-        "correta": 1,
-        "explicacao": "Em Fá maior, o 2º grau é Sol (Gm7), o 5º é Dó (C7) e o 1º é Fá (Fmaj7)."
-      },
-      {
-        "enunciado": "No II–V–I de Lá menor, de onde vem o Sol# do acorde E7?",
-        "opcoes": [
-          "Da menor natural",
-          "Do modo dórico",
-          "Da escala de blues",
-          "Da menor harmônica"
+          "Am7(♭5), D7, Gm",
+          "Em7, A7, Dmaj7",
+          "Am7, D7, Gmaj7"
         ],
         "correta": 3,
-        "explicacao": "A menor harmônica sobe o 7º grau (Sol para Sol#) justamente pra o acorde do 5º grau ser dominante."
+        "explicacao": "Em Sol maior, o 2º grau é Lá, o 5º é Ré e o 1º é Sol."
       },
       {
-        "enunciado": "Quais notas de cada acorde são chamadas de notas-guia?",
+        "enunciado": "Sobre um E7alt, qual menor melódica você pode tocar?",
         "opcoes": [
-          "Fundamental e 5ª",
-          "5ª e 9ª",
-          "3ª e 7ª",
-          "Fundamental e 3ª"
+          "Mi menor melódica",
+          "Fá menor melódica",
+          "Lá menor melódica",
+          "Si menor melódica"
         ],
-        "correta": 2,
-        "explicacao": "A 3ª e a 7ª definem o tipo do acorde e andam no máximo meio tom de um acorde pro próximo."
-      }
-    ]
-  },
-  {
-    "id": "escala-diminuta",
-    "titulo": "Escala diminuta",
-    "resumo": "Tom e semitom alternados, oito notas e só três escalas diferentes no total. A simetria que vira tensão sobre o dominante.",
-    "paragrafos": [
-      "As escalas que vimos até aqui têm sete notas e um desenho irregular de tons e semitons, e é essa irregularidade que dá a cada uma seu centro. A diminuta faz o oposto: alterna tom e semitom sem parar até voltar ao começo. O resultado tem oito notas e é perfeitamente simétrico.",
-      "A simetria tem uma consequência estranha. Começando a escala em qualquer outra de suas notas, o desenho se repete a cada três semitons, e por isso só existem três escalas diminutas diferentes. Aprendendo três, você tem todas. Elas também não têm um centro claro: soam como se estivessem sempre a caminho de algum lugar.",
-      "Há duas formas de ler a escala, conforme a nota de partida. A diminuta tom-semitom começa com um tom e combina com o acorde diminuto (°7). A diminuta semitom-tom começa com um semitom e combina com o acorde dominante, por isso também é chamada de dominante diminuta. Sol semitom-tom é Sol, Lá♭, Si♭, Si, Ré♭, Ré, Mi, Fá, Sol.",
-      "Sobre um Sol7, essa escala traz as notas do acorde (Sol, Si, Ré, Fá) e mais três tensões: a 9ª menor (Lá♭), a 9ª aumentada (Si♭) e a 11ª aumentada (Ré♭), além da 13ª (Mi). É o som de acordes escritos como 7(♭9) ou 13(♭9). No II–V–I, tocar a dominante diminuta no V deixa a resolução no I muito mais forte.",
-      "No sax, o jeito mais rápido de fazer a escala soar como música é trabalhar padrões que aproveitam a simetria: um motivo de três ou quatro notas tocado, e depois repetido três semitons acima. Como a escala se repete a cada três semitons, o motivo deslocado continua dentro dela."
-    ],
-    "exemplo": {
-      "rotulo": "Sol diminuta semitom-tom",
-      "notas": [
-        "Sol",
-        "Lá♭",
-        "Si♭",
-        "Si",
-        "Ré♭",
-        "Ré",
-        "Mi",
-        "Fá",
-        "Sol"
-      ]
-    },
-    "perguntas": [
-      {
-        "enunciado": "Quantas notas diferentes tem a escala diminuta?",
-        "opcoes": [
-          "Seis",
-          "Sete",
-          "Oito",
-          "Nove"
-        ],
-        "correta": 2,
-        "explicacao": "Alternando tom e semitom, a escala fecha a oitava com oito notas diferentes."
+        "correta": 1,
+        "explicacao": "A alterada é a menor melódica meio tom acima da fundamental. Mi mais meio tom é Fá."
       },
       {
-        "enunciado": "Quantas escalas diminutas diferentes existem?",
+        "enunciado": "Que escala tem só três versões diferentes por ser simétrica?",
         "opcoes": [
-          "Três",
-          "Doze",
-          "Seis",
-          "Quatro"
+          "Diminuta",
+          "Menor harmônica",
+          "Escala de blues",
+          "Lídio"
         ],
         "correta": 0,
-        "explicacao": "Como o desenho se repete a cada três semitons, começar em outra nota da escala não cria escala nova. Sobram só três."
+        "explicacao": "A diminuta se repete a cada três semitons, então começar em outra nota dela não cria escala nova."
       },
       {
-        "enunciado": "Sobre um acorde G7(♭9), qual diminuta usar?",
+        "enunciado": "Num II–V–I menor em Ré menor, qual é o acorde V?",
         "opcoes": [
-          "Sol tom-semitom",
-          "Sol semitom-tom",
-          "Lá♭ semitom-tom",
-          "Qualquer diminuta serve"
+          "Am7",
+          "Gm7",
+          "E7",
+          "A7"
         ],
-        "correta": 1,
-        "explicacao": "A semitom-tom a partir da fundamental tem as notas do dominante e a 9ª menor. É a dominante diminuta."
+        "correta": 3,
+        "explicacao": "O 5º grau de Ré é Lá. Com o 7º grau elevado da menor harmônica (Dó#), o acorde é A7."
       }
     ]
   },
   {
-    "id": "escala-alterada",
-    "titulo": "Escala alterada",
-    "resumo": "O 7º modo da menor melódica. Mantém só o essencial do acorde dominante e altera todo o resto.",
-    "paragrafos": [
-      "O acorde dominante existe pra criar tensão e resolver. O mixolídio toca o dominante de um jeito tranquilo. Os músicos de bebop queriam o contrário: o máximo de tensão possível no V, pra que a chegada no I soasse como alívio. A escala alterada é a resposta mais radical a esse desejo.",
-      "A ideia é guardar só o que define o acorde dominante, a fundamental, a 3ª maior e a 7ª menor, e alterar todas as outras notas. A 9ª aparece de dois jeitos, menor e aumentada. A 5ª também, diminuta e aumentada. Sobre Sol7, a escala fica Sol, Lá♭, Si♭, Si, Ré♭, Mi♭, Fá, Sol. Nos acordes cifrados, esse som aparece como 7alt ou 7(♭9 #9 ♭13).",
-      "Agora o atalho, e é aqui que a menor melódica volta. Toque Lá♭ menor melódica: Lá♭, Si♭, Dó♭, Ré♭, Mi♭, Fá, Sol. Dó♭ é o mesmo que Si. São exatamente as notas de Sol alterada. A alterada é o 7º modo da menor melódica, e a regra prática é: sobre um dominante alterado, toque a menor melódica que fica meio tom acima da fundamental.",
-      "Isso economiza estudo. Quem já conhece as doze menores melódicas não precisa decorar doze escalas alteradas: sobre G7alt pensa em Lá♭ menor melódica, sobre C7alt em Ré♭ menor melódica, sobre E7alt em Fá menor melódica.",
-      "Um cuidado: a alterada só faz sentido quando resolve. Toque-a sobre o V e chegue no I numa nota do acorde, de preferência uma nota-guia. Sem a resolução, o som parece só fora do tom. Com ela, parece que você sabia exatamente o que estava fazendo."
-    ],
-    "exemplo": {
-      "rotulo": "Sol alterada (= Lá♭ menor melódica)",
-      "notas": [
-        "Sol",
-        "Lá♭",
-        "Si♭",
-        "Si",
-        "Ré♭",
-        "Mi♭",
-        "Fá",
-        "Sol"
-      ]
-    },
-    "perguntas": [
+    "id": "modulo-2",
+    "titulo": "Harmonia do jazz",
+    "resumo": "Como os acordes de um standard se movem, se substituem e se enfeitam, e como a melodia acompanha esse movimento.",
+    "textos": [
       {
-        "enunciado": "A escala alterada é o 7º modo de qual escala?",
+        "id": "inversoes-tetrades",
+        "titulo": "Inversões de tétrades",
+        "resumo": "O mesmo acorde, começando em outra nota. É o que deixa as passagens entre acordes suaves.",
+        "paragrafos": [
+          "Toque Cmaj7 e depois Fmaj7 na posição fundamental: Dó, Mi, Sol, Si e então Fá, Lá, Dó, Mi. Todas as notas saltam. Num piano ou numa seção de metais, esse pulo faz a harmonia soar dura, como se cada acorde chegasse de um lugar diferente.",
+          "A saída é mudar a ordem das notas sem mudar o acorde. Cmaj7 continua sendo Dó, Mi, Sol e Si, mas pode começar no Mi (primeira inversão: Mi, Sol, Si, Dó), no Sol (segunda: Sol, Si, Dó, Mi) ou no Si (terceira: Si, Dó, Mi, Sol). Cada forma é uma inversão. Nas cifras, quando a nota de baixo importa, ela vem depois da barra: C/E é Dó maior com Mi no baixo.",
+          "Com as inversões, cada nota do acorde novo pode ficar perto de uma nota do acorde anterior. De Cmaj7 pra Fmaj7, por exemplo, o Dó e o Mi são comuns aos dois e podem ficar parados, e o Sol e o Si sobem pra Lá e Dó. Esse caminho curto entre acordes se chama condução de vozes, e é o que faz uma sequência de acordes soar como uma frase.",
+          "No sax, você não toca acordes, mas a ideia muda o jeito de arpejar. Quem sempre arpeja da fundamental pra cima soa como exercício de escola. Começar o arpejo pela 3ª ou pela 7ª, que é tocar o acorde numa inversão, aproxima o arpejo da nota que vem depois e já cai nas notas-guia.",
+          "Um exercício que dá resultado rápido: escolha um II–V–I e arpeje cada acorde começando na nota mais próxima da última nota do acorde anterior. O desenho fica contínuo, sem pulos, e você ouve a condução de vozes acontecendo numa linha só."
+        ],
+        "exemplo": {
+          "rotulo": "Cmaj7 e suas inversões",
+          "notas": [
+            "Dó Mi Sol Si",
+            "Mi Sol Si Dó",
+            "Sol Si Dó Mi",
+            "Si Dó Mi Sol"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Quais são as notas de Cmaj7 na segunda inversão?",
+            "opcoes": [
+              "Mi, Sol, Si, Dó",
+              "Sol, Si, Dó, Mi",
+              "Si, Dó, Mi, Sol",
+              "Dó, Mi, Sol, Si"
+            ],
+            "correta": 1,
+            "explicacao": "A segunda inversão começa na 5ª do acorde: Sol, Si, Dó, Mi."
+          },
+          {
+            "enunciado": "Na terceira inversão de uma tétrade, qual nota fica no baixo?",
+            "opcoes": [
+              "A 3ª",
+              "A 5ª",
+              "A 7ª",
+              "A fundamental"
+            ],
+            "correta": 2,
+            "explicacao": "Primeira inversão põe a 3ª no baixo, segunda põe a 5ª, terceira põe a 7ª."
+          },
+          {
+            "enunciado": "Por que os arranjadores usam inversões ao encadear acordes?",
+            "opcoes": [
+              "Para mudar o tipo do acorde",
+              "Para deixar o acorde mais grave",
+              "Para evitar a 3ª do acorde",
+              "Para as notas andarem pouco de um acorde pro outro"
+            ],
+            "correta": 3,
+            "explicacao": "A inversão não muda o acorde, só a ordem das notas, e permite caminhos curtos entre acordes, a condução de vozes."
+          }
+        ]
+      },
+      {
+        "id": "tensoes-disponiveis",
+        "titulo": "Tensões disponíveis",
+        "resumo": "A 9ª, a 11ª e a 13ª dão cor ao acorde, mas nem toda tensão cabe em todo acorde.",
+        "paragrafos": [
+          "Depois da 7ª, dá pra continuar empilhando terças: 9ª, 11ª e 13ª. Elas são a 2ª, a 4ª e a 6ª da escala, só que uma oitava acima. Ninguém precisa delas pra saber qual é o acorde, mas são elas que dão a cor do jazz. Por isso se chamam tensões.",
+          "O problema é que algumas tensões brigam com o acorde. A regra que explica quase tudo: uma tensão que fica meio tom acima de uma nota do acorde, uma oitava acima, soa áspera. Sobre Cmaj7, o Fá (11ª) fica meio tom acima do Mi, a 3ª, e por isso é a nota a evitar do acorde maior, como no texto do lídio. As tensões boas sobre maj7 são a 9ª, a #11 e a 13ª.",
+          "No m7 a situação é mais tranquila: 9ª e 11ª soam bem sobre Dm7 (Mi e Sol). A 11ª até é uma das cores preferidas sobre acordes menores. A 13ª depende de onde o acorde está no tom: no Dm7 do 2º grau, o Si soa bem; no Em7 do 3º grau, a nota do tom nessa posição é Dó, a ♭13, meio tom acima do Si, e fica de fora.",
+          "O dominante é o único acorde em que a aspereza é bem-vinda. Sobre G7, a 9ª e a 13ª naturais (Lá e Mi) dão um som claro, e as tensões alteradas, ♭9, #9, #11 e ♭13, dão tensão pra resolver. A 9ª menor, que em qualquer outro acorde é proibida, aqui é uma das mais usadas. Só a 11ª natural (Dó) continua problemática, porque esbarra na 3ª, a não ser no acorde sus, que tira a 3ª.",
+          "Na prática do sax, pense assim: as notas do acorde são o chão, as tensões disponíveis são as cores, e as notas a evitar podem aparecer de passagem, mas não como ponto de repouso no tempo forte."
+        ],
+        "exemplo": {
+          "rotulo": "Tensões sobre G7",
+          "notas": [
+            "9: Lá",
+            "13: Mi",
+            "♭9: Lá♭",
+            "#9: Si♭",
+            "#11: Dó#",
+            "♭13: Mi♭"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Qual tensão é a nota a evitar sobre um acorde Cmaj7?",
+            "opcoes": [
+              "A 9ª (Ré)",
+              "A 13ª (Lá)",
+              "A 11ª natural (Fá)",
+              "A #11 (Fá#)"
+            ],
+            "correta": 2,
+            "explicacao": "O Fá fica meio tom acima do Mi, a 3ª do acorde, e soa como choque."
+          },
+          {
+            "enunciado": "Em que tipo de acorde a 9ª menor é uma tensão comum e bem-vinda?",
+            "opcoes": [
+              "No dominante (7)",
+              "No maj7",
+              "No m7",
+              "No m7(♭5)"
+            ],
+            "correta": 0,
+            "explicacao": "O dominante existe pra criar tensão. A ♭9 aumenta a vontade de resolver, por isso é usada só nele."
+          },
+          {
+            "enunciado": "Qual é a 13ª de um acorde G7?",
+            "opcoes": [
+              "Fá",
+              "Mi",
+              "Ré",
+              "Lá"
+            ],
+            "correta": 1,
+            "explicacao": "A 13ª é a 6ª uma oitava acima. A 6ª de Sol é Mi."
+          }
+        ]
+      },
+      {
+        "id": "dominantes-secundarios",
+        "titulo": "Dominantes secundários",
+        "resumo": "Qualquer acorde do tom pode ganhar o seu próprio V7 por um instante. É a nota de fora que conta a história.",
+        "paragrafos": [
+          "No campo harmônico de Dó maior só existe um acorde dominante, o G7, e ele aponta pro Cmaj7. Mas um standard que só voltasse pro I seria monótono. Os compositores queriam a mesma força de resolução indo pra outros acordes do tom, como o Dm7 ou o Am7.",
+          "A solução é emprestar a cada acorde o seu próprio dominante. O acorde que resolve em Dm7 é o dominante de Ré, que é Lá7 (Lá, Dó#, Mi, Sol). Ele não pertence a Dó maior, porque tem Dó#, mas por um instante esse Dó# vira a sensível do Ré e puxa a música pra lá. Esse acorde se chama dominante secundário e se escreve V/II, o quinto do segundo.",
+          "Em Dó maior, os dominantes secundários mais comuns são: A7 indo pra Dm7 (V/II), E7 indo pra Am7 (V/VI), D7 indo pra G7 (V/V) e C7 indo pra Fmaj7 (V/IV). Repare que cada um tem uma nota de fora do tom, e é sempre a 3ª do acorde: Dó# no A7, Sol# no E7, Fá# no D7. O C7 é a exceção, porque a nota de fora é a 7ª, o Si♭.",
+          "Pra improvisar, a regra é respeitar a nota de fora. Sobre A7 em Dó maior, quem toca a escala de Dó por inércia passa pelo Dó natural e bate de frente com o Dó# do acorde. O caminho é tocar o mixolídio do acorde e ajustar as tensões pro tom: como o A7 vai pra um acorde menor, soam bem a ♭9 e a ♭13, que vêm de Ré menor harmônica.",
+          "Muitos standards são cadeias desses acordes. All of Me, por exemplo, começa com C, E7, A7, Dm7: um dominante secundário levando ao próximo. Reconhecer essas notas de fora é metade do trabalho de ler uma cifra de jazz."
+        ],
+        "exemplo": {
+          "rotulo": "Dominantes secundários em Dó maior",
+          "notas": [
+            "A7 → Dm7",
+            "E7 → Am7",
+            "D7 → G7",
+            "C7 → Fmaj7"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Qual é o dominante secundário V/V em Dó maior?",
+            "opcoes": [
+              "G7",
+              "D7",
+              "A7",
+              "E7"
+            ],
+            "correta": 1,
+            "explicacao": "O V de Dó é Sol, e o dominante de Sol é Ré7. Ele resolve no G7."
+          },
+          {
+            "enunciado": "Em Dó maior, para onde o A7 costuma resolver?",
+            "opcoes": [
+              "Cmaj7",
+              "G7",
+              "Fmaj7",
+              "Dm7"
+            ],
+            "correta": 3,
+            "explicacao": "Lá é o 5º grau de Ré, então A7 é o V/II e resolve em Dm7."
+          },
+          {
+            "enunciado": "Qual nota do E7 não pertence a Dó maior?",
+            "opcoes": [
+              "Sol#",
+              "Mi",
+              "Si",
+              "Ré"
+            ],
+            "correta": 0,
+            "explicacao": "E7 é Mi, Sol#, Si, Ré. O Sol# é a 3ª do acorde e a sensível de Lá."
+          }
+        ]
+      },
+      {
+        "id": "substituicao-tritono",
+        "titulo": "Substituição de trítono",
+        "resumo": "Dois dominantes a um trítono de distância dividem as mesmas notas-guia. Trocar um pelo outro faz o baixo descer em semitons.",
+        "paragrafos": [
+          "O que faz o G7 querer ir pro Dó? As duas notas-guia, Si e Fá. A distância entre elas é um trítono, três tons inteiros, o intervalo mais instável da música tonal. O Si sobe pro Dó e o Fá desce pro Mi, e a resolução acontece.",
+          "Agora olhe o Ré♭7: Ré♭, Fá, Lá♭, Dó♭. Dó♭ é o mesmo que Si. As notas-guia do Ré♭7 são Fá e Si, exatamente as mesmas do G7, só que trocadas de papel: o que era 3ª vira 7ª e vice-versa. Como as notas que resolvem são as mesmas, o Ré♭7 também resolve em Dó. Trocar um dominante pelo outro, que fica a um trítono de distância, é a substituição de trítono, ou subV.",
+          "O ganho aparece no baixo. Dm7, G7, Cmaj7 faz o baixo saltar Ré, Sol, Dó. Dm7, D♭7, Cmaj7 faz o baixo descer em semitons, Ré, Ré♭, Dó, uma linha cromática muito mais suave. É um dos sons mais típicos do jazz, e aparece em muitos standards, como na parte A de The Girl from Ipanema, onde Gm7, G♭7, Fmaj7 descem por meio tom.",
+          "Pra improvisar, há uma ligação bonita com o Módulo 1. Sobre o D♭7 de substituição, a escala usual é o lídio dominante de Ré♭, que é o 4º modo de Lá♭ menor melódica. E Sol alterada também é Lá♭ menor melódica. Ou seja: tocar Sol alterada sobre o G7 e tocar Ré♭ lídio dominante sobre o D♭7 são as mesmas notas. A escala alterada é, no fundo, o som do substituto de trítono.",
+          "Um exercício: pegue um II–V–I que você conhece e troque o V pelo subV. Toque só as notas-guia nas duas versões e repare que a melodia das notas-guia não muda; só o baixo muda."
+        ],
+        "exemplo": {
+          "rotulo": "II–V–I e II–subV–I em Dó",
+          "notas": [
+            "Dm7",
+            "G7",
+            "Cmaj7",
+            "Dm7",
+            "D♭7",
+            "Cmaj7"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Qual é o substituto de trítono de G7?",
+            "opcoes": [
+              "D7",
+              "C7",
+              "D♭7",
+              "A♭7"
+            ],
+            "correta": 2,
+            "explicacao": "Ré♭ fica a um trítono de Sol, e Ré♭7 tem as mesmas notas-guia do G7 (Si e Fá)."
+          },
+          {
+            "enunciado": "O que G7 e D♭7 têm em comum?",
+            "opcoes": [
+              "A fundamental",
+              "A 5ª",
+              "As notas-guia: a 3ª e a 7ª, com os papéis trocados",
+              "Nada, por isso a troca surpreende"
+            ],
+            "correta": 2,
+            "explicacao": "Si e Fá são 3ª e 7ª do G7 e 7ª e 3ª do D♭7. Como são essas notas que resolvem, os dois resolvem em Dó."
+          },
+          {
+            "enunciado": "Como fica o baixo de Dm7, D♭7, Cmaj7?",
+            "opcoes": [
+              "Desce em semitons: Ré, Ré♭, Dó",
+              "Sobe em quartas",
+              "Salta uma quinta",
+              "Fica parado em Dó"
+            ],
+            "correta": 0,
+            "explicacao": "O subV transforma o salto de quinta do baixo numa descida cromática."
+          }
+        ]
+      },
+      {
+        "id": "cadeias-ii-v",
+        "titulo": "Cadeias de II–V",
+        "resumo": "Os standards não ficam num tom só. Eles visitam vários, e quem faz a ponte é quase sempre um II–V.",
+        "paragrafos": [
+          "Pegue a cifra de um standard e procure os II–Vs: um m7 seguido de um 7 cuja fundamental fica uma quarta acima. Em muitos temas, metade dos compassos é isso. O motivo é que o II–V é o jeito mais curto e convincente de anunciar um tom novo: em dois acordes, o ouvido já sabe pra onde vai.",
+          "Autumn Leaves é o exemplo de livro. Em Sol menor, a música começa com Cm7, F7, B♭maj7, que é um II–V–I de Si♭ maior. Depois vem E♭maj7, e então Am7(♭5), D7, Gm, que é um II–V–I menor de Sol. A música passeia entre dois tons vizinhos, e cada chegada é preparada por um II–V.",
+          "Os II–Vs também podem vir encadeados sem resolver. Em Dó maior, Em7, A7, Dm7, G7, Cmaj7 é uma cadeia: Em7–A7 é o II–V de Ré, que leva ao Dm7, que por sua vez já é o II de Dó. Cada acorde menor é ao mesmo tempo chegada de um II–V e começo do próximo. Juntando com o texto anterior, dá pra trocar qualquer um desses dominantes pelo seu subV.",
+          "Pra improvisar, essa leitura muda tudo. Em vez de pensar acorde por acorde, você pensa em regiões: estes quatro compassos estão em Si♭, estes estão em Sol menor. Dentro de cada região, a escala do tom serve de base, e as notas-guia de cada acorde marcam o caminho.",
+          "Exercício: escolha um standard que você toca e marque com colchetes cada II–V da cifra. Depois toque só a fundamental do I de cada região. Essa melodia de tônicas é o mapa da música."
+        ],
+        "exemplo": {
+          "rotulo": "Começo de Autumn Leaves (em Sol menor)",
+          "notas": [
+            "Cm7",
+            "F7",
+            "B♭maj7",
+            "E♭maj7",
+            "Am7(♭5)",
+            "D7",
+            "Gm"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Em Dó maior, qual II–V leva ao Dm7?",
+            "opcoes": [
+              "Am7, D7",
+              "Dm7, G7",
+              "Bm7(♭5), E7",
+              "Em7, A7"
+            ],
+            "correta": 3,
+            "explicacao": "Dm7 é a chegada. O dominante de Ré é A7, e o II de Ré é Em7."
+          },
+          {
+            "enunciado": "No começo de Autumn Leaves em Sol menor, Cm7 e F7 preparam qual acorde?",
+            "opcoes": [
+              "Gm",
+              "B♭maj7",
+              "E♭maj7",
+              "D7"
+            ],
+            "correta": 1,
+            "explicacao": "Cm7–F7 é o II–V de Si♭ maior, que chega no B♭maj7."
+          },
+          {
+            "enunciado": "Por que pensar em regiões de tom ajuda a improvisar?",
+            "opcoes": [
+              "Porque vários acordes seguidos pertencem a um mesmo tom, e a escala dele serve de base",
+              "Porque elimina a necessidade de saber os acordes",
+              "Porque toda música fica num tom só",
+              "Porque assim só se usa a escala de blues"
+            ],
+            "correta": 0,
+            "explicacao": "Um II–V–I inteiro cabe numa escala. Ver a região evita trocar de escala a cada acorde."
+          }
+        ]
+      },
+      {
+        "id": "pentatonicas-sobre-acordes",
+        "titulo": "Pentatônicas sobre acordes",
+        "resumo": "Uma pentatônica não serve só pro acorde de mesmo nome. Começar em outra nota muda as tensões que ela traz.",
+        "paragrafos": [
+          "A pentatônica maior de Dó tem cinco notas: Dó, Ré, Mi, Sol, Lá. Ela soa bem sobre Cmaj7 porque não tem o Fá, a nota a evitar, nem o Si. É segura, mas um pouco simples demais, quase sem as cores do jazz.",
+          "Agora toque a pentatônica de Sol sobre o mesmo Cmaj7: Sol, Lá, Si, Ré, Mi. Em relação ao Dó, essas notas são a 5ª, a 13ª, a 7ª maior, a 9ª e a 3ª. A mesma forma de dedilhado, começando em outra nota, já traz a 7ª e a 9ª. E a pentatônica de Ré, Ré, Mi, Fá#, Lá, Si, dá a 9ª, a 3ª, a #11, a 13ª e a 7ª: o som do lídio inteiro, sem nenhuma nota perigosa.",
+          "O mesmo vale pros outros acordes. Sobre Dm7, a pentatônica menor de Ré é o básico, e a de Lá menor (Lá, Dó, Ré, Mi, Sol) traz a 9ª e a 11ª. No dominante alterado, a escolha clássica é a pentatônica maior de Ré♭ sobre G7: Ré♭, Mi♭, Fá, Lá♭, Si♭. Em relação ao Sol, são a #11, a ♭13, a 7ª, a ♭9 e a #9, quase todas as tensões alteradas numa forma que os dedos já conhecem.",
+          "A vantagem prática é enorme. A pentatônica tem um som forte e uma digitação que você já domina. Em vez de aprender escalas novas pra cada cor, você aprende onde colocar a pentatônica que já sabe.",
+          "McCoy Tyner, Woody Shaw e Coltrane usaram muito esse recurso. Um exercício: sobre um acorde fixo, toque as pentatônicas que começam na fundamental, na 5ª e na 9ª, e ouça a cor ficando cada vez mais aberta."
+        ],
+        "exemplo": {
+          "rotulo": "Pentatônica de Ré sobre Cmaj7 (som lídio)",
+          "notas": [
+            "Ré (9)",
+            "Mi (3)",
+            "Fá# (#11)",
+            "Lá (13)",
+            "Si (7)"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Que tensão a pentatônica de Ré traz sobre um Cmaj7?",
+            "opcoes": [
+              "A 11ª natural (Fá)",
+              "A 7ª menor (Si♭)",
+              "A ♭9 (Ré♭)",
+              "A #11 (Fá#)"
+            ],
+            "correta": 3,
+            "explicacao": "Fá# é a #11 de Dó. Por isso a pentatônica de Ré dá o som lídio sobre Cmaj7."
+          },
+          {
+            "enunciado": "Por que tocar a pentatônica de Sol sobre Cmaj7 em vez da de Dó?",
+            "opcoes": [
+              "Porque ela tem a 11ª natural",
+              "Porque ela traz a 7ª maior e a 9ª",
+              "Porque ela tem a 3ª menor",
+              "Porque ela é mais fácil de digitar"
+            ],
+            "correta": 1,
+            "explicacao": "Sol, Lá, Si, Ré, Mi são 5ª, 13ª, 7ª, 9ª e 3ª de Dó: mais cores do jazz que a pentatônica de Dó."
+          },
+          {
+            "enunciado": "Qual pentatônica maior traz as tensões alteradas sobre G7alt?",
+            "opcoes": [
+              "Sol maior",
+              "Dó maior",
+              "Ré♭ maior",
+              "Ré maior"
+            ],
+            "correta": 2,
+            "explicacao": "Ré♭, Mi♭, Fá, Lá♭, Si♭ são #11, ♭13, 7ª, ♭9 e #9 de Sol."
+          }
+        ]
+      },
+      {
+        "id": "escala-bebop",
+        "titulo": "Escala bebop",
+        "resumo": "Uma nota cromática a mais faz as notas do acorde caírem no tempo forte. É o segredo do som de Charlie Parker.",
+        "paragrafos": [
+          "Toque o mixolídio de Sol descendo em colcheias, começando no Sol no primeiro tempo: Sol, Fá, Mi, Ré, Dó, Si, Lá, Sol. Nos tempos fortes caem Sol, Mi, Dó e Lá. Só o Sol é nota do acorde G7. O Dó, a 11ª, cai justamente num tempo forte. Com sete notas, a escala se desencontra do ritmo de colcheias e as notas do acorde vão parar nos contratempos.",
+          "Os músicos de bebop resolveram isso acrescentando uma nota de passagem: a 7ª maior, entre a 7ª menor e a fundamental. Sol bebop dominante é Sol, Fá#, Fá, Mi, Ré, Dó, Si, Lá, Sol descendo. Agora são oito notas, e descendo a partir de uma nota do acorde no tempo forte, as notas do acorde (Sol, Fá, Ré, Si) caem todas nos tempos e as outras ficam nos contratempos.",
+          "A mesma ideia existe pro acorde maior. A escala bebop maior acrescenta a #5 entre a 5ª e a 6ª: Dó, Ré, Mi, Fá, Sol, Sol#, Lá, Si. As notas de C6 (Dó, Mi, Sol, Lá) caem nos tempos fortes, e o Sol# vira uma ponte cromática.",
+          "O efeito é que a linha soa ao mesmo tempo melódica e harmônica: quem ouve escuta o acorde só pela melodia, sem precisar do piano. Esse é um dos motivos de as frases de Parker e Dizzy soarem tão claras mesmo rápidas.",
+          "Um cuidado: a nota cromática é de passagem. Ela funciona andando, não parada. E a escala bebop não é pra subir e descer de ponta a ponta: use trechos dela, misturando com arpejos e com a aproximação cromática, assunto do próximo texto."
+        ],
+        "exemplo": {
+          "rotulo": "Sol bebop dominante (descendo)",
+          "notas": [
+            "Sol",
+            "Fá#",
+            "Fá",
+            "Mi",
+            "Ré",
+            "Dó",
+            "Si",
+            "Lá",
+            "Sol"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Que nota a escala bebop dominante acrescenta ao mixolídio?",
+            "opcoes": [
+              "A 3ª menor",
+              "A #11",
+              "A ♭9",
+              "A 7ª maior"
+            ],
+            "correta": 3,
+            "explicacao": "A 7ª maior entra entre a 7ª menor e a fundamental, como nota de passagem."
+          },
+          {
+            "enunciado": "Qual a vantagem de ter oito notas em vez de sete?",
+            "opcoes": [
+              "A escala fica mais grave",
+              "Ela passa a servir pra acordes menores",
+              "Em colcheias, as notas do acorde caem nos tempos fortes",
+              "Ela elimina a 3ª"
+            ],
+            "correta": 2,
+            "explicacao": "Com oito notas, o desenho fecha certinho em quatro tempos de colcheias e as notas do acorde ficam nos tempos."
+          },
+          {
+            "enunciado": "Que nota a escala bebop maior acrescenta?",
+            "opcoes": [
+              "A #5 entre a 5ª e a 6ª",
+              "A 7ª menor",
+              "A ♭3",
+              "A 11ª"
+            ],
+            "correta": 0,
+            "explicacao": "Em Dó, o Sol# entra entre Sol e Lá, deixando as notas de C6 nos tempos fortes."
+          }
+        ]
+      },
+      {
+        "id": "aproximacao-cromatica",
+        "titulo": "Aproximação cromática e cercadura",
+        "resumo": "Chegar numa nota do acorde pelos lados. É assim que o bebop usa notas de fora sem soar errado.",
+        "paragrafos": [
+          "Uma nota de fora do acorde, tocada parada num tempo forte, soa errada. A mesma nota tocada um instante antes de uma nota do acorde soa intencional, porque o ouvido entende que ela estava indo pra algum lugar. O bebop transformou essa percepção num vocabulário.",
+          "O recurso mais simples é a aproximação cromática: chegar na nota-alvo vindo de meio tom abaixo. Pra cair no Mi, a 3ª de Cmaj7, toque Ré# um instante antes. O Ré# não pertence ao tom, mas resolve imediatamente, e o ouvido aceita. Também dá pra chegar de meio tom acima, ou com duas notas cromáticas seguidas.",
+          "O passo seguinte é a cercadura, que em inglês se chama enclosure: rodear a nota-alvo por cima e por baixo antes de tocá-la. Pra cair no Mi, toque Fá, depois Ré#, depois Mi. A nota de cima é da escala, a de baixo é cromática, e as duas apontam pro alvo como setas. Parker usava cercaduras em quase toda frase.",
+          "O detalhe que faz funcionar é o ritmo. A nota-alvo precisa cair no tempo forte, e as notas de aproximação vêm antes, no contratempo. Se o alvo cai no contratempo, a nota cromática vira a nota importante e o efeito se perde.",
+          "Exercício: pegue as notas-guia de um II–V–I e chegue em cada uma com uma cercadura. Você vai ouvir a linha ganhar o sotaque do bebop sem ter aprendido nenhuma escala nova."
+        ],
+        "exemplo": {
+          "rotulo": "Cercadura chegando no Mi (3ª de Cmaj7)",
+          "notas": [
+            "Fá",
+            "Ré#",
+            "Mi"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "O que é uma cercadura (enclosure)?",
+            "opcoes": [
+              "Tocar o arpejo do acorde inteiro",
+              "Rodear a nota-alvo por cima e por baixo antes de tocá-la",
+              "Repetir a nota-alvo várias vezes",
+              "Tocar a escala inteira até chegar na nota"
+            ],
+            "correta": 1,
+            "explicacao": "A nota acima e a nota abaixo apontam pro alvo, que vem logo depois."
+          },
+          {
+            "enunciado": "Qual a aproximação cromática de baixo para chegar no Mi?",
+            "opcoes": [
+              "Fá",
+              "Ré#",
+              "Ré",
+              "Fá#"
+            ],
+            "correta": 1,
+            "explicacao": "Meio tom abaixo de Mi é Ré#."
+          },
+          {
+            "enunciado": "Onde a nota-alvo deve cair pra aproximação funcionar?",
+            "opcoes": [
+              "No contratempo",
+              "Tanto faz",
+              "Sempre no último tempo do compasso",
+              "No tempo forte"
+            ],
+            "correta": 3,
+            "explicacao": "As notas de aproximação vêm antes, no contratempo. O alvo no tempo forte é o que faz a nota de fora soar intencional."
+          }
+        ]
+      },
+      {
+        "id": "emprestimo-modal",
+        "titulo": "Empréstimo modal",
+        "resumo": "Pegar emprestado um acorde do tom menor de mesmo nome. Um desvio que soa como nostalgia.",
+        "paragrafos": [
+          "Dó maior e Dó menor têm a mesma tônica e escalas diferentes. Os compositores perceberam que dá pra usar, dentro de uma música em Dó maior, acordes que pertencem a Dó menor. A tônica continua a mesma; só a cor muda por um instante. Isso é empréstimo modal.",
+          "O empréstimo mais comum é o IV menor. Em Dó maior o IV é Fá maior; em Dó menor é Fá menor. Tocar F, depois Fm, depois C faz a música escurecer e voltar, um efeito que aparece em canções dos Beatles, na bossa nova e em muito standard. O Lá♭ do Fm é a nota emprestada, e ela desce pro Sol do acorde de Dó.",
+          "Outros acordes emprestados comuns em Dó maior: A♭maj7 (♭VI), E♭maj7 (♭III), B♭7 (♭VII7) e Dm7(♭5) no lugar do Dm7. Todos vêm de Dó menor, e todos trazem uma ou mais das notas Mi♭, Lá♭ e Si♭.",
+          "Uma combinação famosa é a cadência chamada backdoor, a porta dos fundos: Fm7, B♭7, Cmaj7. Em vez de chegar no I pelo G7, a música chega pelo ♭VII7. A resolução é mais suave, com menos tensão, e aparece em temas como Lady Bird.",
+          "Pra improvisar, as escalas seguem os acordes emprestados. Sobre Fm6, a menor melódica de Fá soa muito bem. Sobre o B♭7 do backdoor, o lídio dominante de Si♭, que é o 4º modo de Fá menor melódica. Ou seja, uma escala só cobre Fm e B♭7 e prepara a volta ao Dó."
+        ],
+        "exemplo": {
+          "rotulo": "Backdoor em Dó maior",
+          "notas": [
+            "Fm7",
+            "B♭7",
+            "Cmaj7"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Em Dó maior, qual é o acorde IV emprestado de Dó menor?",
+            "opcoes": [
+              "Fm",
+              "F",
+              "Dm",
+              "G7"
+            ],
+            "correta": 0,
+            "explicacao": "O IV de Dó menor é Fá menor. A nota emprestada é o Lá♭."
+          },
+          {
+            "enunciado": "Qual é a cadência backdoor em Dó maior?",
+            "opcoes": [
+              "Dm7, G7, Cmaj7",
+              "Dm7, D♭7, Cmaj7",
+              "Fm7, B♭7, Cmaj7",
+              "Am7, D7, Gmaj7"
+            ],
+            "correta": 2,
+            "explicacao": "A porta dos fundos chega no I pelo ♭VII7, preparado pelo IVm7."
+          },
+          {
+            "enunciado": "Que escala cobre ao mesmo tempo o Fm6 e o B♭7 do backdoor?",
+            "opcoes": [
+              "Dó maior",
+              "Si♭ mixolídio com 7ª maior",
+              "Fá menor melódica",
+              "Fá blues"
+            ],
+            "correta": 2,
+            "explicacao": "Fá menor melódica serve pro Fm6, e o seu 4º modo é Si♭ lídio dominante, a escala do B♭7."
+          }
+        ]
+      },
+      {
+        "id": "diminuto-passagem",
+        "titulo": "Diminuto de passagem",
+        "resumo": "Um acorde diminuto entre dois acordes faz o baixo andar em semitom e, no fundo, é um dominante disfarçado.",
+        "paragrafos": [
+          "Entre Cmaj7 e Dm7 o baixo dá um passo de um tom, de Dó pra Ré. Os compositores gostam de preencher esse passo com a nota do meio, o Dó#, e de pôr ali um acorde diminuto: Cmaj7, C#°7, Dm7. O baixo sobe em semitons e a passagem ganha um empurrão.",
+          "Por que o C#°7 soa tão natural ali? Olhe as notas: Dó#, Mi, Sol, Si♭. Agora olhe o A7(♭9), o dominante secundário de Dm7: Lá, Dó#, Mi, Sol, Si♭. Tirando a fundamental, são as mesmas notas. O diminuto de passagem é, no fundo, um dominante com ♭9 sem a fundamental. Ele tem a sensível do acorde seguinte (o Dó#, indo pro Ré) e por isso resolve com força.",
+          "A regra geral: um acorde diminuto meio tom abaixo de um acorde-alvo funciona como o dominante do alvo. Pra achar o dominante equivalente, desça uma 3ª maior a partir da fundamental do diminuto: C#°7 equivale a A7(♭9), F#°7 equivale a D7(♭9), G#°7 equivale a E7(♭9).",
+          "Os diminutos de passagem aparecem em muitos standards e no blues de jazz, como o B°7 que liga o B♭7 de volta ao F7 no sexto compasso de um blues em Fá. Saber que ele é um dominante disfarçado ajuda a improvisar: dá pra pensar no dominante e tocar o que você já sabe dele.",
+          "A escala direta pro acorde diminuto é a diminuta tom-semitom a partir da fundamental dele. E ela tem exatamente as mesmas notas da diminuta semitom-tom do dominante equivalente, o que fecha o círculo com o texto da escala diminuta."
+        ],
+        "exemplo": {
+          "rotulo": "Diminuto de passagem em Dó maior",
+          "notas": [
+            "Cmaj7",
+            "C#°7",
+            "Dm7"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Entre Cmaj7 e Dm7, o C#°7 equivale a qual dominante?",
+            "opcoes": [
+              "A7(♭9)",
+              "G7(♭9)",
+              "C#7",
+              "D7"
+            ],
+            "correta": 0,
+            "explicacao": "C#°7 tem Dó#, Mi, Sol, Si♭, que são as notas de A7(♭9) sem o Lá. E A7 é o dominante de Dm7."
+          },
+          {
+            "enunciado": "Por que o diminuto de passagem resolve com força no acorde seguinte?",
+            "opcoes": [
+              "Porque tem as mesmas notas do acorde seguinte",
+              "Porque é um acorde maior",
+              "Porque não tem trítono",
+              "Porque contém a sensível do acorde seguinte e funciona como dominante"
+            ],
+            "correta": 3,
+            "explicacao": "O Dó# do C#°7 é a sensível de Ré, e o acorde inteiro é um dominante com ♭9 disfarçado."
+          },
+          {
+            "enunciado": "Que escala combina diretamente com um acorde diminuto?",
+            "opcoes": [
+              "A diminuta semitom-tom a partir da fundamental",
+              "A diminuta tom-semitom a partir da fundamental",
+              "A escala maior",
+              "A pentatônica menor"
+            ],
+            "correta": 1,
+            "explicacao": "A tom-semitom tem as notas do °7 nas posições certas. A semitom-tom serve pro dominante."
+          }
+        ]
+      }
+    ],
+    "questionario": [
+      {
+        "enunciado": "Em Dó maior, qual sequência é um II–V que leva ao acorde do VI grau (Am7)?",
         "opcoes": [
-          "Escala maior",
-          "Menor harmônica",
-          "Escala diminuta",
-          "Menor melódica"
+          "Bm7(♭5), E7",
+          "Em7, A7",
+          "Dm7, G7",
+          "Gm7, C7"
+        ],
+        "correta": 0,
+        "explicacao": "Am7 é o alvo. O dominante de Lá é E7, e o II é Bm7(♭5), porque o alvo é menor."
+      },
+      {
+        "enunciado": "Qual é o substituto de trítono do A7?",
+        "opcoes": [
+          "E7",
+          "D♭7",
+          "B♭7",
+          "E♭7"
         ],
         "correta": 3,
-        "explicacao": "Começando a menor melódica no 7º grau, sai a alterada. Sol alterada tem as notas de Lá♭ menor melódica."
+        "explicacao": "Mi♭ fica a um trítono de Lá. E♭7 e A7 dividem as notas-guia Dó# (Ré♭) e Sol."
       },
       {
-        "enunciado": "Sobre um acorde C7alt, qual menor melódica você pode tocar?",
+        "enunciado": "Sobre um G7 que vai para Cm, que tensões costumam soar melhor?",
         "opcoes": [
-          "Dó menor melódica",
-          "Ré♭ menor melódica",
-          "Si menor melódica",
-          "Fá menor melódica"
+          "9 e 13 naturais",
+          "♭9 e ♭13",
+          "11 natural",
+          "7ª maior"
         ],
         "correta": 1,
-        "explicacao": "A regra é a menor melódica meio tom acima da fundamental: Dó mais meio tom é Ré♭."
+        "explicacao": "Indo pra um acorde menor, o dominante pede as tensões que vêm da menor harmônica do alvo: ♭9 e ♭13."
       },
       {
-        "enunciado": "Quais notas do acorde dominante a escala alterada mantém sem alteração?",
+        "enunciado": "Em Dó maior, D♭7 resolvendo em Cmaj7 é um exemplo de quê?",
         "opcoes": [
-          "Fundamental, 5ª e 9ª",
-          "Só a fundamental",
-          "Fundamental, 3ª e 7ª",
-          "3ª, 5ª e 7ª"
+          "Empréstimo modal",
+          "Dominante secundário",
+          "Substituição de trítono",
+          "Diminuto de passagem"
         ],
         "correta": 2,
-        "explicacao": "Fundamental, 3ª maior e 7ª menor definem o dominante e ficam. A 5ª e a 9ª aparecem alteradas."
+        "explicacao": "D♭7 está no lugar do G7, a um trítono dele, com as mesmas notas-guia."
+      },
+      {
+        "enunciado": "Qual destas progressões usa um acorde emprestado do tom menor?",
+        "opcoes": [
+          "C, Am, Dm, G",
+          "C, A7, Dm",
+          "C, C#°7, Dm",
+          "C, Fm, C"
+        ],
+        "correta": 3,
+        "explicacao": "Fm é o IV de Dó menor usado dentro de Dó maior. Os outros exemplos são diatônicos, dominante secundário e diminuto de passagem."
+      },
+      {
+        "enunciado": "Sobre um Cmaj7, qual pentatônica maior dá o som lídio?",
+        "opcoes": [
+          "Dó maior",
+          "Fá maior",
+          "Ré maior",
+          "Si♭ maior"
+        ],
+        "correta": 2,
+        "explicacao": "A pentatônica de Ré tem o Fá#, a #11 de Dó, e nenhuma nota a evitar."
+      },
+      {
+        "enunciado": "Por que a escala bebop dominante tem uma nota cromática a mais?",
+        "opcoes": [
+          "Para as notas do acorde caírem nos tempos fortes em colcheias",
+          "Para virar uma escala menor",
+          "Para incluir a ♭9",
+          "Para ter o mesmo número de notas da diminuta"
+        ],
+        "correta": 0,
+        "explicacao": "Com oito notas, descendo a partir de uma nota do acorde no tempo, as notas do acorde caem nos tempos."
+      },
+      {
+        "enunciado": "O diminuto G#°7 entre Gmaj7 e Am7 em Sol maior equivale a qual dominante?",
+        "opcoes": [
+          "D7(♭9)",
+          "E7(♭9)",
+          "G#7",
+          "A7"
+        ],
+        "correta": 1,
+        "explicacao": "Descendo uma 3ª maior de Sol# chega-se a Mi. E7 é o dominante de Am7."
+      },
+      {
+        "enunciado": "Numa cercadura que chega no Sol, qual sequência funciona?",
+        "opcoes": [
+          "Sol, Lá, Sol",
+          "Lá, Fá#, Sol",
+          "Fá, Mi, Sol",
+          "Dó, Si, Sol"
+        ],
+        "correta": 1,
+        "explicacao": "A nota de cima (Lá, da escala) e a de baixo (Fá#, meio tom abaixo) rodeiam o Sol antes de chegar nele."
+      },
+      {
+        "enunciado": "Qual tensão de um Dm7 costuma ser a mais segura e característica?",
+        "opcoes": [
+          "A ♭9 (Mi♭)",
+          "A ♭13 (Si♭)",
+          "A 7ª maior (Dó#)",
+          "A 11ª (Sol)"
+        ],
+        "correta": 3,
+        "explicacao": "A 11ª não esbarra em nenhuma nota do acorde menor e é uma das cores preferidas sobre m7."
+      }
+    ]
+  },
+  {
+    "id": "modulo-3",
+    "titulo": "Recursos avançados",
+    "resumo": "As escalas derivadas, as formas clássicas do jazz e os recursos que levam a harmonia e o improviso além do tom.",
+    "textos": [
+      {
+        "id": "modos-menor-melodica",
+        "titulo": "Modos da menor melódica",
+        "resumo": "Uma escala, sete pontos de partida, e quase todos viram ferramenta do jazz moderno.",
+        "paragrafos": [
+          "No Módulo 1 apareceram dois modos da menor melódica: o lídio dominante e a escala alterada. A ideia é a mesma dos modos da escala maior: as mesmas notas, começando em outro grau, criam outro som. Com a menor melódica, os sete sons servem a acordes muito usados no jazz, e por isso ela é chamada de segunda escala-mãe do jazz.",
+          "Usando Dó menor melódica (Dó, Ré, Mi♭, Fá, Sol, Lá, Si), os modos são: 1º, a própria menor melódica, sobre Cm(maj7) ou Cm6; 2º, a partir do Ré, o dórico ♭2, sobre acordes sus com ♭9; 3º, a partir do Mi♭, o lídio aumentado, sobre maj7(#5); 4º, a partir do Fá, o lídio dominante, sobre 7(#11); 5º, a partir do Sol, o mixolídio ♭6, sobre 7(♭13); 6º, a partir do Lá, o lócrio ♮2, sobre m7(♭5); 7º, a partir do Si, a alterada, sobre 7alt.",
+          "O 6º modo resolve um problema prático. Sobre m7(♭5), o lócrio da escala maior tem uma 2ª menor que esbarra na fundamental. O lócrio ♮2 troca essa nota por uma 9ª natural e soa muito mais limpo. Bm7(♭5) com o lócrio ♮2 de Si usa as notas de Ré menor melódica.",
+          "O jeito eficiente de estudar isso não é decorar sete nomes por tonalidade. É saber de que menor melódica vem cada acorde: sobre um 7(#11), a menor melódica uma 5ª acima; sobre um m7(♭5), uma 3ª menor acima; sobre um 7alt, meio tom acima. A digitação que você aprende é uma só.",
+          "Um exercício: escolha Ré menor melódica e toque-a sobre Bm7(♭5), sobre G7(#11) e sobre C#7alt. A mesma escala, três acordes, três sons diferentes."
+        ],
+        "exemplo": {
+          "rotulo": "Acordes servidos por Dó menor melódica",
+          "notas": [
+            "Cm(maj7)",
+            "Dsus(♭9)",
+            "E♭maj7(#5)",
+            "F7(#11)",
+            "G7(♭13)",
+            "Am7(♭5)",
+            "B7alt"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Que modo da menor melódica se usa sobre um acorde m7(♭5)?",
+            "opcoes": [
+              "O 6º, lócrio ♮2",
+              "O 4º, lídio dominante",
+              "O 2º, dórico ♭2",
+              "O 3º, lídio aumentado"
+            ],
+            "correta": 0,
+            "explicacao": "O lócrio ♮2 tem a 3ª menor, a 5ª diminuta e a 7ª menor, e troca a 2ª menor do lócrio comum por uma 9ª natural."
+          },
+          {
+            "enunciado": "Sobre Bm7(♭5), as notas do lócrio ♮2 são as de qual menor melódica?",
+            "opcoes": [
+              "Si menor melódica",
+              "Dó menor melódica",
+              "Ré menor melódica",
+              "Lá menor melódica"
+            ],
+            "correta": 2,
+            "explicacao": "Si é o 6º grau de Ré menor melódica, que fica uma 3ª menor acima."
+          },
+          {
+            "enunciado": "Qual modo da menor melódica é o lídio dominante?",
+            "opcoes": [
+              "O 7º",
+              "O 5º",
+              "O 4º",
+              "O 2º"
+            ],
+            "correta": 2,
+            "explicacao": "Começando no 4º grau. Em Dó menor melódica, é Fá lídio dominante, sobre F7(#11)."
+          }
+        ]
+      },
+      {
+        "id": "modos-menor-harmonica",
+        "titulo": "Modos da menor harmônica",
+        "resumo": "Dos sete, um é estrela: o frígio dominante, o som do V7 em tom menor e do flamenco.",
+        "paragrafos": [
+          "A menor harmônica também tem sete modos, mas na prática do jazz um deles domina. É o 5º, o frígio dominante. Em Lá menor harmônica, ele começa no Mi: Mi, Fá, Sol#, Lá, Si, Dó, Ré, Mi. É uma escala maior com 2ª menor e 6ª menor, ou, em termos de acorde, um dominante com ♭9 e ♭13.",
+          "Ele existe pra resolver o V7 de um tom menor, aquele que a menor harmônica foi criada pra ter. Sobre E7 indo pra Am, o frígio dominante de Mi traz a ♭9 (Fá) e a ♭13 (Dó), duas notas que já são do tom de Lá menor. Por isso o som é ao mesmo tempo tenso e coerente: as tensões do dominante são as notas do acorde de chegada.",
+          "Fora do jazz, o frígio dominante é a base do flamenco e de muita música do Oriente Médio e dos Bálcãs. A 2ª menor no começo, junto da 3ª maior logo depois, dá aquele intervalo de três semitons (Fá a Sol#) que identifica essas tradições.",
+          "Os outros modos aparecem menos, mas têm nomes conhecidos. O 4º modo, a partir do Ré, é o dórico #4, também chamado de escala romena. O 6º, a partir do Fá, é o lídio #2. O 7º, a partir do Sol#, tem as notas de um acorde diminuto mais algumas, e é um dos jeitos de ouvir o G#°7.",
+          "A distinção prática com o Módulo 2: num II–V–I menor, o V7 pode levar a alterada (mais tensão, notas vindas da menor melódica) ou o frígio dominante (tensões que já são do tom). Teste as duas sobre o mesmo E7 e decida pelo ouvido."
+        ],
+        "exemplo": {
+          "rotulo": "Mi frígio dominante (5º modo de Lá menor harmônica)",
+          "notas": [
+            "Mi",
+            "Fá",
+            "Sol#",
+            "Lá",
+            "Si",
+            "Dó",
+            "Ré",
+            "Mi"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Qual modo da menor harmônica é o mais usado no jazz?",
+            "opcoes": [
+              "O 5º, frígio dominante",
+              "O 2º, lócrio ♮6",
+              "O 3º, jônio #5",
+              "O 6º, lídio #2"
+            ],
+            "correta": 0,
+            "explicacao": "O frígio dominante é a escala do V7 num tom menor."
+          },
+          {
+            "enunciado": "Sobre E7 indo para Am, que tensões o frígio dominante de Mi traz?",
+            "opcoes": [
+              "9 (Fá#) e 13 (Dó#)",
+              "#11 (Lá#) e 13 (Dó#)",
+              "#9 (Sol) e #11 (Lá#)",
+              "♭9 (Fá) e ♭13 (Dó)"
+            ],
+            "correta": 3,
+            "explicacao": "As duas tensões do frígio dominante, Fá e Dó, já são notas de Lá menor."
+          },
+          {
+            "enunciado": "Que tradição musical tem o frígio dominante como base?",
+            "opcoes": [
+              "O samba de roda",
+              "O flamenco",
+              "O blues do Delta",
+              "O canto gregoriano"
+            ],
+            "correta": 1,
+            "explicacao": "A 2ª menor seguida da 3ª maior é a assinatura do flamenco."
+          }
+        ]
+      },
+      {
+        "id": "tons-inteiros",
+        "titulo": "Escala de tons inteiros",
+        "resumo": "Seis notas, todas a um tom de distância. Nenhuma tem prioridade, e por isso a escala soa como sonho ou suspensão.",
+        "paragrafos": [
+          "Todas as escalas do Módulo 1 misturam tons e semitons, e são os semitons que criam centro: a sensível puxando pra tônica, a nota a evitar esbarrando na 3ª. Agora imagine uma escala sem nenhum semitom. Dó, Ré, Mi, Fá#, Sol#, Lá#, Dó. São seis notas, todas a um tom de distância.",
+          "Sem semitom, nenhuma nota puxa pra outra, e a escala perde o centro. Começando em qualquer uma das suas notas, o desenho é o mesmo. Por isso só existem duas escalas de tons inteiros: a que contém o Dó e a que contém o Dó#. Debussy usou esse som pra criar atmosferas sem chão, e no cinema ele virou trilha de sonho e de lembrança.",
+          "No jazz, o lugar da escala de tons inteiros é o dominante com 5ª aumentada. Sobre G7(#5), Sol tons inteiros é Sol, Lá, Si, Dó#, Ré#, Fá: tem fundamental, 9ª, 3ª, #11, #5 e 7ª menor. É o acorde que aparece cifrado como 7(#5), 7(♭13) ou aug7.",
+          "Thelonious Monk adorava esse som e terminava frases com corridas de tons inteiros que parecem desabar. No sax, um bom jeito de usar é em pequenas doses: dois ou três tempos de tons inteiros no fim de um V7, resolvendo numa nota-guia do I.",
+          "Compare com a diminuta, que é a outra escala simétrica. A diminuta alterna tom e semitom, tem oito notas e três versões. A de tons inteiros tem seis notas e duas versões. As duas servem a dominantes, mas a diminuta traz ♭9 e 13 naturais, e a de tons inteiros traz 9 natural e #5."
+        ],
+        "exemplo": {
+          "rotulo": "Sol tons inteiros sobre G7(#5)",
+          "notas": [
+            "Sol",
+            "Lá",
+            "Si",
+            "Dó#",
+            "Ré#",
+            "Fá",
+            "Sol"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Quantas notas diferentes tem a escala de tons inteiros?",
+            "opcoes": [
+              "Seis",
+              "Sete",
+              "Oito",
+              "Cinco"
+            ],
+            "correta": 0,
+            "explicacao": "Com tons inteiros, a oitava fecha em seis passos."
+          },
+          {
+            "enunciado": "Quantas escalas de tons inteiros diferentes existem?",
+            "opcoes": [
+              "Três",
+              "Seis",
+              "Doze",
+              "Duas"
+            ],
+            "correta": 3,
+            "explicacao": "Como o desenho é igual a partir de qualquer nota, só existem a que contém o Dó e a que contém o Dó#."
+          },
+          {
+            "enunciado": "Sobre que acorde a escala de tons inteiros se encaixa naturalmente?",
+            "opcoes": [
+              "Menor com sétima, m7",
+              "Dominante com 5ª aumentada, 7(#5)",
+              "Maior com sétima maior, maj7",
+              "Meio-diminuto, m7(♭5)"
+            ],
+            "correta": 1,
+            "explicacao": "Ela tem 3ª maior, 7ª menor e 5ª aumentada, as notas do 7(#5)."
+          }
+        ]
+      },
+      {
+        "id": "estrutura-superior",
+        "titulo": "Tríades de estrutura superior",
+        "resumo": "Uma tríade simples tocada por cima de um dominante gera tensões sofisticadas. Fácil de tocar, rica de ouvir.",
+        "paragrafos": [
+          "Cifras como C13(#11) ou C7(#9 ♭13) assustam. Contar a 13ª, a #11 e a 9ª de cabeça no meio de um solo é lento. Os pianistas acharam um atalho: deixar a 3ª e a 7ª do dominante embaixo e tocar uma tríade maior comum por cima. A tríade, que é fácil, gera as tensões, que são difíceis. Isso se chama tríade de estrutura superior.",
+          "Sobre C7 (3ª Mi, 7ª Si♭), algumas tríades clássicas: Ré maior (Ré, Fá#, Lá) dá 9ª, #11 e 13ª, o som de C13(#11). Lá maior (Lá, Dó#, Mi) dá 13ª, ♭9 e 3ª, o som de C13(♭9). Lá♭ maior (Lá♭, Dó, Mi♭) dá ♭13, fundamental e #9, o som de C7(#9 ♭13). Fá# maior (Fá#, Lá#, Dó#) dá #11, 7ª e ♭9, o som de C7(♭9 #11).",
+          "Cada tríade tem um nome pelo grau em que está: Ré é a estrutura do II, Lá a do VI, Lá♭ a do ♭VI, Fá# a do ♭V. Aprendendo quatro relações, você tem quatro cores de dominante em qualquer tom.",
+          "No sax a vantagem é ainda maior. Arpejo de tríade maior é das primeiras coisas que se aprende, e ele soa forte e claro. Tocar um arpejo de Lá♭ maior sobre C7 é mais simples que pensar em #9 e ♭13, e o resultado é o mesmo som alterado.",
+          "Uma ligação com o resto do curso: as tríades de Lá♭ e de Fá# cabem na escala alterada de Dó, a de Ré cabe no lídio dominante e a de Lá cabe na diminuta semitom-tom. A estrutura superior é um jeito de tocar essas escalas em blocos de três notas."
+        ],
+        "exemplo": {
+          "rotulo": "Tríades sobre C7 e o som que geram",
+          "notas": [
+            "Ré: 13(#11)",
+            "Lá: 13(♭9)",
+            "Lá♭: 7(#9 ♭13)",
+            "Fá#: 7(♭9 #11)"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Que tensões a tríade de Ré maior gera sobre C7?",
+            "opcoes": [
+              "♭9, 3ª e 13ª",
+              "♭13, fundamental e #9",
+              "9ª, #11 e 13ª",
+              "#11, 7ª e ♭9"
+            ],
+            "correta": 2,
+            "explicacao": "Ré é a 9ª de Dó, Fá# é a #11 e Lá é a 13ª."
+          },
+          {
+            "enunciado": "Que tríade sobre C7 gera o som de C7(#9 ♭13)?",
+            "opcoes": [
+              "Ré maior",
+              "Lá maior",
+              "Sol maior",
+              "Lá♭ maior"
+            ],
+            "correta": 3,
+            "explicacao": "Lá♭ é a ♭13, Dó a fundamental e Mi♭ a #9."
+          },
+          {
+            "enunciado": "Qual a principal vantagem das estruturas superiores pro improvisador?",
+            "opcoes": [
+              "Evitar as notas do acorde",
+              "Dispensar a resolução",
+              "Gerar tensões complexas com um arpejo simples",
+              "Tocar só em tons sem acidente"
+            ],
+            "correta": 2,
+            "explicacao": "A tríade é fácil de tocar e ouvir, e as tensões vêm de graça pela relação com o acorde de baixo."
+          }
+        ]
+      },
+      {
+        "id": "acordes-sus",
+        "titulo": "Acordes sus",
+        "resumo": "Tire a 3ª do dominante e ele para de querer resolver. É o som de Maiden Voyage.",
+        "paragrafos": [
+          "A 3ª e a 7ª do dominante formam o trítono que pede resolução. Se você tirar a 3ª e puser a 4ª no lugar, o trítono some. G7sus4 é Sol, Dó, Ré, Fá. Ele ainda tem a cara de um V, mas sem urgência: soa suspenso, flutuando. O nome vem daí: sus é de suspenso.",
+          "Por muito tempo, o sus foi só um enfeite antes do dominante normal: G7sus4, depois G7, depois C. No jazz modal dos anos 1960 ele ganhou vida própria. Maiden Voyage, de Herbie Hancock, é feito quase só de acordes sus que se movem sem resolver, e cria um ambiente parado, aquático, muito diferente da corrida de II–Vs do bebop.",
+          "Repare nas notas de G7sus4 com a 9ª: Sol, Dó, Ré, Fá, Lá. Por cima do Sol no baixo estão as notas de Dm7 (Ré, Fá, Lá, Dó), ou de Fá maior. Por isso o sus também é escrito Dm7/G ou F/G. Ele é, de certo modo, o II e o V tocados ao mesmo tempo.",
+          "Pra improvisar, o mixolídio continua sendo a base, com uma mudança de prioridade: a 4ª (Dó, sobre G7sus4) deixa de ser nota a evitar e vira nota do acorde, e a 3ª (Si) é que passa a ser usada com cuidado. A pentatônica que começa na 4ª, a de Dó sobre G7sus4, tem as cores do acorde sem tocar a 3ª.",
+          "Existe ainda o sus(♭9), escrito G7sus(♭9) ou Fm/G, mais escuro. A escala dele é o 2º modo da menor melódica, o dórico ♭2, ou o frígio da escala maior."
+        ],
+        "exemplo": {
+          "rotulo": "G7sus4 e suas outras cifras",
+          "notas": [
+            "G7sus4",
+            "Dm7/G",
+            "F/G"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Que nota sai do acorde dominante para ele virar sus4?",
+            "opcoes": [
+              "A 3ª",
+              "A 5ª",
+              "A 7ª",
+              "A fundamental"
+            ],
+            "correta": 0,
+            "explicacao": "A 3ª sai e a 4ª entra no lugar. Sem a 3ª, o trítono com a 7ª desaparece."
+          },
+          {
+            "enunciado": "G7sus4 com 9ª pode ser escrito também como:",
+            "opcoes": [
+              "G/D",
+              "Dm7/G",
+              "Dm7(♭5)",
+              "G7(#9)"
+            ],
+            "correta": 1,
+            "explicacao": "Por cima do Sol ficam Ré, Fá, Lá e Dó, as notas de Dm7."
+          },
+          {
+            "enunciado": "Que composição de Herbie Hancock é feita quase só de acordes sus?",
+            "opcoes": [
+              "Cantaloupe Island",
+              "Maiden Voyage",
+              "Watermelon Man",
+              "Chameleon"
+            ],
+            "correta": 1,
+            "explicacao": "Maiden Voyage usa acordes sus que se movem sem resolver e é o exemplo clássico desse som."
+          }
+        ]
+      },
+      {
+        "id": "rearmonizacao-diatonica",
+        "titulo": "Rearmonização diatônica",
+        "resumo": "Acordes que dividem notas podem trocar de lugar. A função importa mais que o nome.",
+        "paragrafos": [
+          "Os sete acordes do campo harmônico se dividem em três famílias pelo papel que fazem. Tônica, a sensação de casa: I, III e VI (Cmaj7, Em7, Am7). Subdominante, a sensação de sair: II e IV (Dm7, Fmaj7). Dominante, a sensação de precisar voltar: V e VII (G7, Bm7(♭5)).",
+          "Os acordes da mesma família dividem várias notas. Cmaj7 é Dó, Mi, Sol, Si; Am7 é Lá, Dó, Mi, Sol; Em7 é Mi, Sol, Si, Ré. Três notas em comum entre o I e o VI, três entre o I e o III. Por isso dá pra trocar um pelo outro sem estragar a melodia, e a música ganha uma cor nova. É a forma mais simples de rearmonizar.",
+          "O exemplo mais comum é o turnaround. Numa música que fica dois compassos parada em Cmaj7 no fim, os músicos tocam Cmaj7, Am7, Dm7, G7, o I–VI–II–V, que leva de volta ao começo com movimento. Trocando o Am7 pelo A7, o dominante secundário do Módulo 2, o turnaround fica ainda mais forte.",
+          "Também dá pra trocar o IV pelo II, como Fmaj7 por Dm7, e o V pelo VII, ou pelo subV. Aos poucos você vê que muitos acordes de uma cifra são escolhas, não obrigações. A melodia e a função mandam; o acorde exato é decisão do arranjador.",
+          "Pra quem improvisa, essa ideia libera. Sobre um Cmaj7 longo, você pode imaginar Cmaj7, Am7, Dm7, G7 e tocar as notas-guia desse movimento. O baixista não precisa acompanhar: a frase sozinha cria a sensação de harmonia andando."
+        ],
+        "exemplo": {
+          "rotulo": "Turnaround I–VI–II–V em Dó",
+          "notas": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Que acordes do campo harmônico de Dó maior podem substituir o Cmaj7?",
+            "opcoes": [
+              "Dm7 e Fmaj7",
+              "G7 e Bm7(♭5)",
+              "Fm7 e B♭7",
+              "Am7 e Em7"
+            ],
+            "correta": 3,
+            "explicacao": "Am7 e Em7 são da família da tônica e dividem três notas com o Cmaj7."
+          },
+          {
+            "enunciado": "Quais graus formam a família da subdominante?",
+            "opcoes": [
+              "II e IV",
+              "I e VI",
+              "V e VII",
+              "III e VI"
+            ],
+            "correta": 0,
+            "explicacao": "Dm7 e Fmaj7, em Dó, fazem o papel de sair de casa."
+          },
+          {
+            "enunciado": "Qual é o turnaround mais comum em Dó maior?",
+            "opcoes": [
+              "Cmaj7, Fmaj7, G7, Cmaj7",
+              "Dm7, G7, Cmaj7, Fmaj7",
+              "Cmaj7, Am7, Dm7, G7",
+              "Cmaj7, Em7, Fmaj7, Bm7(♭5)"
+            ],
+            "correta": 2,
+            "explicacao": "O I–VI–II–V leva de volta ao I com movimento, em vez de ficar parado no Cmaj7."
+          }
+        ]
+      },
+      {
+        "id": "blues-de-jazz",
+        "titulo": "Blues de jazz",
+        "resumo": "Os doze compassos do blues com a harmonia do bebop por dentro. Quase todo o Módulo 2 cabe aqui.",
+        "paragrafos": [
+          "O blues básico de doze compassos usa três acordes: I7, IV7 e V7. Em Fá: F7, B♭7 e C7. Os músicos de jazz mantiveram a forma e o som de blues, mas começaram a encher os espaços com a harmonia que usavam nos standards. O resultado é o blues de jazz, a forma mais tocada nas jam sessions.",
+          "Uma versão comum em Fá, compasso por compasso: F7 | B♭7 | F7 | Cm7 F7 | B♭7 | B°7 | F7 | Am7 D7 | Gm7 | C7 | F7 D7 | Gm7 C7. Parece muita coisa, mas cada acréscimo é um recurso que você já conhece.",
+          "No compasso 4, Cm7–F7 é o II–V que leva ao B♭7 do compasso 5. No 6, o B°7 é um diminuto de passagem que liga o B♭7 de volta ao F7. No 8, Am7–D7 é o II–V que leva ao Gm7, e o D7 é o V/II de Fá. Do 9 ao 12, Gm7–C7 é o II–V de Fá, e o fim F7–D7–Gm7–C7 é o turnaround I–VI–II–V com o VI trocado pelo dominante secundário.",
+          "Charlie Parker levou isso mais longe em Blues for Alice, que troca boa parte do blues por uma cadeia de II–Vs descendo. É um blues que mal soa como blues, e é um dos exercícios favoritos dos estudantes de bebop.",
+          "No improviso, o blues de jazz pede as duas línguas ao mesmo tempo: a escala de blues e as frases com blue notes, que funcionam por cima de tudo, e as notas-guia dos acordes novos, que mostram que você sabe onde está. Os grandes solos alternam as duas."
+        ],
+        "exemplo": {
+          "rotulo": "Blues de jazz em Fá (12 compassos)",
+          "notas": [
+            "F7",
+            "B♭7",
+            "F7",
+            "Cm7 F7",
+            "B♭7",
+            "B°7",
+            "F7",
+            "Am7 D7",
+            "Gm7",
+            "C7",
+            "F7 D7",
+            "Gm7 C7"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "No blues de jazz em Fá, o que prepara o B♭7 do compasso 5?",
+            "opcoes": [
+              "O diminuto B°7",
+              "O turnaround Gm7, C7",
+              "O II–V Cm7, F7",
+              "O empréstimo modal B♭m"
+            ],
+            "correta": 2,
+            "explicacao": "Cm7–F7 é o II–V de Si♭, colocado no compasso 4."
+          },
+          {
+            "enunciado": "O D7 do compasso 8 tem que função?",
+            "opcoes": [
+              "Dominante secundário que leva ao Gm7",
+              "Substituto de trítono do C7",
+              "Acorde de tônica",
+              "Acorde emprestado do tom menor"
+            ],
+            "correta": 0,
+            "explicacao": "D7 é o V/II de Fá e resolve no Gm7 do compasso 9."
+          },
+          {
+            "enunciado": "Qual música de Charlie Parker transforma o blues numa cadeia de II–Vs?",
+            "opcoes": [
+              "Now's the Time",
+              "Billie's Bounce",
+              "Ornithology",
+              "Blues for Alice"
+            ],
+            "correta": 3,
+            "explicacao": "Blues for Alice é o exemplo clássico do blues reharmonizado com II–Vs descendo."
+          }
+        ]
+      },
+      {
+        "id": "rhythm-changes",
+        "titulo": "Rhythm changes",
+        "resumo": "A harmonia de I Got Rhythm, de Gershwin, virou a segunda forma mais tocada do jazz, depois do blues.",
+        "paragrafos": [
+          "Em 1930, George Gershwin escreveu I Got Rhythm. Os músicos de bebop adoraram a harmonia da música e passaram a escrever melodias novas sobre ela. Isso era comum: compor uma melodia nova sobre acordes conhecidos evitava pagar direitos e dava aos músicos um terreno que todos já sabiam. A harmonia ganhou nome próprio, rhythm changes, os acordes de Rhythm.",
+          "A forma tem 32 compassos em AABA, normalmente em Si♭. As partes A são feitas de turnarounds rápidos, dois acordes por compasso: B♭, G7, Cm7, F7, repetido com variações, com uma passagem pelo IV no meio. É o I–VI–II–V do texto anterior, tocado sem parar.",
+          "A ponte, a parte B, muda de lógica. São quatro dominantes, dois compassos cada: D7, G7, C7, F7. Cada um resolve no seguinte, descendo por quintas, até o F7 devolver a música pro B♭ da última parte A. A ponte é uma cadeia de dominantes secundários, e muitos músicos a enriquecem transformando cada dominante num II–V.",
+          "Dezenas de temas usam essa forma: Oleo, de Sonny Rollins; Anthropology e Moose the Mooche, de Charlie Parker; Rhythm-a-ning, de Thelonious Monk. Saber os rhythm changes é como saber o blues: abre a porta pra um repertório inteiro.",
+          "Pra estudar, separe as partes. Nas partes A, treine frases que soam em Si♭ por cima dos turnarounds, sem perseguir cada acorde. Na ponte, faça o contrário: marque bem a 3ª de cada dominante, porque cada um tem uma nota de fora do tom que precisa ser ouvida."
+        ],
+        "exemplo": {
+          "rotulo": "Ponte dos rhythm changes em Si♭",
+          "notas": [
+            "D7",
+            "D7",
+            "G7",
+            "G7",
+            "C7",
+            "C7",
+            "F7",
+            "F7"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "De que música vem a harmonia dos rhythm changes?",
+            "opcoes": [
+              "Rhythm-a-ning, de Monk",
+              "I Got Rhythm, de Gershwin",
+              "All the Things You Are, de Kern",
+              "Body and Soul, de Green"
+            ],
+            "correta": 1,
+            "explicacao": "A harmonia de I Got Rhythm, de 1930, é a base de toda a família de temas."
+          },
+          {
+            "enunciado": "Como é a ponte dos rhythm changes em Si♭?",
+            "opcoes": [
+              "Quatro dominantes descendo por quintas: D7, G7, C7, F7",
+              "Um II–V–I de Mi♭",
+              "Turnarounds B♭, G7, Cm7, F7",
+              "Um blues de doze compassos"
+            ],
+            "correta": 0,
+            "explicacao": "Cada dominante dura dois compassos e resolve no seguinte, até o F7 voltar pro B♭."
+          },
+          {
+            "enunciado": "Qual destes temas usa os rhythm changes?",
+            "opcoes": [
+              "So What, de Miles Davis",
+              "Maiden Voyage, de Herbie Hancock",
+              "Giant Steps, de John Coltrane",
+              "Oleo, de Sonny Rollins"
+            ],
+            "correta": 3,
+            "explicacao": "Oleo é uma melodia de Rollins escrita sobre a harmonia de I Got Rhythm."
+          }
+        ]
+      },
+      {
+        "id": "coltrane-changes",
+        "titulo": "Coltrane changes",
+        "resumo": "Três tons a uma terça maior de distância, cada um com seu dominante. A harmonia de Giant Steps.",
+        "paragrafos": [
+          "No fim dos anos 1950, John Coltrane estava atrás de uma harmonia que andasse mais rápido e mais longe que o II–V–I. A resposta foi dividir a oitava em três partes iguais. Si, Sol e Mi♭ ficam a uma terça maior um do outro, e de Mi♭ mais uma terça maior volta-se ao Si. Três tons, simétricos, sem nenhum mais importante que os outros.",
+          "Em Giant Steps, de 1959, a harmonia salta entre esses três tons, e cada chegada é preparada pelo seu dominante: Bmaj7, D7, Gmaj7, B♭7, E♭maj7, e assim por diante, com um acorde a cada dois tempos. O andamento é rápido e os centros mudam o tempo todo. A música virou o teste mais famoso de fluência no jazz.",
+          "Coltrane também usou o mesmo ciclo como substituição dentro de standards. No lugar de um II–V–I em Dó (Dm7, G7, Cmaj7), ele tocava Dm7, E♭7, A♭maj7, B7, Emaj7, G7, Cmaj7: passando por Lá♭ e Mi, os outros dois tons do ciclo de Dó, antes de chegar. Fez isso em Countdown, sobre Tune Up, e em 26-2, sobre Confirmation.",
+          "Pra estudar, o caminho mais usado é pequeno e repetitivo: arpejos de 1, 2, 3 e 5 de cada acorde, tocados em colcheias, conectando um acorde ao outro pela nota mais próxima. Coltrane praticava padrões assim por horas.",
+          "Uma ligação com o resto do curso: a divisão da oitava em terças maiores é parente das escalas simétricas. A de tons inteiros divide a oitava em seis, a diminuta em quatro blocos de terça menor, e o ciclo de Coltrane em três blocos de terça maior."
+        ],
+        "exemplo": {
+          "rotulo": "Substituição de Coltrane para o II–V–I em Dó",
+          "notas": [
+            "Dm7",
+            "E♭7",
+            "A♭maj7",
+            "B7",
+            "Emaj7",
+            "G7",
+            "Cmaj7"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "Qual intervalo separa os centros tonais dos Coltrane changes?",
+            "opcoes": [
+              "Uma quinta justa",
+              "Uma terça maior",
+              "Uma terça menor",
+              "Um trítono"
+            ],
+            "correta": 1,
+            "explicacao": "Si, Sol e Mi♭ ficam a uma terça maior um do outro e dividem a oitava em três."
+          },
+          {
+            "enunciado": "Em que música os Coltrane changes aparecem de forma mais famosa?",
+            "opcoes": [
+              "A Love Supreme",
+              "My Favorite Things",
+              "Giant Steps",
+              "Naima"
+            ],
+            "correta": 2,
+            "explicacao": "Giant Steps, de 1959, é construída inteira sobre esse ciclo."
+          },
+          {
+            "enunciado": "Na substituição de Coltrane para Dm7, G7, Cmaj7, por quais outros tons a harmonia passa?",
+            "opcoes": [
+              "Fá e Sol",
+              "Mi♭ e Lá",
+              "Ré e Si♭",
+              "Lá♭ e Mi"
+            ],
+            "correta": 3,
+            "explicacao": "Dó, Lá♭ e Mi ficam a uma terça maior um do outro. Os acordes A♭maj7 e Emaj7 aparecem antes do Cmaj7."
+          }
+        ]
+      },
+      {
+        "id": "tocar-fora",
+        "titulo": "Tocar fora",
+        "resumo": "Sair do tom de propósito e voltar. Tensão controlada, não erro.",
+        "paragrafos": [
+          "Depois de anos aprendendo a tocar dentro dos acordes, os músicos dos anos 1960 começaram a sair deles de propósito. A ideia não é tocar qualquer nota: é criar uma tensão maior do que a harmonia pede e resolvê-la, de modo que a volta soe como alívio. É a mesma lógica da dominante, levada a uma frase inteira.",
+          "O recurso mais conhecido é o deslocamento de meio tom, chamado em inglês de side-slipping. Sobre um Dm7 longo, você toca uma frase em Ré dórico, repete a mesma frase meio tom acima, em Mi♭ dórico, e volta pro Ré. O ouvido reconhece a frase repetida, entende o deslocamento como intenção e sente a volta como resolução.",
+          "Três coisas fazem a saída soar convincente. Ritmo firme: frase hesitante fora do tom soa como erro, frase decidida soa como escolha. Um padrão claro: um motivo ou uma forma que o ouvido possa seguir mesmo sem tom. E a volta: a frase precisa terminar numa nota do acorde, de preferência uma nota-guia.",
+          "McCoy Tyner, John Coltrane e, depois, saxofonistas como Dave Liebman e Michael Brecker usaram muito esses recursos, com pentatônicas e tríades deslocadas por cima de acordes parados, como nos vamps do jazz modal. É o jazz modal de So What, do Módulo 1, que abriu espaço pra isso: com o acorde parado por muitos compassos, há tempo pra sair e voltar.",
+          "Pra estudar, comece pequeno. Sobre um acorde fixo, toque um motivo de quatro notas, depois o mesmo motivo meio tom acima, e volte. Grave e ouça: se a volta soar como chegada, o recurso está funcionando."
+        ],
+        "exemplo": {
+          "rotulo": "Side-slipping sobre Dm7",
+          "notas": [
+            "Ré dórico",
+            "Mi♭ dórico",
+            "Ré dórico"
+          ]
+        },
+        "perguntas": [
+          {
+            "enunciado": "O que é o side-slipping?",
+            "opcoes": [
+              "Tocar só as notas do acorde",
+              "Usar a escala de blues em qualquer acorde",
+              "Deslocar uma frase meio tom acima ou abaixo do tom e voltar",
+              "Tocar a melodia uma oitava acima"
+            ],
+            "correta": 2,
+            "explicacao": "A frase é repetida meio tom fora e depois volta, criando tensão e resolução."
+          },
+          {
+            "enunciado": "O que mais ajuda uma frase fora do tom a soar intencional?",
+            "opcoes": [
+              "Ritmo firme, um padrão claro e a volta numa nota do acorde",
+              "Tocar mais baixo",
+              "Usar notas longas e hesitantes",
+              "Evitar qualquer repetição"
+            ],
+            "correta": 0,
+            "explicacao": "Sem decisão rítmica, padrão reconhecível e resolução, o ouvido entende a saída como erro."
+          },
+          {
+            "enunciado": "Por que o jazz modal abriu espaço para tocar fora?",
+            "opcoes": [
+              "Porque não usa acordes",
+              "Porque os acordes ficam parados por muitos compassos",
+              "Porque só usa a escala de blues",
+              "Porque é sempre em andamento rápido"
+            ],
+            "correta": 1,
+            "explicacao": "Com a harmonia parada, há tempo pra sair do tom, criar tensão e voltar."
+          }
+        ]
+      }
+    ],
+    "questionario": [
+      {
+        "enunciado": "Sobre um F7(#11), que menor melódica você pode tocar?",
+        "opcoes": [
+          "Fá menor melódica",
+          "Dó menor melódica",
+          "Si♭ menor melódica",
+          "Sol♭ menor melódica"
+        ],
+        "correta": 1,
+        "explicacao": "O lídio dominante é o 4º modo. Fá é o 4º grau de Dó menor melódica, que fica uma 5ª acima."
+      },
+      {
+        "enunciado": "Num II–V–i em Lá menor, que escala sobre o E7 usa tensões que já pertencem ao tom de Lá menor?",
+        "opcoes": [
+          "Mi alterada",
+          "Mi tons inteiros",
+          "Mi mixolídio",
+          "Mi frígio dominante"
+        ],
+        "correta": 3,
+        "explicacao": "O frígio dominante vem de Lá menor harmônica. A ♭9 e a ♭13 dele são notas do tom."
+      },
+      {
+        "enunciado": "Que tríade maior sobre G7 gera o som de G13(#11)?",
+        "opcoes": [
+          "Lá maior",
+          "Mi♭ maior",
+          "Ré♭ maior",
+          "Mi maior"
+        ],
+        "correta": 0,
+        "explicacao": "A estrutura do II: Lá, Dó#, Mi são 9ª, #11 e 13ª de Sol."
+      },
+      {
+        "enunciado": "Qual escala simétrica combina com um G7(#5)?",
+        "opcoes": [
+          "Sol diminuta tom-semitom",
+          "Sol bebop dominante",
+          "Sol tons inteiros",
+          "Sol frígio dominante"
+        ],
+        "correta": 2,
+        "explicacao": "A de tons inteiros tem 3ª maior, 7ª menor e 5ª aumentada."
+      },
+      {
+        "enunciado": "O acorde F/G equivale a que acorde?",
+        "opcoes": [
+          "G7(♭9)",
+          "Fmaj7",
+          "G7sus4 com 9ª",
+          "G7(#5)"
+        ],
+        "correta": 2,
+        "explicacao": "Fá, Lá, Dó por cima do Sol são a 7ª, a 9ª e a 4ª de Sol: o som do sus."
+      },
+      {
+        "enunciado": "Num turnaround em Dó, que acorde troca o Am7 pra deixar a volta mais forte?",
+        "opcoes": [
+          "A7",
+          "Am7(♭5)",
+          "Amaj7",
+          "A♭maj7"
+        ],
+        "correta": 0,
+        "explicacao": "A7 é o dominante secundário de Dm7 e puxa o II–V com mais força."
+      },
+      {
+        "enunciado": "No blues de jazz em Fá, que recurso é o B°7 do compasso 6?",
+        "opcoes": [
+          "Substituição de trítono",
+          "Empréstimo modal",
+          "Estrutura superior",
+          "Diminuto de passagem"
+        ],
+        "correta": 3,
+        "explicacao": "Ele liga o B♭7 ao F7 com o baixo andando em semitom."
+      },
+      {
+        "enunciado": "Quantos compassos e qual forma têm os rhythm changes?",
+        "opcoes": [
+          "12 compassos, blues",
+          "32 compassos, AABA",
+          "16 compassos, AB",
+          "32 compassos, ABAC"
+        ],
+        "correta": 1,
+        "explicacao": "Como I Got Rhythm: duas partes A, a ponte B e a última A, oito compassos cada."
+      },
+      {
+        "enunciado": "Que relação há entre os Coltrane changes e as escalas simétricas?",
+        "opcoes": [
+          "Os três dividem a oitava em partes iguais",
+          "Nenhuma, são ideias opostas",
+          "Ambos usam só acordes menores",
+          "Ambos evitam o acorde dominante"
+        ],
+        "correta": 0,
+        "explicacao": "Tons inteiros dividem a oitava em seis, a diminuta em blocos de terça menor e o ciclo de Coltrane em três terças maiores."
+      },
+      {
+        "enunciado": "Sobre um Bm7(♭5) indo para E7 e Am, que escala dá a 9ª natural no meio-diminuto?",
+        "opcoes": [
+          "Si lócrio da escala maior",
+          "Si frígio dominante",
+          "Si tons inteiros",
+          "Si lócrio ♮2 (notas de Ré menor melódica)"
+        ],
+        "correta": 3,
+        "explicacao": "O lócrio ♮2, 6º modo da menor melódica, troca a 2ª menor do lócrio por uma 9ª natural."
       }
     ]
   }

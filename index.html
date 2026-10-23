@@ -157,6 +157,11 @@
   .indice-titulo { font: 700 24px/1.1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; }
   .indice-resumo { color: var(--muted); font-size: 15px; min-width: 0; }
 
+  .modulo { display: grid; gap: 6px; }
+  .modulo + .modulo { margin-top: 28px; }
+  .modulo-titulo { margin: 0; font: 800 clamp(34px, 6vw, 48px)/0.95 var(--display); text-transform: uppercase; color: var(--brass); }
+  .modulo-resumo { margin: 0 0 8px; color: var(--muted); max-width: 70ch; }
+  .indice-quiz .indice-num { color: var(--ink); }
   .leitura { display: grid; gap: 14px; max-width: 70ch; }
   .leitura h2 { margin: 0; font: 800 clamp(36px, 7vw, 56px)/0.95 var(--display); text-transform: uppercase; text-wrap: balance; }
   .leitura .resumo { margin: 0; font-size: 18px; color: var(--muted); }
@@ -889,14 +894,14 @@ document.addEventListener("keydown", e => {
 
 /* ---------- Teoria ---------- */
 
-let theoryTexts = null, theoryOpen = null, theoryAnswers = [];
+let theoryModules = null, theoryView = { kind: "list" }, theoryAnswers = [];
 
-/* Carrega os textos de teoria uma vez, do teoria.json publicado junto com a página. */
+/* Carrega os módulos de teoria uma vez, do teoria.json publicado junto com a página. */
 async function loadTheory() {
-  if (theoryTexts) return theoryTexts;
-  try { theoryTexts = await (await fetch("teoria.json")).json(); }
-  catch { theoryTexts = []; }
-  return theoryTexts;
+  if (theoryModules) return theoryModules;
+  try { theoryModules = await (await fetch("teoria.json")).json(); }
+  catch { theoryModules = []; }
+  return theoryModules;
 }
 
 function h(tag, props = {}, ...children) {
@@ -906,50 +911,91 @@ function h(tag, props = {}, ...children) {
   return e;
 }
 
-/* Desenha a lista de textos ou o texto aberto com as três perguntas. A
-   resposta fica travada no primeiro clique e a explicação aparece na hora. */
+function onClick(el, fn) { el.addEventListener("click", fn); return el; }
+
+/* Perguntas do que está aberto: as do texto ou as do questionário do módulo. */
+function theoryQuestions() {
+  const v = theoryView, m = theoryModules[v.module];
+  return v.kind === "text" ? m.textos[v.text].perguntas : m.questionario;
+}
+
+/* Abre um texto, um questionário ou a lista, com as perguntas zeradas. */
+function showTheory(view) {
+  theoryView = view;
+  theoryAnswers = view.kind === "list" ? [] : theoryQuestions().map(() => null);
+  renderTheory().then(() => $("theory").scrollIntoView({ block: "start" }));
+}
+
+/* Segue a ordem do curso: próximo texto, questionário do módulo, próximo módulo. */
+function theoryNext() {
+  const v = theoryView;
+  if (v.kind === "text") {
+    if (v.text + 1 < theoryModules[v.module].textos.length) showTheory({ kind: "text", module: v.module, text: v.text + 1 });
+    else showTheory({ kind: "quiz", module: v.module });
+  } else if (v.module + 1 < theoryModules.length) showTheory({ kind: "text", module: v.module + 1, text: 0 });
+  else showTheory({ kind: "list" });
+}
+
+/* Desenha a lista de módulos, ou o texto/questionário aberto com as perguntas.
+   A resposta fica travada no primeiro clique e a explicação aparece na hora. */
 async function renderTheory() {
   const box = $("theory");
-  const texts = await loadTheory();
+  const modules = await loadTheory();
   if (settings.mode !== "theory") return;
-  if (!texts.length) { box.replaceChildren(h("p", { className: "aviso", textContent: "Não consegui carregar os textos." })); return; }
+  if (!modules.length) { box.replaceChildren(h("p", { className: "aviso", textContent: "Não consegui carregar os textos." })); return; }
 
-  if (theoryOpen === null) {
-    const list = h("ol", { className: "indice" });
-    texts.forEach((t, i) => {
-      const b = h("button", {},
-        h("span", { className: "indice-num", textContent: String(i + 1).padStart(2, "0") }),
+  if (theoryView.kind === "list") {
+    box.replaceChildren(...modules.map((m, mi) => {
+      const list = h("ol", { className: "indice" });
+      m.textos.forEach((t, ti) => list.append(h("li", {}, onClick(h("button", {},
+        h("span", { className: "indice-num", textContent: String(ti + 1).padStart(2, "0") }),
         h("span", { className: "indice-titulo", textContent: t.titulo }),
-        h("span", { className: "indice-resumo", textContent: t.resumo }));
-      b.addEventListener("click", () => openTheory(i));
-      list.append(h("li", {}, b));
-    });
-    box.replaceChildren(list);
+        h("span", { className: "indice-resumo", textContent: t.resumo })), () => showTheory({ kind: "text", module: mi, text: ti })))));
+      list.append(h("li", {}, onClick(h("button", { className: "indice-quiz" },
+        h("span", { className: "indice-num", textContent: "?" }),
+        h("span", { className: "indice-titulo", textContent: "Questionário do módulo" }),
+        h("span", { className: "indice-resumo", textContent: `${m.questionario.length} perguntas misturando os assuntos do módulo.` })), () => showTheory({ kind: "quiz", module: mi }))));
+      return h("section", { className: "modulo" },
+        h("span", { className: "rotulo", textContent: `Módulo ${mi + 1}` }),
+        h("h2", { className: "modulo-titulo", textContent: m.titulo }),
+        h("p", { className: "modulo-resumo", textContent: m.resumo }),
+        list);
+    }));
     return;
   }
 
-  const t = texts[theoryOpen];
-  const back = h("button", { className: "acao voltar", textContent: "← Todos os textos" });
-  back.addEventListener("click", () => { theoryOpen = null; renderTheory(); });
-  const reading = h("article", { className: "leitura" },
-    back,
-    h("span", { className: "rotulo", textContent: `Texto ${theoryOpen + 1} de ${texts.length}` }),
-    h("h2", { textContent: t.titulo }),
-    h("p", { className: "resumo", textContent: t.resumo }),
-    ...t.paragrafos.map(p => h("p", { textContent: p })),
-    h("figure", { className: "exemplo" },
-      h("figcaption", { className: "rotulo", textContent: t.exemplo.rotulo }),
-      h("div", { className: "exemplo-notas" }, ...t.exemplo.notas.map(n => h("span", { textContent: n })))));
+  const v = theoryView, m = modules[v.module];
+  const back = onClick(h("button", { className: "acao voltar", textContent: "← Todos os módulos" }), () => showTheory({ kind: "list" }));
+  let reading;
+  if (v.kind === "text") {
+    const t = m.textos[v.text];
+    reading = h("article", { className: "leitura" },
+      back,
+      h("span", { className: "rotulo", textContent: `${m.titulo} · texto ${v.text + 1} de ${m.textos.length}` }),
+      h("h2", { textContent: t.titulo }),
+      h("p", { className: "resumo", textContent: t.resumo }),
+      ...t.paragrafos.map(p => h("p", { textContent: p })),
+      h("figure", { className: "exemplo" },
+        h("figcaption", { className: "rotulo", textContent: t.exemplo.rotulo }),
+        h("div", { className: "exemplo-notas" }, ...t.exemplo.notas.map(n => h("span", { textContent: n })))));
+  } else {
+    reading = h("header", { className: "leitura" },
+      back,
+      h("span", { className: "rotulo", textContent: "Questionário do módulo" }),
+      h("h2", { textContent: m.titulo }),
+      h("p", { className: "resumo", textContent: `${m.questionario.length} perguntas misturando os textos do módulo.` }));
+  }
 
-  const quiz = h("section", { className: "painel quiz" }, h("h3", { textContent: "Teste o que ficou" }));
-  t.perguntas.forEach((q, qi) => {
+  const questions = theoryQuestions();
+  const quiz = h("section", { className: "painel quiz" }, h("h3", { textContent: v.kind === "quiz" ? "Perguntas" : "Teste o que ficou" }));
+  questions.forEach((q, qi) => {
     const chosen = theoryAnswers[qi];
     const block = h("div", { className: "pergunta" }, h("p", { className: "enunciado", textContent: `${qi + 1}. ${q.enunciado}` }));
     q.opcoes.forEach((o, oi) => {
-      const b = h("button", { className: "opcao", disabled: chosen !== null }, h("b", { textContent: "ABCD"[oi] }), o);
+      const b = onClick(h("button", { className: "opcao", disabled: chosen !== null }, h("b", { textContent: "ABCD"[oi] }), o),
+        () => { theoryAnswers[qi] = oi; renderTheory(); });
       if (chosen !== null && oi === q.correta) b.classList.add("certa");
       if (chosen === oi && oi !== q.correta) b.classList.add("errada");
-      b.addEventListener("click", () => { theoryAnswers[qi] = oi; renderTheory(); });
       block.append(b);
     });
     if (chosen !== null) {
@@ -959,19 +1005,15 @@ async function renderTheory() {
     quiz.append(block);
   });
   if (theoryAnswers.every(a => a !== null)) {
-    const score = theoryAnswers.filter((a, i) => a === t.perguntas[i].correta).length;
-    const last = theoryOpen + 1 >= texts.length;
-    const next = h("button", { className: "acao principal", textContent: last ? "Voltar à lista" : "Próximo texto" });
-    next.addEventListener("click", () => last ? (theoryOpen = null, renderTheory()) : openTheory(theoryOpen + 1));
-    quiz.append(h("div", { className: "fim" }, h("span", {}, "Você acertou ", h("b", { textContent: `${score} de ${t.perguntas.length}` })), next));
+    const score = theoryAnswers.filter((a, i) => a === questions[i].correta).length;
+    const label = v.kind === "text"
+      ? (v.text + 1 < m.textos.length ? "Próximo texto" : "Questionário do módulo")
+      : (v.module + 1 < modules.length ? "Próximo módulo" : "Voltar à lista");
+    quiz.append(h("div", { className: "fim" },
+      h("span", {}, "Você acertou ", h("b", { textContent: `${score} de ${questions.length}` })),
+      onClick(h("button", { className: "acao principal", textContent: label }), theoryNext)));
   }
   box.replaceChildren(reading, quiz);
-}
-
-function openTheory(i) {
-  theoryOpen = i;
-  theoryAnswers = theoryTexts[i].perguntas.map(() => null);
-  renderTheory().then(() => $("theory").scrollIntoView({ block: "start" }));
 }
 
 buildChips();
