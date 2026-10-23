@@ -317,7 +317,7 @@
     <div class="grupo" id="melodySettings" hidden>
       <span class="rotulo">Notas na melodia</span>
       <div class="chips" id="lengthChips"></div>
-      <p class="nota-rodape">A melodia fica num tom maior, anda mais por notas vizinhas e termina na tônica. A primeira nota aparece na pauta; as outras surgem conforme você acerta.</p>
+      <p class="nota-rodape">A melodia fica num tom maior, anda mais por notas vizinhas e termina na tônica. A primeira nota aparece na pauta; as outras surgem conforme você acerta. Errou uma nota, a melodia volta pro começo.</p>
     </div>
 
     <div class="grupo" id="intervalSettings" hidden>
@@ -573,33 +573,36 @@ function generateMelody(low, high, length, onlyNaturals) {
   return null;
 }
 
-/* Confere uma melodia tocada nota por nota. A nota só conta quando fica
-   firme por um instante, e errar não volta ao começo: tenta-se de novo a
-   mesma posição. */
+/* Confere uma melodia tocada nota por nota. A nota do microfone só conta
+   quando fica firme por um instante. Errar zera a melodia: a pessoa recomeça
+   do início, e se a nota errada for a primeira da frase, ela já vale como o
+   começo da nova tentativa. */
 function makeFollower(notes) {
   let stable = null, since = 0, counted = null;
-  const f = { progress: 0 };
-  f.hear = (written, now) => {
+  const f = { progress: 0, missedAt: 0 };
+  const matches = (note, i) => {
+    let diff = note - notes[i];
+    if (settings.anyOctave) diff = ((diff % 12) + 18) % 12 - 6;
+    return diff === 0;
+  };
+  const judge = note => {
     if (f.progress >= notes.length) return null;
+    if (matches(note, f.progress)) { f.progress++; return "certa"; }
+    f.missedAt = f.progress + 1;
+    f.progress = matches(note, 0) ? 1 : 0;
+    return "errada";
+  };
+  f.hear = (written, now) => {
     if (written === null) { stable = null; counted = null; return null; }
     const nearest = Math.round(written);
     if (Math.abs(written - nearest) > 0.4) return null;
     if (nearest !== stable) { stable = nearest; since = now; return null; }
     if (now - since < 120 || nearest === counted) return null;
     counted = nearest;
-    let diff = nearest - notes[f.progress];
-    if (settings.anyOctave) diff = ((diff % 12) + 18) % 12 - 6;
-    if (diff === 0) { f.progress++; return "certa"; }
-    return "errada";
+    return judge(nearest);
   };
   /* Uma tecla do teclado conta na hora: não há som pra esperar firmar. */
-  f.press = note => {
-    if (f.progress >= notes.length) return null;
-    let diff = note - notes[f.progress];
-    if (settings.anyOctave) diff = ((diff % 12) + 18) % 12 - 6;
-    if (diff === 0) { f.progress++; return "certa"; }
-    return "errada";
-  };
+  f.press = judge;
   return f;
 }
 
@@ -661,7 +664,8 @@ function handleMelodyResult(result) {
     renderTarget();
     if (follower.progress >= round.melody.length) markSolved();
   } else if (result === "errada") {
-    setStatus(`Errou a ${follower.progress + 1}ª nota`, "quase");
+    setStatus(`Errou a ${follower.missedAt}ª nota. Do começo!`, "quase");
+    renderTarget();
   }
 }
 
