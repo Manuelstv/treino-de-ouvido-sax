@@ -60,7 +60,8 @@
     border: 1px solid var(--line); background: var(--surface); color: var(--ink);
   }
 
-  .modos { display: flex; gap: 0; border-bottom: 1px solid var(--line); }
+  .modos { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--line); }
+  @media (max-width: 480px) { .modos button { padding: 10px 11px 12px; font-size: 20px; } }
   .modos button {
     font: 700 22px/1 var(--display); letter-spacing: 0.06em; text-transform: uppercase;
     background: none; border: 0; color: var(--muted); cursor: pointer;
@@ -142,6 +143,51 @@
 
   .aviso { font-size: 14px; color: var(--warn); margin: 0; }
   .nota-rodape { font-size: 13px; color: var(--muted); margin: 0; max-width: 70ch; }
+  .treino { display: grid; gap: 22px; }
+
+  .teoria { display: grid; gap: 16px; }
+  .indice { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .indice button {
+    width: 100%; display: grid; grid-template-columns: 64px 1fr; gap: 4px 16px; align-items: baseline;
+    padding: 16px 4px; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line);
+    color: var(--ink); cursor: pointer; font: inherit;
+  }
+  .indice button:hover .indice-titulo { color: var(--brass); }
+  .indice-num { grid-row: span 2; font: 800 40px/0.9 var(--display); color: var(--brass); font-variant-numeric: tabular-nums; }
+  .indice-titulo { font: 700 24px/1.1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; }
+  .indice-resumo { color: var(--muted); font-size: 15px; min-width: 0; }
+
+  .leitura { display: grid; gap: 14px; max-width: 70ch; }
+  .leitura h2 { margin: 0; font: 800 clamp(36px, 7vw, 56px)/0.95 var(--display); text-transform: uppercase; text-wrap: balance; }
+  .leitura .resumo { margin: 0; font-size: 18px; color: var(--muted); }
+  .leitura p { margin: 0; line-height: 1.7; font-size: 17px; }
+  .voltar { justify-self: start; }
+  .exemplo { display: grid; gap: 8px; margin: 6px 0 0; }
+  .exemplo-notas { display: flex; flex-wrap: wrap; gap: 6px; }
+  .exemplo-notas span {
+    min-width: 46px; text-align: center; padding: 7px 9px; border-radius: 3px;
+    font: 500 14px var(--mono); background: var(--brass-soft); border: 1px solid var(--brass); color: var(--ink);
+  }
+
+  .quiz { display: grid; gap: 22px; }
+  .quiz h3 { margin: 0; font: 700 26px/1 var(--display); text-transform: uppercase; letter-spacing: 0.03em; }
+  .pergunta { display: grid; gap: 8px; }
+  .enunciado { margin: 0; font-weight: 600; font-size: 17px; }
+  .opcao {
+    display: flex; gap: 10px; align-items: baseline; width: 100%; text-align: left; cursor: pointer;
+    font: inherit; font-size: 15px; padding: 10px 12px; border-radius: 4px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  }
+  .opcao:not(:disabled):hover { border-color: var(--brass); }
+  .opcao:disabled { cursor: default; }
+  .opcao b { font-family: var(--mono); color: var(--muted); }
+  .opcao.certa { border-color: var(--ok); box-shadow: inset 4px 0 0 var(--ok); }
+  .opcao.errada { border-color: var(--warn); box-shadow: inset 4px 0 0 var(--warn); }
+  .explicacao { margin: 0; font-size: 14px; color: var(--warn); }
+  .explicacao.acertou { color: var(--ok); }
+  .fim { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  .fim b { font: 800 24px var(--display); }
+
   [hidden] { display: none !important; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -169,7 +215,12 @@
     <button role="tab" id="modeNote" aria-selected="true">Nota</button>
     <button role="tab" id="modeInterval" aria-selected="false">Intervalo</button>
     <button role="tab" id="modeMelody" aria-selected="false">Melodia</button>
+    <button role="tab" id="modeTheory" aria-selected="false">Teoria</button>
   </nav>
+
+  <section id="theory" class="teoria" hidden></section>
+
+  <div id="trainer" class="treino">
 
   <section class="palco">
     <div class="painel">
@@ -244,7 +295,9 @@
     </div>
   </section>
 
-  <p class="nota-rodape">As notas aparecem como você lê na partitura do seu sax; o som tocado é o som real que ele produz. Funciona melhor no Chrome. Atalhos: espaço ouve de novo, R mostra a resposta, enter passa pra próxima.</p>
+  </div>
+
+  <p class="nota-rodape" id="footNote">As notas aparecem como você lê na partitura do seu sax; o som tocado é o som real que ele produz. Funciona melhor no Chrome. Atalhos: espaço ouve de novo, R mostra a resposta, enter passa pra próxima.</p>
 </main>
 
 <script>
@@ -729,10 +782,13 @@ function applySettingsToForm() {
   for (const [id, mode] of MODES) $(id).setAttribute("aria-selected", String(settings.mode === mode));
   $("intervalSettings").hidden = settings.mode !== "interval";
   $("melodySettings").hidden = settings.mode !== "melody";
+  const theory = settings.mode === "theory";
+  $("trainer").hidden = theory; $("footNote").hidden = theory; $("theory").hidden = !theory;
+  if (theory) renderTheory();
   for (const b of $("lengthChips").children) b.setAttribute("aria-pressed", String(Number(b.dataset.n) === settings.melodyLength));
 }
 
-const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"]];
+const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["modeTheory", "theory"]];
 
 function buildChips() {
   for (const n of [4, 5, 6]) {
@@ -767,7 +823,7 @@ function onSettingChange(apply) {
     apply(e.target);
     saveSettings();
     applySettingsToForm();
-    if (ctx) newRound(); else drawStaff();
+    if (ctx && settings.mode !== "theory") newRound(); else drawStaff();
   };
 }
 
@@ -785,7 +841,8 @@ for (const [id, mode] of MODES) {
   $(id).addEventListener("click", () => {
     if (settings.mode === mode) return;
     settings.mode = mode; saveSettings(); applySettingsToForm();
-    if (ctx) newRound();
+    if (mode === "theory") { clearTimeout(nextTimer); if (ctx) stopDrone(); round = null; follower = null; }
+    else if (ctx) newRound();
   });
 }
 
@@ -824,11 +881,98 @@ function next() {
 }
 
 document.addEventListener("keydown", e => {
-  if (!ctx || e.target.closest("select, input")) return;
+  if (!ctx || settings.mode === "theory" || e.target.closest("select, input")) return;
   if (e.key === " ") { e.preventDefault(); playRound(); }
   else if (e.key === "Enter") { e.preventDefault(); next(); }
   else if (e.key.toLowerCase() === "r") reveal();
 });
+
+/* ---------- Teoria ---------- */
+
+let theoryTexts = null, theoryOpen = null, theoryAnswers = [];
+
+/* Carrega os textos de teoria uma vez, do teoria.json publicado junto com a página. */
+async function loadTheory() {
+  if (theoryTexts) return theoryTexts;
+  try { theoryTexts = await (await fetch("teoria.json")).json(); }
+  catch { theoryTexts = []; }
+  return theoryTexts;
+}
+
+function h(tag, props = {}, ...children) {
+  const e = document.createElement(tag);
+  Object.assign(e, props);
+  e.append(...children);
+  return e;
+}
+
+/* Desenha a lista de textos ou o texto aberto com as três perguntas. A
+   resposta fica travada no primeiro clique e a explicação aparece na hora. */
+async function renderTheory() {
+  const box = $("theory");
+  const texts = await loadTheory();
+  if (settings.mode !== "theory") return;
+  if (!texts.length) { box.replaceChildren(h("p", { className: "aviso", textContent: "Não consegui carregar os textos." })); return; }
+
+  if (theoryOpen === null) {
+    const list = h("ol", { className: "indice" });
+    texts.forEach((t, i) => {
+      const b = h("button", {},
+        h("span", { className: "indice-num", textContent: String(i + 1).padStart(2, "0") }),
+        h("span", { className: "indice-titulo", textContent: t.titulo }),
+        h("span", { className: "indice-resumo", textContent: t.resumo }));
+      b.addEventListener("click", () => openTheory(i));
+      list.append(h("li", {}, b));
+    });
+    box.replaceChildren(list);
+    return;
+  }
+
+  const t = texts[theoryOpen];
+  const back = h("button", { className: "acao voltar", textContent: "← Todos os textos" });
+  back.addEventListener("click", () => { theoryOpen = null; renderTheory(); });
+  const reading = h("article", { className: "leitura" },
+    back,
+    h("span", { className: "rotulo", textContent: `Texto ${theoryOpen + 1} de ${texts.length}` }),
+    h("h2", { textContent: t.titulo }),
+    h("p", { className: "resumo", textContent: t.resumo }),
+    ...t.paragrafos.map(p => h("p", { textContent: p })),
+    h("figure", { className: "exemplo" },
+      h("figcaption", { className: "rotulo", textContent: t.exemplo.rotulo }),
+      h("div", { className: "exemplo-notas" }, ...t.exemplo.notas.map(n => h("span", { textContent: n })))));
+
+  const quiz = h("section", { className: "painel quiz" }, h("h3", { textContent: "Teste o que ficou" }));
+  t.perguntas.forEach((q, qi) => {
+    const chosen = theoryAnswers[qi];
+    const block = h("div", { className: "pergunta" }, h("p", { className: "enunciado", textContent: `${qi + 1}. ${q.enunciado}` }));
+    q.opcoes.forEach((o, oi) => {
+      const b = h("button", { className: "opcao", disabled: chosen !== null }, h("b", { textContent: "ABCD"[oi] }), o);
+      if (chosen !== null && oi === q.correta) b.classList.add("certa");
+      if (chosen === oi && oi !== q.correta) b.classList.add("errada");
+      b.addEventListener("click", () => { theoryAnswers[qi] = oi; renderTheory(); });
+      block.append(b);
+    });
+    if (chosen !== null) {
+      const right = chosen === q.correta;
+      block.append(h("p", { className: `explicacao ${right ? "acertou" : ""}`, textContent: `${right ? "Certo." : "Não é essa."} ${q.explicacao}` }));
+    }
+    quiz.append(block);
+  });
+  if (theoryAnswers.every(a => a !== null)) {
+    const score = theoryAnswers.filter((a, i) => a === t.perguntas[i].correta).length;
+    const last = theoryOpen + 1 >= texts.length;
+    const next = h("button", { className: "acao principal", textContent: last ? "Voltar à lista" : "Próximo texto" });
+    next.addEventListener("click", () => last ? (theoryOpen = null, renderTheory()) : openTheory(theoryOpen + 1));
+    quiz.append(h("div", { className: "fim" }, h("span", {}, "Você acertou ", h("b", { textContent: `${score} de ${t.perguntas.length}` })), next));
+  }
+  box.replaceChildren(reading, quiz);
+}
+
+function openTheory(i) {
+  theoryOpen = i;
+  theoryAnswers = theoryTexts[i].perguntas.map(() => null);
+  renderTheory().then(() => $("theory").scrollIntoView({ block: "start" }));
+}
 
 buildChips();
 buildGauge();
