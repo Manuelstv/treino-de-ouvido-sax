@@ -14,3 +14,7 @@ A página toca uma nota e você responde tocando a mesma no instrumento. O micro
 - Use fone de ouvido ou volume baixo, para o microfone não ouvir a caixa de som.
 
 Um arquivo só (`index.html`), sem dependências. Para reconhecer a nota, usa o método de McLeod (NSDF), que resiste a confundir a nota com a oitava acima.
+
+## Créditos do som
+
+As notas tocadas são gravações de sax alto do **Weresax**, da [Karoryfer Samples](https://karoryfer.com/karoryfer-samples/wpis/weresax), na versão editada (cortada e com volume igualado) do [tonejs-instruments](https://github.com/nbrosowsky/tonejs-instruments), de Nicholaus Brosowsky. Licença das amostras: [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Ficam na pasta `sax/`.

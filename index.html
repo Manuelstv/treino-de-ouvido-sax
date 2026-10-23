@@ -338,7 +338,6 @@ let hits = 0, streak = 0, skips = 0;
 
 const letter = midi => `${LETTERS[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
 const freqOf = midi => 440 * Math.pow(2, (midi - 69) / 12);
-const concertFreq = written => freqOf(written - settings.offset);
 
 /* ---------- Reconhecimento da nota ---------- */
 
@@ -388,27 +387,62 @@ function detectPitch(data, sampleRate) {
 
 /* ---------- Som ---------- */
 
-/* Monta uma voz suave (triângulo com um pouco de brilho) ligada à saída. */
-function makeVoice(freq, when) {
+/* Gravações de sax alto, uma por semitom, de Dó#3 a Lá5 em som real (falta o
+   Lá3). Vêm do Weresax, da Karoryfer, editadas pelo tonejs-instruments. */
+const SAX_SAMPLES = ["Cs3", "D3", "Ds3", "E3", "F3", "Fs3", "G3", "Gs3", "As3", "B3",
+  "C4", "Cs4", "D4", "Ds4", "E4", "F4", "Fs4", "G4", "Gs4", "A4", "As4", "B4",
+  "C5", "Cs5", "D5", "Ds5", "E5", "F5", "Fs5", "G5", "Gs5", "A5"];
+const saxBuffers = new Map();   // nota MIDI de concerto → gravação decodificada
+
+/* Baixa e decodifica as gravações. Se alguma falhar, a página usa o som
+   sintético no lugar dela, então nunca fica muda. */
+async function loadSax() {
+  const letters = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+  await Promise.all(SAX_SAMPLES.map(async name => {
+    const [, l, sharp, oct] = name.match(/^([A-G])(s?)(\d)$/);
+    const midi = 12 * (Number(oct) + 1) + letters[l] + (sharp ? 1 : 0);
+    try {
+      const data = await (await fetch(`sax/${name}.mp3`)).arrayBuffer();
+      saxBuffers.set(midi, await ctx.decodeAudioData(data));
+    } catch {}
+  }));
+}
+
+/* Monta uma voz ligada à saída, com o volume começando em zero. Usa a
+   gravação de sax mais próxima da nota, acelerada ou freada até a altura
+   certa; com `loop`, repete o trecho do meio da gravação pra soar sem fim. */
+function makeVoice(written, when, loop = false) {
   const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, when);
+  gain.connect(ctx.destination);
+  const concert = written - settings.offset;
+  if (saxBuffers.size) {
+    const nearest = [...saxBuffers.keys()].reduce((a, b) => Math.abs(b - concert) < Math.abs(a - concert) ? b : a);
+    const src = ctx.createBufferSource();
+    src.buffer = saxBuffers.get(nearest);
+    src.playbackRate.value = Math.pow(2, (concert - nearest) / 12);
+    if (loop) { src.loop = true; src.loopStart = 1.0; src.loopEnd = src.buffer.duration - 0.8; }
+    src.connect(gain);
+    src.start(when);
+    return { gain, oscs: [src] };
+  }
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass"; filter.frequency.value = 2400;
-  gain.gain.setValueAtTime(0, when);
+  filter.connect(gain);
   const oscs = [["triangle", 1], ["sawtooth", 0.12]].map(([type, level]) => {
     const osc = ctx.createOscillator(), g = ctx.createGain();
-    osc.type = type; osc.frequency.value = freq; g.gain.value = level;
+    osc.type = type; osc.frequency.value = freqOf(concert); g.gain.value = level;
     osc.connect(g).connect(filter);
     osc.start(when);
     return osc;
   });
-  filter.connect(gain).connect(ctx.destination);
   return { gain, oscs };
 }
 
 /* Toca uma nota curta. Devolve o instante em que ela termina. */
 function tone(written, when, dur) {
-  const v = makeVoice(concertFreq(written), when);
-  v.gain.gain.linearRampToValueAtTime(0.32, when + 0.04);
+  const v = makeVoice(written, when);
+  v.gain.gain.linearRampToValueAtTime(0.32, when + 0.02);
   v.gain.gain.setValueAtTime(0.32, when + dur - 0.2);
   v.gain.gain.linearRampToValueAtTime(0, when + dur);
   v.oscs.forEach(o => o.stop(when + dur + 0.05));
@@ -418,7 +452,7 @@ function tone(written, when, dur) {
 /* Liga uma nota que fica soando até stopDrone. */
 function startDrone(written, when) {
   stopDrone();
-  const v = makeVoice(concertFreq(written), when);
+  const v = makeVoice(written, when, true);
   v.gain.gain.linearRampToValueAtTime(0.22, when + 0.25);
   drone = v;
 }
@@ -866,6 +900,8 @@ $("startBtn").addEventListener("click", async () => {
     return;
   }
   $("startBtn").hidden = true;
+  $("targetHint").textContent = "Carregando o som do sax…";
+  await loadSax();
   $("micState").textContent = "ouvindo";
   for (const id of ["replayBtn", "revealBtn", "nextBtn"]) $(id).disabled = false;
   listen();
