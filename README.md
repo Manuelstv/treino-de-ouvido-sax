@@ -17,4 +17,4 @@ Um arquivo só (`index.html`), sem dependências. Para reconhecer a nota, usa o 
 
 ## Créditos do som
 
-As notas tocadas são gravações de sax alto do **Weresax**, da [Karoryfer Samples](https://karoryfer.com/karoryfer-samples/wpis/weresax), na versão editada (cortada e com volume igualado) do [tonejs-instruments](https://github.com/nbrosowsky/tonejs-instruments), de Nicholaus Brosowsky. Licença das amostras: [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Ficam na pasta `sax/`.
+As notas tocadas são gravações de sax alto do **Weresax**, da [Karoryfer Samples](https://karoryfer.com/), na versão editada (cortada e com volume igualado) do [tonejs-instruments](https://github.com/nbrosowsky/tonejs-instruments), de Nicholaus Brosowsky. Licença das amostras: [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Ficam na pasta `sax/`.
