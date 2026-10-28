@@ -245,6 +245,15 @@
     button.acao:disabled, .acoes kbd { display: none; }
   }
 
+  .dica-ios {
+    max-width: min(360px, calc(100vw - 32px)); padding: 22px; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--surface); color: var(--ink);
+  }
+  .dica-ios::backdrop { background: rgba(0, 0, 0, 0.55); }
+  .dica-ios h2 { margin: 0 0 10px; font: 800 30px/1 var(--display); text-transform: uppercase; color: var(--brass); }
+  .dica-ios ol { margin: 0 0 18px; padding-left: 20px; display: grid; gap: 10px; }
+  .dica-ios button.acao { width: 100%; }
+
   [hidden] { display: none !important; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -366,6 +375,15 @@
   <p class="nota-rodape" id="footNote">As notas aparecem como você lê na partitura do seu sax; o som tocado é o som real que ele produz. Funciona melhor no Chrome. Atalhos: espaço ouve de novo, R mostra a resposta, enter passa pra próxima.</p>
 </main>
 
+<dialog class="dica-ios" id="iosTip">
+  <h2>Antes de começar</h2>
+  <ol>
+    <li>Libere o microfone: <b>Ajustes → <span id="iosBrowser">Safari</span> → Microfone</b>.</li>
+    <li>Tire o iPhone do <b>modo silencioso</b> (chave ou botão na lateral). No silencioso, o som da página não toca.</li>
+  </ol>
+  <form method="dialog"><button class="acao principal">Entendi</button></form>
+</dialog>
+
 <script>
 const NAMES = ["Dó", "Dó#", "Ré", "Ré#", "Mi", "Fá", "Fá#", "Sol", "Sol#", "Lá", "Lá#", "Si"];
 const LETTERS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -387,7 +405,7 @@ const SVGNS = "http://www.w3.org/2000/svg";
 const $ = id => document.getElementById(id);
 const settings = {
   offset: 9, range: "60-84", naturals: false, anyOctave: true,
-  noInstrument: false, mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
+  noInstrument: false, iosTipSeen: false, mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
 };
 try { Object.assign(settings, JSON.parse(localStorage.getItem("ouvido-sax") || "{}")); } catch {}
 const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.stringify(settings)); } catch {} };
@@ -1170,6 +1188,15 @@ buildGauge();
 buildKeyboard();
 applySettingsToForm();
 drawStaff();
+
+/* No iPhone e no iPad o navegador não libera o microfone sozinho e o modo
+   silencioso cala o som da página. Na primeira visita, avisa o que ajustar. */
+const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+if (isIOS && !settings.iosTipSeen && $("iosTip").showModal) {
+  if (/CriOS/.test(navigator.userAgent)) $("iosBrowser").textContent = "Chrome";
+  $("iosTip").addEventListener("close", () => { settings.iosTipSeen = true; saveSettings(); });
+  $("iosTip").showModal();
+}
 </script>
 </body>
 </html>
