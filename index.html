@@ -271,10 +271,11 @@
       <svg class="mostrador" id="gauge" viewBox="0 0 260 200" aria-hidden="true"></svg>
       <div class="segurar" title="Segure a nota certa até encher"><div id="holdBar"></div></div>
       <div class="status" id="status"></div>
+      <p class="aviso" id="micWarn" hidden>Microfone não conectado: a página não consegue ouvir seu sax. Permita o microfone no navegador ou ligue "Sem instrumento" nos ajustes pra responder pelo teclado.</p>
     </div>
   </section>
 
-  <section class="painel teclado-painel">
+  <section class="painel teclado-painel" id="keyboardPanel">
     <div class="painel-topo">
       <span class="rotulo">Teclado</span>
       <span class="rotulo" id="keyboardHint">Toque as teclas pra responder sem instrumento</span>
@@ -309,6 +310,7 @@
 
     <div class="grupo">
       <span class="rotulo">Som</span>
+      <label class="linha"><input type="checkbox" id="noInstrument"> Sem instrumento (mostra o teclado)</label>
       <label class="linha"><input type="checkbox" id="drone"> Som contínuo</label>
       <p class="nota-rodape" id="droneHelp">A nota de referência fica soando enquanto você toca: bom pra ouvir a afinação batendo. No Intervalo, quem fica soando é a primeira nota; na Melodia, a tônica.</p>
       <p class="aviso" id="droneWarn" hidden>Use fone de ouvido. Sem fone, o microfone pode ouvir a caixa de som e marcar acerto sozinho.</p>
@@ -357,7 +359,7 @@ const SVGNS = "http://www.w3.org/2000/svg";
 const $ = id => document.getElementById(id);
 const settings = {
   offset: 9, range: "60-84", naturals: false, anyOctave: true, drone: false,
-  mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
+  noInstrument: false, mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
 };
 try { Object.assign(settings, JSON.parse(localStorage.getItem("ouvido-sax") || "{}")); } catch {}
 const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.stringify(settings)); } catch {} };
@@ -863,6 +865,8 @@ function applySettingsToForm() {
   $("naturals").checked = settings.naturals;
   $("anyOctave").checked = settings.anyOctave;
   $("drone").checked = settings.drone;
+  $("noInstrument").checked = settings.noInstrument;
+  $("keyboardPanel").hidden = !settings.noInstrument;
   $("direction").value = settings.direction;
   $("droneWarn").hidden = !settings.drone;
   for (const [id, mode] of MODES) $(id).setAttribute("aria-selected", String(settings.mode === mode));
@@ -977,6 +981,7 @@ function onSettingChange(apply) {
 $("instrument").addEventListener("change", onSettingChange(t => settings.offset = Number(t.value)));
 $("range").addEventListener("change", onSettingChange(t => settings.range = t.value));
 $("naturals").addEventListener("change", onSettingChange(t => settings.naturals = t.checked));
+$("noInstrument").addEventListener("change", e => { settings.noInstrument = e.target.checked; saveSettings(); applySettingsToForm(); });
 $("anyOctave").addEventListener("change", e => { settings.anyOctave = e.target.checked; saveSettings(); });
 $("direction").addEventListener("change", onSettingChange(t => settings.direction = t.value));
 $("drone").addEventListener("change", async e => {
@@ -1005,6 +1010,7 @@ $("startBtn").addEventListener("click", async () => {
   $("targetHint").textContent = "Carregando o som do sax…";
   await loadSax();
   $("micState").textContent = micOk ? "ouvindo" : "sem microfone";
+  $("micWarn").hidden = micOk;
   if (!micOk) $("keyboardHint").textContent = "Sem microfone: responda pelo teclado";
   $("keyboard").classList.remove("desligado");
   for (const key of $("keyboard").children) key.disabled = false;
