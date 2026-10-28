@@ -216,6 +216,34 @@
   .fim { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
   .fim b { font: 800 24px var(--display); }
 
+  /* Celular: o treino inteiro cabe numa tela, pra ninguém precisar rolar com o
+     sax nas mãos. Pauta e mostrador lado a lado, botões presos no rodapé. */
+  @media (max-width: 560px) {
+    main { padding-block: 12px calc(84px + env(safe-area-inset-bottom, 0px)); gap: 12px; }
+    header { flex-wrap: nowrap; align-items: center; }
+    .marca h1 { font-size: 44px; }
+    .marca p, .instrumento .rotulo, .so-largo { display: none; }
+    .instrumento select { padding: 7px 8px; font-size: 15px; }
+    .modos { flex-wrap: nowrap; }
+    .modos button { flex: 1; padding: 8px 2px 10px; font-size: 18px; }
+    .treino { gap: 12px; }
+    .palco { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .palco .painel { padding: 10px; gap: 6px; }
+    .nota-alvo .grande { font-size: 30px; }
+    .nota-alvo .pequena { font-size: 12px; }
+    .status { font-size: 18px; min-height: 22px; }
+    .aviso { font-size: 12px; }
+    .teclado-painel { padding: 10px; gap: 8px; }
+    .teclado { height: 120px; }
+    .acoes {
+      position: fixed; z-index: 5; left: 0; right: 0; bottom: 0; flex-wrap: nowrap; gap: 8px;
+      padding: 10px max(16px, env(safe-area-inset-left, 0px)) calc(10px + env(safe-area-inset-bottom, 0px));
+      background: var(--surface); border-top: 1px solid var(--line);
+    }
+    button.acao { flex: 1; padding: 13px 6px; font-size: 14px; line-height: 1.15; }
+    button.acao:disabled, .acoes kbd { display: none; }
+  }
+
   [hidden] { display: none !important; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -254,7 +282,7 @@
     <div class="painel">
       <div class="painel-topo">
         <span class="rotulo" id="staffLabel">Nota pedida</span>
-        <span class="rotulo">Escrita pro seu sax</span>
+        <span class="rotulo so-largo">Escrita pro seu sax</span>
       </div>
       <svg class="pauta" id="staff" viewBox="0 0 360 190" role="img" aria-label="Pauta com a nota pedida"></svg>
       <div class="nota-alvo">
@@ -265,7 +293,7 @@
 
     <div class="painel">
       <div class="painel-topo">
-        <span class="rotulo">O que o microfone ouve</span>
+        <span class="rotulo"><span class="so-largo">O que o microfone ouve</span></span>
         <span class="rotulo" id="micState">desligado</span>
       </div>
       <svg class="mostrador" id="gauge" viewBox="0 0 260 200" aria-hidden="true"></svg>
@@ -278,7 +306,7 @@
   <section class="painel teclado-painel" id="keyboardPanel">
     <div class="painel-topo">
       <span class="rotulo">Teclado</span>
-      <span class="rotulo" id="keyboardHint">Toque as teclas pra responder sem instrumento</span>
+      <span class="rotulo so-largo" id="keyboardHint">Toque as teclas pra responder sem instrumento</span>
     </div>
     <div class="teclado-rolagem"><div class="teclado desligado" id="keyboard"></div></div>
   </section>
