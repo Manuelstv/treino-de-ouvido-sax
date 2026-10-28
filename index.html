@@ -146,6 +146,7 @@
   .placar { display: flex; justify-content: center; gap: 28px; font: 500 14px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
   .placar b { color: var(--ink); font-size: 18px; margin-left: 6px; }
 
+  button.acao.editar { justify-self: center; padding: 10px 18px; }
   .ajustes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
   .grupo { display: grid; gap: 10px; align-content: start; }
   .linha { display: flex; align-items: center; gap: 10px; font-size: 15px; }
@@ -299,7 +300,7 @@
       <svg class="mostrador" id="gauge" viewBox="0 0 260 200" aria-hidden="true"></svg>
       <div class="segurar" title="Segure a nota certa até encher"><div id="holdBar"></div></div>
       <div class="status" id="status"></div>
-      <p class="aviso" id="micWarn" hidden>Microfone não conectado: a página não consegue ouvir seu sax. Permita o microfone no navegador ou ligue "Sem instrumento" nos ajustes pra responder pelo teclado.</p>
+      <p class="aviso" id="micWarn" hidden>Microfone não conectado: a página não consegue ouvir seu sax. Permita o microfone no navegador ou toque em "Editar ajustes" e ligue "Sem instrumento" pra responder pelo teclado.</p>
     </div>
   </section>
 
@@ -324,7 +325,9 @@
     <span>puladas<b id="skips">0</b></span>
   </div>
 
-  <section class="painel ajustes">
+  <button class="acao editar" id="settingsBtn" aria-expanded="false" aria-controls="settingsPanel">Editar ajustes</button>
+
+  <section class="painel ajustes" id="settingsPanel" hidden>
     <div class="grupo">
       <span class="rotulo">Notas</span>
       <select id="range" aria-label="Faixa de notas">
@@ -337,11 +340,8 @@
     </div>
 
     <div class="grupo">
-      <span class="rotulo">Som</span>
+      <span class="rotulo">Abrir teclado</span>
       <label class="linha"><input type="checkbox" id="noInstrument"> Sem instrumento (mostra o teclado)</label>
-      <label class="linha"><input type="checkbox" id="drone"> Som contínuo</label>
-      <p class="nota-rodape" id="droneHelp">A nota de referência fica soando enquanto você toca: bom pra ouvir a afinação batendo. No Intervalo, quem fica soando é a primeira nota; na Melodia, a tônica.</p>
-      <p class="aviso" id="droneWarn" hidden>Use fone de ouvido. Sem fone, o microfone pode ouvir a caixa de som e marcar acerto sozinho.</p>
     </div>
 
     <div class="grupo" id="melodySettings" hidden>
@@ -386,7 +386,7 @@ const SVGNS = "http://www.w3.org/2000/svg";
 
 const $ = id => document.getElementById(id);
 const settings = {
-  offset: 9, range: "60-84", naturals: false, anyOctave: true, drone: false,
+  offset: 9, range: "60-84", naturals: false, anyOctave: true,
   noInstrument: false, mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
 };
 try { Object.assign(settings, JSON.parse(localStorage.getItem("ouvido-sax") || "{}")); } catch {}
@@ -394,7 +394,7 @@ const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.strin
 
 let ctx = null, analyser = null, stream = null, source = null, buf = null;
 let round = null, solved = false, revealed = false, mutedUntil = 0, holdStart = 0;
-let drone = null, nextTimer = 0, heard = null, follower = null, micOk = false;
+let nextTimer = 0, heard = null, follower = null, micOk = false;
 let hits = 0, streak = 0, skips = 0;
 
 const letter = midi => `${LETTERS[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
@@ -471,8 +471,8 @@ async function loadSax() {
 
 /* Monta uma voz ligada à saída, com o volume começando em zero. Usa a
    gravação de sax mais próxima da nota, acelerada ou freada até a altura
-   certa; com `loop`, repete o trecho do meio da gravação pra soar sem fim. */
-function makeVoice(written, when, loop = false) {
+   certa. */
+function makeVoice(written, when) {
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0, when);
   gain.connect(ctx.destination);
@@ -482,7 +482,6 @@ function makeVoice(written, when, loop = false) {
     const src = ctx.createBufferSource();
     src.buffer = saxBuffers.get(nearest);
     src.playbackRate.value = Math.pow(2, (concert - nearest) / 12);
-    if (loop) { src.loop = true; src.loopStart = 1.0; src.loopEnd = src.buffer.duration - 0.8; }
     src.connect(gain);
     src.start(when);
     return { gain, oscs: [src] };
@@ -510,55 +509,32 @@ function tone(written, when, dur) {
   return when + dur;
 }
 
-/* Liga uma nota que fica soando até stopDrone. */
-function startDrone(written, when) {
-  stopDrone();
-  const v = makeVoice(written, when, true);
-  v.gain.gain.linearRampToValueAtTime(0.22, when + 0.25);
-  drone = v;
-}
-
-function stopDrone() {
-  if (!drone) return;
-  const now = ctx.currentTime;
-  drone.gain.gain.cancelScheduledValues(now);
-  drone.gain.gain.setValueAtTime(drone.gain.gain.value, now);
-  drone.gain.gain.linearRampToValueAtTime(0, now + 0.15);
-  drone.oscs.forEach(o => o.stop(now + 0.2));
-  drone = null;
-}
-
 /* Toca a rodada. O microfone fica surdo enquanto uma nota curta soa, senão
-   a caixa de som contaria como resposta. No som contínuo a nota não para,
-   então quem protege é o fone e o cancelamento de eco. */
+   a caixa de som contaria como resposta. */
 function playRound() {
   if (!round || !ctx) return;
-  stopDrone();
   const now = ctx.currentTime + 0.05;
   if (round.melody) {
     let end = now;
     round.melody.forEach((n, i) => { end = tone(n, end, i === round.melody.length - 1 ? 0.9 : 0.48) + 0.04; });
     mutedUntil = performance.now() + (end - ctx.currentTime) * 1000 + 350;
-    if (settings.drone) startDrone(round.tonic, end + 0.15);
   } else if (round.base === null) {
-    if (settings.drone) { startDrone(round.target, now); mutedUntil = performance.now() + 400; }
-    else mutedUntil = performance.now() + (tone(round.target, now, 1.3) - ctx.currentTime) * 1000 + 350;
+    mutedUntil = performance.now() + (tone(round.target, now, 1.3) - ctx.currentTime) * 1000 + 350;
   } else {
     const end = tone(round.target, tone(round.base, now, 0.9) + 0.1, 0.9);
     mutedUntil = performance.now() + (end - ctx.currentTime) * 1000 + 350;
-    if (settings.drone) startDrone(round.base, end + 0.15);
   }
 }
 
 /* ---------- Microfone ---------- */
 
-/* Abre o microfone. O cancelamento de eco só liga no som contínuo: nos
-   outros modos ele atrapalha, porque o navegador trata o sax como barulho. */
+/* Abre o microfone. O cancelamento de eco fica desligado porque o navegador
+   trata o sax como barulho e corta a nota. */
 async function openMic() {
   stream?.getTracks().forEach(t => t.stop());
   source?.disconnect();
   stream = await navigator.mediaDevices.getUserMedia({
-    audio: { echoCancellation: settings.drone, noiseSuppression: false, autoGainControl: false },
+    audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
   });
   source = ctx.createMediaStreamSource(stream);
   source.connect(analyser);
@@ -703,7 +679,6 @@ function markSolved() {
   solved = true; revealed = true;
   hits++; streak++;
   $("hits").textContent = hits; $("streak").textContent = streak;
-  stopDrone();
   setStatus("Acertou!", "ok");
   renderTarget();
   nextTimer = setTimeout(newRound, 1500);
@@ -892,11 +867,9 @@ function applySettingsToForm() {
   $("range").value = settings.range;
   $("naturals").checked = settings.naturals;
   $("anyOctave").checked = settings.anyOctave;
-  $("drone").checked = settings.drone;
   $("noInstrument").checked = settings.noInstrument;
   $("keyboardPanel").hidden = !settings.noInstrument;
   $("direction").value = settings.direction;
-  $("droneWarn").hidden = !settings.drone;
   for (const [id, mode] of MODES) $(id).setAttribute("aria-selected", String(settings.mode === mode));
   $("intervalSettings").hidden = settings.mode !== "interval";
   $("melodySettings").hidden = settings.mode !== "melody";
@@ -1009,19 +982,20 @@ function onSettingChange(apply) {
 $("instrument").addEventListener("change", onSettingChange(t => settings.offset = Number(t.value)));
 $("range").addEventListener("change", onSettingChange(t => settings.range = t.value));
 $("naturals").addEventListener("change", onSettingChange(t => settings.naturals = t.checked));
+$("settingsBtn").addEventListener("click", () => {
+  const open = $("settingsPanel").hidden;
+  $("settingsPanel").hidden = !open;
+  $("settingsBtn").setAttribute("aria-expanded", String(open));
+  $("settingsBtn").textContent = open ? "Fechar ajustes" : "Editar ajustes";
+});
 $("noInstrument").addEventListener("change", e => { settings.noInstrument = e.target.checked; saveSettings(); applySettingsToForm(); });
 $("anyOctave").addEventListener("change", e => { settings.anyOctave = e.target.checked; saveSettings(); });
 $("direction").addEventListener("change", onSettingChange(t => settings.direction = t.value));
-$("drone").addEventListener("change", async e => {
-  settings.drone = e.target.checked;
-  saveSettings(); applySettingsToForm();
-  if (ctx) { if (micOk) { try { await openMic(); } catch {} } playRound(); }
-});
 for (const [id, mode] of MODES) {
   $(id).addEventListener("click", () => {
     if (settings.mode === mode) return;
     settings.mode = mode; saveSettings(); applySettingsToForm();
-    if (mode === "theory") { clearTimeout(nextTimer); if (ctx) stopDrone(); round = null; follower = null; }
+    if (mode === "theory") { clearTimeout(nextTimer); round = null; follower = null; }
     else if (ctx) newRound();
   });
 }
