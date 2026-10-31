@@ -142,6 +142,10 @@
   .tecla.certa { background: var(--ok); color: var(--bg); }
   .tecla.errada { background: var(--warn); color: var(--bg); }
   .teclado.desligado .tecla { opacity: 0.55; }
+  /* No celular em pé as teclas ficam finas demais pro dedo. O aviso aparece
+     só nessa posição e some sozinho quando o aparelho é girado. */
+  .aviso-girar { display: none; }
+  @media (orientation: portrait) and (pointer: coarse) { .aviso-girar { display: block; } }
   @media (max-width: 560px) { .tecla-branca { font-size: 8px; padding-bottom: 6px; letter-spacing: -0.03em; } .tecla-branca .oitava-fora { display: none; } }
   .placar { display: flex; justify-content: center; gap: 28px; font: 500 14px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
   .placar b { color: var(--ink); font-size: 18px; margin-left: 6px; }
@@ -318,6 +322,7 @@
       <span class="rotulo">Teclado</span>
       <span class="rotulo so-largo" id="keyboardHint">Toque as teclas pra responder sem instrumento</span>
     </div>
+    <p class="aviso aviso-girar">Gire o celular: o teclado fica mais fácil de tocar na horizontal.</p>
     <div class="teclado-rolagem"><div class="teclado desligado" id="keyboard"></div></div>
   </section>
 
