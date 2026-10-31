@@ -1258,7 +1258,9 @@ async function startRanking() {
   } catch { return; }
   const fb = app.initializeApp(FIREBASE_CONFIG);
   const authApi = auth.getAuth(fb);
-  const db = fs.getFirestore(fb);
+  /* A conexão padrão do Firestore pode travar no Safari do iPhone; a
+     alternativa mais simples (long polling) funciona em todos os navegadores. */
+  const db = fs.initializeFirestore(fb, { experimentalForceLongPolling: true });
   let user = null, best = {};
 
   $("account").hidden = false;
@@ -1302,7 +1304,8 @@ async function startRanking() {
     $("rankingDialog").showModal();
     try {
       const q = fs.query(fs.collection(db, "jogadores"), fs.orderBy(`melhores.${key}`, "desc"), fs.limit(20));
-      const docs = (await fs.getDocs(q)).docs;
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 10000));
+      const docs = (await Promise.race([fs.getDocs(q), timeout])).docs;
       list.replaceChildren();
       if (!docs.length) list.append(Object.assign(document.createElement("li"), { textContent: "Ninguém pontuou aqui ainda. Seja o primeiro!" }));
       docs.forEach((d, i) => {
