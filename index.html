@@ -286,7 +286,7 @@
     <button role="tab" id="modeNote" aria-selected="true">Nota</button>
     <button role="tab" id="modeInterval" aria-selected="false">Intervalo</button>
     <button role="tab" id="modeMelody" aria-selected="false">Melodia</button>
-    <button role="tab" id="modeTheory" aria-selected="false">Teoria</button>
+    <button role="tab" id="modeTheory" aria-selected="false" hidden>Teoria</button>
   </nav>
 
   <section id="theory" class="teoria" hidden></section>
@@ -451,6 +451,8 @@ if (!INSTRUMENTS[saved.instrument]) {
   settings.instrument = Object.keys(INSTRUMENTS).find(k => INSTRUMENTS[k].offset === saved.offset) || "alto";
 }
 settings.offset = INSTRUMENTS[settings.instrument].offset;
+/* A aba de teoria está escondida por enquanto: quem saiu dela volta pro modo Nota. */
+if (settings.mode === "theory") settings.mode = "note";
 if (!INSTRUMENTS[settings.instrument].ranges.some(([v]) => v === settings.range)) {
   settings.range = INSTRUMENTS[settings.instrument].ranges[1][0];
 }
