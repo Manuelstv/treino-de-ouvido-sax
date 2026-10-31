@@ -1233,7 +1233,12 @@ if (isIOS && !settings.iosTipSeen && $("iosTip").showModal) {
 /* Conta com login do Google e ranking entre amigos, guardados no Firebase.
    Sem configuração, ou se o Firebase não carregar, o app segue igual, só
    sem conta e sem ranking. */
-const FIREBASE_CONFIG = null;
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBou-p73Wk8aP3VV-9GTsWO3fgaktKGzAU",
+  authDomain: "treino-de-ouvido.firebaseapp.com",
+  projectId: "treino-de-ouvido",
+  appId: "1:744686157440:web:4885cd2fb44e3af583b065",
+};
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2";
 
 async function startRanking() {
