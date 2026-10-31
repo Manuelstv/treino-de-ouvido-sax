@@ -72,6 +72,8 @@
   .modos button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brass); }
 
   .palco { display: grid; width: 100%; max-width: 480px; justify-self: center; }
+  /* Respondendo pelo teclado, o que é do microfone não serve pra nada e some. */
+  .palco.sem-afinador :is(.mostrador, .segurar, #micState, #micWarn) { display: none; }
   .painel {
     background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
     padding: 18px; display: grid; gap: 12px; min-width: 0; align-content: start;
@@ -903,6 +905,7 @@ function applySettingsToForm() {
   $("anyOctave").checked = settings.anyOctave;
   $("noInstrument").checked = settings.noInstrument;
   $("keyboardPanel").hidden = !settings.noInstrument;
+  document.querySelector(".palco").classList.toggle("sem-afinador", settings.noInstrument);
   $("direction").value = settings.direction;
   for (const [id, mode] of MODES) $(id).setAttribute("aria-selected", String(settings.mode === mode));
   $("intervalSettings").hidden = settings.mode !== "interval";
