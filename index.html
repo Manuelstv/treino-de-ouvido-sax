@@ -375,7 +375,6 @@
 
   </div>
 
-  <p class="nota-rodape" id="footNote">As notas aparecem como você lê na partitura do seu sax; o som tocado é o som real que ele produz. Funciona melhor no Chrome. Atalhos: espaço ouve de novo, R mostra a resposta, enter passa pra próxima.</p>
 </main>
 
 <dialog class="dica-ios" id="iosTip">
@@ -955,7 +954,7 @@ function applySettingsToForm() {
   $("intervalSettings").hidden = settings.mode !== "interval";
   $("melodySettings").hidden = settings.mode !== "melody";
   const theory = settings.mode === "theory";
-  $("trainer").hidden = theory; $("footNote").hidden = theory; $("theory").hidden = !theory;
+  $("trainer").hidden = theory; $("theory").hidden = !theory;
   if (theory) renderTheory();
   for (const b of $("lengthChips").children) b.setAttribute("aria-pressed", String(Number(b.dataset.n) === settings.melodyLength));
 }
