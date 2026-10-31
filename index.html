@@ -351,8 +351,6 @@
 
   <div class="placar">
     <span>acertos<b id="hits">0</b></span>
-    <span>em sequência<b id="streak">0</b></span>
-    <span>puladas<b id="skips">0</b></span>
   </div>
 
   <button class="acao editar" id="settingsBtn" aria-expanded="false" aria-controls="settingsPanel">Editar ajustes</button>
@@ -470,7 +468,7 @@ const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.strin
 let ctx = null, analyser = null, stream = null, source = null, buf = null;
 let round = null, solved = false, revealed = false, mutedUntil = 0, holdStart = 0;
 let nextTimer = 0, follower = null, micOk = false;
-let hits = 0, streak = 0, skips = 0;
+let hits = 0, streak = 0;   // a sequência não aparece na tela, mas é o que vale no ranking
 
 const letter = midi => `${LETTERS[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
 const freqOf = midi => 440 * Math.pow(2, (midi - 69) / 12);
@@ -761,7 +759,7 @@ function handleMelodyResult(result) {
 function markSolved() {
   solved = true; revealed = true;
   hits++; streak++;
-  $("hits").textContent = hits; $("streak").textContent = streak;
+  $("hits").textContent = hits;
   window.ranking?.recordHit(rankingKey(), streak);
   setStatus("Acertou!", "ok");
   renderTarget();
@@ -1015,7 +1013,7 @@ function pressKey(m, key) {
 
 /* Zera a sequência. Uma sequência só vale pro ranking se foi feita inteira
    no mesmo modo, faixa e instrumento. */
-function resetStreak() { streak = 0; $("streak").textContent = 0; }
+function resetStreak() { streak = 0; }
 
 function onSettingChange(apply) {
   return e => {
@@ -1089,11 +1087,11 @@ $("nextBtn").addEventListener("click", next);
 
 function reveal() {
   if (!round || revealed) return;
-  revealed = true; streak = 0; $("streak").textContent = 0;
+  revealed = true; streak = 0;
   renderTarget();
 }
 function next() {
-  if (!solved) { skips++; streak = 0; $("skips").textContent = skips; $("streak").textContent = 0; }
+  if (!solved) streak = 0;
   newRound();
 }
 
