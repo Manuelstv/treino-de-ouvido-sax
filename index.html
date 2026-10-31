@@ -6,10 +6,10 @@
 <title>Ouvido · treino no sax</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Noto+Music&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-  /* Layout: palco em duas colunas (pauta | mostrador) que vira uma coluna no
-     celular; ajustes ficam abaixo, agrupados por assunto. */
+  /* Layout: um painel central com a nota pedida e o afinador; ajustes ficam
+     abaixo, agrupados por assunto. */
   :root {
     --bg: #eceee9; --surface: #fbfbf8; --ink: #14201c; --muted: #5a6963;
     --line: #d2d8d3; --brass: #9a710d; --brass-soft: #f0e2b6; --ok: #1d8a52; --warn: #b4601a;
@@ -17,7 +17,6 @@
     --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
     --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-    --music: "Noto Music", "Segoe UI Symbol", serif;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -72,8 +71,7 @@
   }
   .modos button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brass); }
 
-  .palco { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; }
-  @media (max-width: 720px) { .palco { grid-template-columns: 1fr; } }
+  .palco { display: grid; width: 100%; max-width: 480px; justify-self: center; }
   .painel {
     background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
     padding: 18px; display: grid; gap: 12px; min-width: 0; align-content: start;
@@ -81,16 +79,6 @@
   .painel-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 
   svg { display: block; width: 100%; height: auto; max-width: 100%; }
-  .pauta line { stroke: var(--ink); stroke-width: 1.3; }
-  .pauta .suplementar { stroke-width: 1.6; }
-  .pauta .clave { font: 92px var(--music); fill: var(--ink); }
-  .pauta .cabeca { fill: var(--ink); }
-  .pauta .cabeca.alvo { fill: var(--brass); }
-  .pauta .cabeca.escuta { fill: var(--brass); opacity: 0.35; }
-  .pauta .acidente { font: 30px var(--music); fill: currentColor; }
-  .pauta .interrogacao { font: 800 46px var(--display); fill: var(--brass); }
-  .pauta .nome { font: 600 13px var(--body); fill: var(--muted); }
-
   .nota-alvo { text-align: center; display: grid; gap: 2px; }
   .nota-alvo .grande { font: 800 clamp(40px, 7vw, 58px)/1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; }
   .nota-alvo .pequena { color: var(--muted); font-size: 14px; min-height: 1.5em; }
@@ -222,7 +210,7 @@
   .fim b { font: 800 24px var(--display); }
 
   /* Celular: o treino inteiro cabe numa tela, pra ninguém precisar rolar com o
-     sax nas mãos. Pauta e mostrador lado a lado, botões presos no rodapé. */
+     sax nas mãos. Botões presos no rodapé. */
   @media (max-width: 560px) {
     main { padding-block: 12px calc(84px + env(safe-area-inset-bottom, 0px)); gap: 12px; }
     header { flex-wrap: nowrap; align-items: center; }
@@ -232,7 +220,6 @@
     .modos { flex-wrap: nowrap; }
     .modos button { flex: 1; padding: 8px 2px 10px; font-size: 18px; }
     .treino { gap: 12px; }
-    .palco { grid-template-columns: 1fr 1fr; gap: 8px; }
     .palco .painel { padding: 10px; gap: 6px; }
     .nota-alvo .grande { font-size: 30px; }
     .nota-alvo .pequena { font-size: 12px; }
@@ -277,7 +264,7 @@
         <option value="soprano">Sax soprano (Si♭)</option>
         <option value="baritono">Sax barítono (Mi♭)</option>
         <option value="trompete">Trompete (Si♭)</option>
-        <option value="trombone">Trombone (clave de Sol)</option>
+        <option value="trombone">Trombone (Dó)</option>
         <option value="do">Instrumento em Dó</option>
       </select>
     </label>
@@ -298,19 +285,11 @@
     <div class="painel">
       <div class="painel-topo">
         <span class="rotulo" id="staffLabel">Nota pedida</span>
-        <span class="rotulo so-largo">Escrita pro seu instrumento</span>
+        <span class="rotulo" id="micState">desligado</span>
       </div>
-      <svg class="pauta" id="staff" viewBox="0 0 360 190" role="img" aria-label="Pauta com a nota pedida"></svg>
       <div class="nota-alvo">
         <div class="grande" id="targetName">Pronto?</div>
         <div class="pequena" id="targetHint">Clique em Começar e permita o microfone.</div>
-      </div>
-    </div>
-
-    <div class="painel">
-      <div class="painel-topo">
-        <span class="rotulo"><span class="so-largo">O que o microfone ouve</span></span>
-        <span class="rotulo" id="micState">desligado</span>
       </div>
       <svg class="mostrador" id="gauge" viewBox="0 0 260 200" aria-hidden="true"></svg>
       <div class="segurar" title="Segure a nota certa até encher"><div id="holdBar"></div></div>
@@ -359,7 +338,7 @@
     <div class="grupo" id="melodySettings" hidden>
       <span class="rotulo">Notas na melodia</span>
       <div class="chips" id="lengthChips"></div>
-      <p class="nota-rodape">A melodia fica num tom maior, anda mais por notas vizinhas e termina na tônica. A primeira nota aparece na pauta; as outras surgem conforme você acerta. Errou uma nota, a melodia volta pro começo.</p>
+      <p class="nota-rodape">A melodia fica num tom maior, anda mais por notas vizinhas e termina na tônica. A tela diz qual é a primeira nota e quantas você já acertou. Errou uma nota, a melodia volta pro começo.</p>
     </div>
 
     <div class="grupo" id="intervalSettings" hidden>
@@ -390,7 +369,6 @@
 const NAMES = ["Dó", "Dó#", "Ré", "Ré#", "Mi", "Fá", "Fá#", "Sol", "Sol#", "Lá", "Lá#", "Si"];
 const LETTERS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const NATURAL = [0, 2, 4, 5, 7, 9, 11];
-const LETTER_STEP = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
 const IS_SHARP = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
 const INTERVALS = [
   { st: 1, short: "2m", name: "2ª menor" }, { st: 2, short: "2M", name: "2ª maior" },
@@ -414,8 +392,7 @@ const SAX_RANGES = [
 
 /* Cada instrumento: quantos semitons a nota escrita fica acima do som real,
    qual gravação toca e quais faixas de notas oferece. O instrumento em Dó
-   usa o som do sax alto. O trombone aparece em clave de Sol, uma oitava
-   acima do som real. */
+   usa o som do sax alto. */
 const INSTRUMENTS = {
   alto: { offset: 9, sound: "alto", ranges: SAX_RANGES },
   tenor: { offset: 14, sound: "tenor", ranges: SAX_RANGES },
@@ -426,10 +403,10 @@ const INSTRUMENTS = {
     ["60-79", "Médio: Dó grave a Sol"],
     ["54-84", "Extensão toda: Fá# a Dó agudo"],
   ] },
-  trombone: { offset: 12, sound: "trombone", ranges: [
-    ["58-70", "Fácil: Si♭ a Si♭ (1 oitava)"],
-    ["53-74", "Médio: Fá a Ré"],
-    ["52-77", "Extensão toda: Mi a Fá"],
+  trombone: { offset: 0, sound: "trombone", ranges: [
+    ["46-58", "Fácil: Si♭ a Si♭ (1 oitava)"],
+    ["41-62", "Médio: Fá a Ré"],
+    ["40-65", "Extensão toda: Mi a Fá"],
   ] },
   do: { offset: 0, sound: "alto", ranges: SAX_RANGES },
 };
@@ -439,14 +416,15 @@ const settings = {
   instrument: "alto", offset: 9, range: "60-84", naturals: false, anyOctave: true,
   noInstrument: false, iosTipSeen: false, mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
 };
-try { Object.assign(settings, JSON.parse(localStorage.getItem("ouvido-sax") || "{}")); } catch {}
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem("ouvido-sax") || "{}"); } catch {}
+Object.assign(settings, saved);
 /* Quem salvou as configurações antes de existir a escolha por nome tem só a
    transposição guardada: descobre o instrumento por ela. */
-if (!INSTRUMENTS[settings.instrument]) settings.instrument = "alto";
-if (INSTRUMENTS[settings.instrument].offset !== settings.offset) {
-  settings.instrument = Object.keys(INSTRUMENTS).find(k => INSTRUMENTS[k].offset === settings.offset) || "alto";
-  settings.offset = INSTRUMENTS[settings.instrument].offset;
+if (!INSTRUMENTS[saved.instrument]) {
+  settings.instrument = Object.keys(INSTRUMENTS).find(k => INSTRUMENTS[k].offset === saved.offset) || "alto";
 }
+settings.offset = INSTRUMENTS[settings.instrument].offset;
 if (!INSTRUMENTS[settings.instrument].ranges.some(([v]) => v === settings.range)) {
   settings.range = INSTRUMENTS[settings.instrument].ranges[1][0];
 }
@@ -454,7 +432,7 @@ const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.strin
 
 let ctx = null, analyser = null, stream = null, source = null, buf = null;
 let round = null, solved = false, revealed = false, mutedUntil = 0, holdStart = 0;
-let nextTimer = 0, heard = null, follower = null, micOk = false;
+let nextTimer = 0, follower = null, micOk = false;
 let hits = 0, streak = 0, skips = 0;
 
 const letter = midi => `${LETTERS[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
@@ -725,7 +703,6 @@ function newRound() {
     $("targetHint").textContent = melody
       ? "Nenhuma melodia coube nessa faixa de notas."
       : "Marque pelo menos um intervalo que caiba na faixa de notas.";
-    drawStaff();
     return;
   }
   renderTarget();
@@ -766,7 +743,7 @@ function renderTarget() {
     $("targetName").textContent = revealed ? "Melodia completa" : `${done} de ${r.melody.length}`;
     $("targetHint").textContent = revealed
       ? r.melody.map(n => NAMES[n % 12]).join(" · ")
-      : `Começa em ${NAMES[r.melody[0] % 12]}. Toque a melodia inteira, na ordem.`;
+      : `Começa em ${NAMES[r.melody[0] % 12]} (${letter(r.melody[0])}). Toque a melodia inteira, na ordem.`;
   } else if (r.base === null) {
     $("staffLabel").textContent = "Nota pedida";
     $("targetName").textContent = revealed ? `${NAMES[r.target % 12]} · ${letter(r.target)}` : "?";
@@ -777,81 +754,16 @@ function renderTarget() {
     $("targetName").textContent = revealed ? `${r.interval.name} ${r.dir > 0 ? "↑" : "↓"}` : "?";
     $("targetHint").textContent = revealed
       ? `De ${NAMES[r.base % 12]} pra ${NAMES[r.target % 12]} (${letter(r.target)})`
-      : `Começa em ${NAMES[r.base % 12]}. Toque a segunda nota, ${dir}.`;
+      : `Começa em ${NAMES[r.base % 12]} (${letter(r.base)}). Toque a segunda nota, ${dir}.`;
   }
-  drawStaff();
 }
 
-/* ---------- Desenho: pauta ---------- */
-
-const BOTTOM_LINE = 130, HALF = 7.5;   // posição da linha do Mi e meio espaço
-const staffPos = midi => LETTER_STEP[midi % 12] + 7 * (Math.floor(midi / 12) - 1);
-const staffY = pos => BOTTOM_LINE - (pos - 30) * HALF;
-
+/* Cria um elemento de desenho (SVG) com os atributos dados. */
 function el(tag, attrs, text) {
   const e = document.createElementNS(SVGNS, tag);
   for (const k in attrs) e.setAttribute(k, attrs[k]);
   if (text !== undefined) e.textContent = text;
   return e;
-}
-
-function drawNote(svg, midi, x, cls) {
-  const pos = staffPos(midi), y = staffY(pos);
-  const ledger = [];
-  for (let p = 28; p >= pos; p -= 2) ledger.push(p);
-  for (let p = 40; p <= pos; p += 2) ledger.push(p);
-  for (const p of ledger) svg.append(el("line", { x1: x - 16, x2: x + 16, y1: staffY(p), y2: staffY(p), class: "suplementar" }));
-  if (IS_SHARP[midi % 12]) {
-    const acc = el("text", { x: x - 32, y: y + 10, class: "acidente" }, "♯");
-    acc.style.color = cls === "alvo" || cls === "escuta" ? "var(--brass)" : "var(--ink)";
-    svg.append(acc);
-  }
-  svg.append(el("ellipse", { cx: x, cy: y, rx: 10, ry: 7, transform: `rotate(-20 ${x} ${y})`, class: `cabeca ${cls}` }));
-}
-
-/* Escreve o nome da nota logo abaixo da pauta. Quando a nota desce tanto que
-   ficaria por cima do nome, ele vai pro lado direito dela. */
-function drawName(svg, midi, x) {
-  const y = staffY(staffPos(midi));
-  const below = y + 24 <= 182;
-  svg.append(el("text", below
-    ? { x, y: 182, "text-anchor": "middle", class: "nome" }
-    : { x: x + 20, y: y + 5, "text-anchor": "start", class: "nome" }, NAMES[midi % 12]));
-}
-
-function drawStaff() {
-  const svg = $("staff");
-  svg.replaceChildren();
-  for (let i = 0; i < 5; i++) {
-    const y = BOTTOM_LINE - i * 2 * HALF;
-    svg.append(el("line", { x1: 8, x2: 352, y1: y, y2: y }));
-  }
-  svg.append(el("text", { x: 12, y: 142, class: "clave" }, "𝄞"));
-  if (!round) return;
-
-  if (round.melody) {
-    const n = round.melody.length, done = follower ? follower.progress : 0;
-    const xs = round.melody.map((_, i) => 140 + i * (195 / (n - 1)));
-    round.melody.forEach((note, i) => {
-      if (i === 0 || i < done || revealed) drawNote(svg, note, xs[i], i < done || revealed ? "alvo" : "");
-      else svg.append(el("text", { x: xs[i], y: 40, "text-anchor": "middle", class: "interrogacao", style: "font-size:30px" }, "?"));
-    });
-    if (!revealed && done < n && heard !== null && heard >= 50 && heard <= 96) drawNote(svg, heard, xs[done], "escuta");
-    return;
-  }
-  const single = round.base === null;
-  const targetX = single ? 220 : 270;
-  if (!single) {
-    drawNote(svg, round.base, 160, "");
-    drawName(svg, round.base, 160);
-  }
-  if (revealed) {
-    drawNote(svg, round.target, targetX, "alvo");
-    drawName(svg, round.target, targetX);
-  } else {
-    if (heard !== null && heard >= 50 && heard <= 96) drawNote(svg, heard, targetX, "escuta");
-    svg.append(el("text", { x: targetX, y: 40, "text-anchor": "middle", class: "interrogacao" }, "?"));
-  }
 }
 
 /* ---------- Desenho: mostrador de afinação ---------- */
@@ -911,9 +823,6 @@ function listen() {
   const freq = now > mutedUntil ? detectPitch(buf, ctx.sampleRate) : null;
   const written = freq ? 69 + 12 * Math.log2(freq / 440) + settings.offset : null;
   showHeard(written);
-
-  const newHeard = written === null ? null : Math.round(written);
-  if (newHeard !== heard) { heard = newHeard; if (round && !revealed) drawStaff(); }
 
   let held = 0;
   if (follower && !solved) {
@@ -1055,7 +964,7 @@ function onSettingChange(apply) {
     saveSettings();
     applySettingsToForm();
     buildKeyboard();
-    if (ctx && settings.mode !== "theory") newRound(); else drawStaff();
+    if (ctx && settings.mode !== "theory") newRound();
   };
 }
 
@@ -1261,7 +1170,6 @@ buildChips();
 buildGauge();
 buildKeyboard();
 applySettingsToForm();
-drawStaff();
 
 /* No iPhone e no iPad o navegador não libera o microfone sozinho e o modo
    silencioso cala o som da página. Na primeira visita, avisa o que ajustar. */
