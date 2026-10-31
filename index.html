@@ -851,7 +851,9 @@ function showHeard(written) {
 function listen() {
   analyser.getFloatTimeDomainData(buf);
   const now = performance.now();
-  const freq = now > mutedUntil ? detectPitch(buf, ctx.sampleRate) : null;
+  /* Respondendo pelo teclado, o microfone é ignorado: um barulho na sala não
+     pode contar como resposta. */
+  const freq = now > mutedUntil && !settings.noInstrument ? detectPitch(buf, ctx.sampleRate) : null;
   const written = freq ? 69 + 12 * Math.log2(freq / 440) + settings.offset : null;
   showHeard(written);
 
