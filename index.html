@@ -250,6 +250,11 @@
     button.acao:disabled, .acoes kbd { display: none; }
   }
 
+  .sugestao { display: grid; gap: 10px; }
+  .sugestao p { margin: 0; color: var(--muted); font-size: 15px; }
+  .sugestao textarea, .sugestao input { font: 16px/1.4 var(--body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; width: 100%; box-sizing: border-box; }
+  .sugestao textarea { resize: vertical; }
+  .sugestao .aviso.ok { color: var(--ok); }
   .ranking-aba { display: grid; gap: 16px; width: 100%; max-width: 520px; justify-self: center; }
   .conta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
   .conta b { color: var(--ink); font-weight: 600; }
@@ -302,10 +307,22 @@
     <button role="tab" id="modeInterval" aria-selected="false">Intervalo</button>
     <button role="tab" id="modeMelody" aria-selected="false">Melodia</button>
     <button role="tab" id="modeRanking" aria-selected="false">Ranking</button>
+    <button role="tab" id="modeSuggest" aria-selected="false">Sugestões</button>
     <button role="tab" id="modeTheory" aria-selected="false" hidden>Teoria</button>
   </nav>
 
   <section id="theory" class="teoria" hidden></section>
+
+  <section id="suggestTab" class="ranking-aba" hidden>
+    <form class="painel sugestao" id="suggestForm">
+      <span class="rotulo">Mande uma sugestão</span>
+      <p>Ideia, problema ou algo que faltou no app. Chega direto pra quem faz o app.</p>
+      <textarea id="suggestText" required maxlength="2000" rows="5" placeholder="Ex.: queria um modo com acordes"></textarea>
+      <input type="text" id="suggestName" maxlength="80" placeholder="Seu nome (opcional)">
+      <button class="acao principal" id="suggestSend" type="submit">Enviar</button>
+      <p class="aviso" id="suggestStatus" hidden></p>
+    </form>
+  </section>
 
   <section id="rankingTab" class="ranking-aba" hidden>
     <div class="painel conta">
@@ -1074,6 +1091,40 @@ function rankingKey() {
   return `${settings.mode}-${level}`;
 }
 
+/* ---------- Sugestões ---------- */
+
+/* Manda a sugestão por e-mail pelo FormSubmit, serviço que entrega
+   formulários de páginas sem servidor próprio, e guarda uma cópia no
+   Firebase. Basta um dos dois funcionar pra sugestão não se perder. */
+const SUGGEST_URL = "https://formsubmit.co/ajax/manuel.stveras@gmail.com";
+
+$("suggestForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const text = $("suggestText").value.trim();
+  if (!text) return;
+  const show = (msg, ok) => { $("suggestStatus").textContent = msg; $("suggestStatus").className = ok ? "aviso ok" : "aviso"; $("suggestStatus").hidden = false; };
+  $("suggestSend").disabled = true;
+  const data = { nome: $("suggestName").value.trim(), sugestao: text, instrumento: settings.instrument };
+  const email = fetch(SUGGEST_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ _subject: "Sugestão pro Treino de Ouvido", _template: "table", ...data, nome: data.nome || "(sem nome)" }),
+  }).then(res => { if (!res.ok) throw new Error(res.status); });
+  /* Sem conexão o Firebase fica esperando em vez de falhar: 10 segundos bastam. */
+  const stored = window.ranking
+    ? Promise.race([window.ranking.saveSuggestion(data), new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 10000))])
+    : Promise.reject(new Error("sem Firebase"));
+  try {
+    await Promise.any([email, stored]);
+    $("suggestText").value = "";
+    show("Valeu! Sua sugestão foi enviada.", true);
+  } catch {
+    show("Não deu pra enviar agora. Confira a internet e tente de novo.", false);
+  } finally {
+    $("suggestSend").disabled = false;
+  }
+});
+
 /* ---------- Controles ---------- */
 
 function applySettingsToForm() {
@@ -1089,8 +1140,9 @@ function applySettingsToForm() {
   for (const [id, mode] of MODES) $(id).setAttribute("aria-selected", String(settings.mode === mode));
   $("intervalSettings").hidden = settings.mode !== "interval";
   $("melodySettings").hidden = settings.mode !== "melody";
-  const theory = settings.mode === "theory", ranking = settings.mode === "ranking";
-  $("trainer").hidden = theory || ranking; $("theory").hidden = !theory; $("rankingTab").hidden = !ranking;
+  const theory = settings.mode === "theory", ranking = settings.mode === "ranking", suggest = settings.mode === "suggest";
+  $("trainer").hidden = theory || ranking || suggest; $("theory").hidden = !theory;
+  $("rankingTab").hidden = !ranking; $("suggestTab").hidden = !suggest;
   if (theory) renderTheory();
   for (const b of $("lengthChips").children) b.setAttribute("aria-pressed", String(Number(b.dataset.n) === settings.melodyLength));
   renderPhases();
@@ -1104,7 +1156,7 @@ for (const [id, style] of [["styleFree", "livre"], ["stylePhases", "fases"]]) {
   });
 }
 
-const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["modeRanking", "ranking"], ["modeTheory", "theory"]];
+const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["modeRanking", "ranking"], ["modeSuggest", "suggest"], ["modeTheory", "theory"]];
 /* Modos em que se joga; Ranking e Teoria são abas sem rodada. */
 const isPlayMode = mode => mode in MODE_NAMES;
 
@@ -1516,6 +1568,10 @@ async function startRanking() {
       const data = { nome: user.displayName || "Sem nome", acertos: fs.increment(1), atualizado: fs.serverTimestamp() };
       if (streak > (best[key] || 0)) { best[key] = streak; data.melhores = { [key]: streak }; }
       fs.setDoc(fs.doc(db, "jogadores", user.uid), data, { merge: true }).catch(() => {});
+    },
+    /* Guarda uma sugestão no banco. Não precisa estar logado. */
+    saveSuggestion(data) {
+      return fs.addDoc(fs.collection(db, "sugestoes"), { ...data, criada: fs.serverTimestamp() });
     },
     /* Abre a aba já no modo e nível que estavam sendo jogados. */
     preset(key) { const [mode, level] = key.split("-"); $("rankMode").value = mode; $("rankLevel").value = level; },

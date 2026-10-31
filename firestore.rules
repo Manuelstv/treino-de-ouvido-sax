@@ -11,5 +11,19 @@ service cloud.firestore {
         && request.resource.data.nome is string
         && request.resource.data.nome.size() <= 80;
     }
+
+    // Qualquer pessoa, mesmo sem login, pode mandar uma sugestão.
+    // Ninguém lê, muda ou apaga sugestões pelo app: só o dono, pelo console.
+    match /sugestoes/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['nome', 'sugestao', 'instrumento', 'criada'])
+        && request.resource.data.sugestao is string
+        && request.resource.data.sugestao.size() > 0
+        && request.resource.data.sugestao.size() <= 2000
+        && request.resource.data.nome is string
+        && request.resource.data.nome.size() <= 80
+        && request.resource.data.instrumento is string
+        && request.resource.data.instrumento.size() <= 20
+        && request.resource.data.criada == request.time;
+    }
   }
 }
