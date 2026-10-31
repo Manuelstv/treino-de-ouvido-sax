@@ -156,6 +156,19 @@
     font: 500 13px var(--mono); border: 1px solid var(--line); color: var(--muted); background: none;
   }
   .chip-botao[aria-pressed="true"] { background: var(--brass-soft); border-color: var(--brass); color: var(--ink); }
+  .fases { display: grid; gap: 10px; justify-items: center; }
+  .estilo { display: flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .estilo button { font: 600 14px/1 var(--body); padding: 9px 18px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer; }
+  .estilo button + button { border-left: 1px solid var(--line); }
+  .estilo button[aria-pressed="true"] { background: var(--brass-soft); color: var(--ink); }
+  .lista-fases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 480px; }
+  .lista-fases button { display: grid; gap: 2px; justify-items: center; min-width: 0; padding: 8px 6px; border-radius: 4px; cursor: pointer;
+    font: 600 14px/1.2 var(--body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .lista-fases button span { font-size: 12px; font-weight: 500; color: var(--muted); }
+  .lista-fases button small { font: 500 11px var(--mono); color: var(--muted); }
+  .lista-fases button[aria-pressed="true"] { border-color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+  .lista-fases button.feita small { color: var(--ok); }
+  .lista-fases button:disabled { opacity: 0.45; cursor: default; }
   .chip input:checked + span { background: var(--brass-soft); border-color: var(--brass); color: var(--ink); }
 
   .aviso { font-size: 14px; color: var(--warn); margin: 0; }
@@ -316,6 +329,14 @@
 
   <div id="trainer" class="treino">
 
+  <div class="fases" id="phaseBar" hidden>
+    <div class="estilo" role="group" aria-label="Tipo de jogo">
+      <button type="button" id="styleFree">Livre</button>
+      <button type="button" id="stylePhases">Fases</button>
+    </div>
+    <div class="lista-fases" id="phaseList" hidden></div>
+  </div>
+
   <section class="palco">
     <div class="painel">
       <div class="painel-topo">
@@ -448,6 +469,7 @@ const $ = id => document.getElementById(id);
 const settings = {
   instrument: "alto", offset: 9, range: "60-84", naturals: false, anyOctave: true,
   noInstrument: false, iosTipSeen: false, mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
+  melodyStyle: "livre", phase: 0, phaseProgress: [0, 0, 0],
 };
 let saved = {};
 try { saved = JSON.parse(localStorage.getItem("ouvido-sax") || "{}"); } catch {}
@@ -661,6 +683,63 @@ function generateMelody(low, high, length, onlyNaturals) {
   return null;
 }
 
+/* Fases do modo Melodia. Cada fase tem 10 melodias fixas de 5 notas que só
+   andam pelos intervalos permitidos (em semitons, subindo ou descendo). A
+   partir da segunda fase, toda melodia usa ao menos um intervalo novo. */
+const PHASES = [
+  { name: "Fase 1", hint: "2ª maior", steps: [2] },
+  { name: "Fase 2", hint: "2ª e 3ªs", steps: [2, 3, 4], must: [3, 4] },
+  { name: "Fase 3", hint: "2ª, 3ªs e 5ª", steps: [2, 3, 4, 7], must: [7] },
+];
+const PHASE_SIZE = 10, PHASE_NOTES = 5;
+
+/* Sorteio com semente: os mesmos números dados geram sempre a mesma
+   sequência. É o que faz as melodias de uma fase serem sempre as mesmas. */
+function seededRandom(seed) {
+  return () => {
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* Monta as 10 melodias da fase dentro da faixa de notas, todas diferentes
+   entre si. Cada uma começa numa nota natural, pra soar menos estranha, e
+   nunca repete a nota anterior. Devolve null se a faixa não comportar. */
+const phaseCache = new Map();
+function phaseMelodies(phaseIndex, low, high) {
+  const key = `${phaseIndex}:${low}:${high}`;
+  if (phaseCache.has(key)) return phaseCache.get(key);
+  const phase = PHASES[phaseIndex];
+  const rand = seededRandom(phaseIndex * 100003 + low * 131 + high);
+  const choose = list => list[Math.floor(rand() * list.length)];
+  const starts = [];
+  for (let m = low; m <= high; m++) if (NATURAL.includes(m % 12)) starts.push(m);
+  const list = [], seen = new Set();
+  for (let attempt = 0; attempt < 5000 && list.length < PHASE_SIZE; attempt++) {
+    const notes = [choose(starts)], moves = [];
+    while (notes.length < PHASE_NOTES) {
+      const options = [];
+      for (const st of phase.steps) for (const dir of [1, -1]) {
+        const n = notes[notes.length - 1] + dir * st;
+        if (n >= low && n <= high) options.push([n, st]);
+      }
+      const [n, st] = choose(options);
+      notes.push(n); moves.push(st);
+    }
+    if (phase.must && !moves.some(st => phase.must.includes(st))) continue;
+    if (seen.has(notes.join())) continue;
+    seen.add(notes.join()); list.push(notes);
+  }
+  const result = list.length === PHASE_SIZE ? list : null;
+  phaseCache.set(key, result);
+  return result;
+}
+
+const playingPhases = () => settings.mode === "melody" && settings.melodyStyle === "fases";
+const phaseUnlocked = i => i === 0 || settings.phaseProgress[i - 1] >= PHASE_SIZE;
+
 /* Confere uma melodia tocada nota por nota. A nota do microfone só conta
    quando fica firme por um instante. Errar zera a melodia: a pessoa recomeça
    do início, e se a nota errada for a primeira da frase, ela já vale como o
@@ -710,6 +789,12 @@ function pickRound() {
     do { t = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && round && t === round.target);
     return { base: null, target: t, interval: null };
   }
+  if (playingPhases()) {
+    const i = settings.phase, done = settings.phaseProgress[i];
+    const k = done < PHASE_SIZE ? done : Math.floor(Math.random() * PHASE_SIZE);
+    const notes = phaseMelodies(i, lo, hi)?.[k];
+    return notes && { base: null, melody: notes, target: notes[0], phaseMelody: k };
+  }
   if (settings.mode === "melody") {
     const m = generateMelody(lo, hi, settings.melodyLength, settings.naturals);
     return m && { base: null, melody: m.notes, tonic: m.tonic, target: m.notes[0] };
@@ -758,12 +843,56 @@ function handleMelodyResult(result) {
 
 function markSolved() {
   solved = true; revealed = true;
-  hits++; streak++;
+  hits++;
   $("hits").textContent = hits;
+  if (round.phaseMelody !== undefined) return phaseMelodySolved();
+  streak++;
   window.ranking?.recordHit(rankingKey(), streak);
   setStatus("Acertou!", "ok");
   renderTarget();
   nextTimer = setTimeout(newRound, 1500);
+}
+
+/* Conta a melodia na fase. Ao completar as 10, a fase fica concluída e o
+   jogo segue pra próxima fase, se houver. */
+function phaseMelodySolved() {
+  const i = settings.phase;
+  const firstTime = round.phaseMelody === settings.phaseProgress[i];
+  if (firstTime) settings.phaseProgress[i]++;
+  const finished = firstTime && settings.phaseProgress[i] === PHASE_SIZE;
+  if (finished && i + 1 < PHASES.length) settings.phase = i + 1;
+  saveSettings();
+  renderPhases();
+  setStatus(finished ? (i + 1 < PHASES.length ? `${PHASES[i].name} concluída! ${PHASES[i + 1].name} liberada.` : "Você terminou todas as fases!") : "Acertou!", "ok");
+  renderTarget();
+  nextTimer = setTimeout(newRound, finished ? 3000 : 1500);
+}
+
+/* Mostra a escolha Livre/Fases e os botões das fases com o progresso. */
+function renderPhases() {
+  const melody = settings.mode === "melody", phases = playingPhases();
+  $("phaseBar").hidden = !melody;
+  $("styleFree").setAttribute("aria-pressed", String(!phases));
+  $("stylePhases").setAttribute("aria-pressed", String(phases));
+  $("phaseList").hidden = !phases;
+  $("nextBtn").hidden = phases;
+  $("phaseList").replaceChildren(...PHASES.map((ph, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    const done = settings.phaseProgress[i];
+    b.disabled = !phaseUnlocked(i);
+    b.className = done >= PHASE_SIZE ? "feita" : "";
+    b.setAttribute("aria-pressed", String(i === settings.phase));
+    const status = !phaseUnlocked(i) ? "🔒 bloqueada" : done >= PHASE_SIZE ? "✓ concluída" : `${done} de ${PHASE_SIZE}`;
+    b.append(ph.name, Object.assign(document.createElement("span"), { textContent: ph.hint }),
+      Object.assign(document.createElement("small"), { textContent: status }));
+    b.addEventListener("click", () => {
+      if (settings.phase === i) return;
+      settings.phase = i; saveSettings(); renderPhases();
+      if (ctx) newRound();
+    });
+    return b;
+  }));
 }
 
 function setStatus(text, kind = "") {
@@ -774,7 +903,8 @@ function setStatus(text, kind = "") {
 function renderTarget() {
   const r = round;
   if (r.melody) {
-    $("staffLabel").textContent = "Melodia";
+    $("staffLabel").textContent = r.phaseMelody !== undefined
+      ? `${PHASES[settings.phase].name} · melodia ${r.phaseMelody + 1} de ${PHASE_SIZE}` : "Melodia";
     const done = follower ? follower.progress : 0;
     $("targetName").textContent = revealed ? "Melodia completa" : `${done} de ${r.melody.length}`;
     $("targetHint").textContent = revealed
@@ -917,6 +1047,15 @@ function applySettingsToForm() {
   $("trainer").hidden = theory || ranking; $("theory").hidden = !theory; $("rankingTab").hidden = !ranking;
   if (theory) renderTheory();
   for (const b of $("lengthChips").children) b.setAttribute("aria-pressed", String(Number(b.dataset.n) === settings.melodyLength));
+  renderPhases();
+}
+
+for (const [id, style] of [["styleFree", "livre"], ["stylePhases", "fases"]]) {
+  $(id).addEventListener("click", () => {
+    if (settings.melodyStyle === style) return;
+    settings.melodyStyle = style; saveSettings(); renderPhases(); resetStreak();
+    if (ctx) newRound();
+  });
 }
 
 const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["modeRanking", "ranking"], ["modeTheory", "theory"]];
@@ -1091,6 +1230,7 @@ function reveal() {
   renderTarget();
 }
 function next() {
+  if (playingPhases() && !solved) return;   // nas fases não dá pra pular melodia
   if (!solved) streak = 0;
   newRound();
 }
