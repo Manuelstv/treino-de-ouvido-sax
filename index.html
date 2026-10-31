@@ -272,11 +272,11 @@
     <label class="instrumento">
       <span class="rotulo">Instrumento</span>
       <select id="instrument">
-        <option value="9">Sax alto (Mi♭)</option>
-        <option value="14">Sax tenor (Si♭)</option>
-        <option value="2">Sax soprano (Si♭)</option>
-        <option value="21">Sax barítono (Mi♭)</option>
-        <option value="0">Instrumento em Dó</option>
+        <option value="alto">Sax alto (Mi♭)</option>
+        <option value="tenor">Sax tenor (Si♭)</option>
+        <option value="soprano">Sax soprano (Si♭)</option>
+        <option value="baritono">Sax barítono (Mi♭)</option>
+        <option value="do">Instrumento em Dó</option>
       </select>
     </label>
   </header>
@@ -407,12 +407,29 @@ const HOLD_MS = 350;       // quanto tempo a nota precisa ficar certa para conta
 const TOLERANCE = 40;      // folga de afinação, em cents
 const SVGNS = "http://www.w3.org/2000/svg";
 
+/* Cada instrumento: quantos semitons a nota escrita fica acima do som real e
+   qual gravação toca. O instrumento em Dó usa o som do sax alto. */
+const INSTRUMENTS = {
+  alto: { offset: 9, sound: "alto" },
+  tenor: { offset: 14, sound: "tenor" },
+  soprano: { offset: 2, sound: "soprano" },
+  baritono: { offset: 21, sound: "baritono" },
+  do: { offset: 0, sound: "alto" },
+};
+
 const $ = id => document.getElementById(id);
 const settings = {
-  offset: 9, range: "60-84", naturals: false, anyOctave: true,
+  instrument: "alto", offset: 9, range: "60-84", naturals: false, anyOctave: true,
   noInstrument: false, iosTipSeen: false, mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
 };
 try { Object.assign(settings, JSON.parse(localStorage.getItem("ouvido-sax") || "{}")); } catch {}
+/* Quem salvou as configurações antes de existir a escolha por nome tem só a
+   transposição guardada: descobre o instrumento por ela. */
+if (!INSTRUMENTS[settings.instrument]) settings.instrument = "alto";
+if (INSTRUMENTS[settings.instrument].offset !== settings.offset) {
+  settings.instrument = Object.keys(INSTRUMENTS).find(k => INSTRUMENTS[k].offset === settings.offset) || "alto";
+  settings.offset = INSTRUMENTS[settings.instrument].offset;
+}
 const saveSettings = () => { try { localStorage.setItem("ouvido-sax", JSON.stringify(settings)); } catch {} };
 
 let ctx = null, analyser = null, stream = null, source = null, buf = null;
@@ -471,39 +488,46 @@ function detectPitch(data, sampleRate) {
 
 /* ---------- Som ---------- */
 
-/* Gravações de sax alto, uma por semitom, de Dó#3 a Lá5 em som real (falta o
-   Lá3). Vêm do Weresax, da Karoryfer, editadas pelo tonejs-instruments. */
-const SAX_SAMPLES = ["Cs3", "D3", "Ds3", "E3", "F3", "Fs3", "G3", "Gs3", "As3", "B3",
-  "C4", "Cs4", "D4", "Ds4", "E4", "F4", "Fs4", "G4", "Gs4", "A4", "As4", "B4",
-  "C5", "Cs5", "D5", "Ds5", "E5", "F5", "Fs5", "G5", "Gs5", "A5"];
-const saxBuffers = new Map();   // nota MIDI de concerto → gravação decodificada
+/* Notas gravadas de cada instrumento, em som real (número MIDI). Cada
+   arquivo fica em sons/<instrumento>/ com o nome da nota, como "Cs4.mp3". */
+const span = (lo, hi, skip = []) => Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).filter(m => !skip.includes(m));
+const SOUNDS = {
+  alto: span(49, 81, [57]),
+  tenor: span(44, 76),
+  soprano: span(56, 88),
+  baritono: span(36, 69),
+};
+const FILE_NAMES = ["C", "Cs", "D", "Ds", "E", "F", "Fs", "G", "Gs", "A", "As", "B"];
+const soundBuffers = {};   // instrumento → (nota MIDI de concerto → gravação decodificada)
 
-/* Baixa e decodifica as gravações. Se alguma falhar, a página usa o som
-   sintético no lugar dela, então nunca fica muda. */
-async function loadSax() {
-  const letters = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
-  await Promise.all(SAX_SAMPLES.map(async name => {
-    const [, l, sharp, oct] = name.match(/^([A-G])(s?)(\d)$/);
-    const midi = 12 * (Number(oct) + 1) + letters[l] + (sharp ? 1 : 0);
+/* Baixa as gravações do instrumento uma vez só, na primeira vez que ele é
+   usado. Se alguma falhar, a nota sai com o som sintético, então a página
+   nunca fica muda. */
+async function loadSound(name) {
+  if (soundBuffers[name]) return;
+  const buffers = soundBuffers[name] = new Map();
+  await Promise.all(SOUNDS[name].map(async midi => {
     try {
-      const data = await (await fetch(`sax/${name}.mp3`)).arrayBuffer();
-      saxBuffers.set(midi, await ctx.decodeAudioData(data));
+      const file = `${FILE_NAMES[midi % 12]}${Math.floor(midi / 12) - 1}`;
+      const data = await (await fetch(`sons/${name}/${file}.mp3`)).arrayBuffer();
+      buffers.set(midi, await ctx.decodeAudioData(data));
     } catch {}
   }));
 }
 
 /* Monta uma voz ligada à saída, com o volume começando em zero. Usa a
-   gravação de sax mais próxima da nota, acelerada ou freada até a altura
-   certa. */
+   gravação do instrumento mais próxima da nota, acelerada ou freada até a
+   altura certa. */
 function makeVoice(written, when) {
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0, when);
   gain.connect(ctx.destination);
   const concert = written - settings.offset;
-  if (saxBuffers.size) {
-    const nearest = [...saxBuffers.keys()].reduce((a, b) => Math.abs(b - concert) < Math.abs(a - concert) ? b : a);
+  const buffers = soundBuffers[INSTRUMENTS[settings.instrument].sound];
+  if (buffers?.size) {
+    const nearest = [...buffers.keys()].reduce((a, b) => Math.abs(b - concert) < Math.abs(a - concert) ? b : a);
     const src = ctx.createBufferSource();
-    src.buffer = saxBuffers.get(nearest);
+    src.buffer = buffers.get(nearest);
     src.playbackRate.value = Math.pow(2, (concert - nearest) / 12);
     src.connect(gain);
     src.start(when);
@@ -886,7 +910,7 @@ function listen() {
 /* ---------- Controles ---------- */
 
 function applySettingsToForm() {
-  $("instrument").value = String(settings.offset);
+  $("instrument").value = settings.instrument;
   $("range").value = settings.range;
   $("naturals").checked = settings.naturals;
   $("anyOctave").checked = settings.anyOctave;
@@ -1002,7 +1026,17 @@ function onSettingChange(apply) {
   };
 }
 
-$("instrument").addEventListener("change", onSettingChange(t => settings.offset = Number(t.value)));
+/* Trocar de instrumento no meio do jogo espera o som novo chegar antes da
+   próxima rodada, senão ela tocaria com o som sintético. */
+$("instrument").addEventListener("change", async e => {
+  settings.instrument = e.target.value;
+  settings.offset = INSTRUMENTS[settings.instrument].offset;
+  if (ctx) {
+    $("targetHint").textContent = "Carregando o som do instrumento…";
+    await loadSound(INSTRUMENTS[settings.instrument].sound);
+  }
+  onSettingChange(() => {})(e);
+});
 $("range").addEventListener("change", onSettingChange(t => settings.range = t.value));
 $("naturals").addEventListener("change", onSettingChange(t => settings.naturals = t.checked));
 $("settingsBtn").addEventListener("click", () => {
@@ -1032,8 +1066,8 @@ $("startBtn").addEventListener("click", async () => {
   buf = new Float32Array(analyser.fftSize);
   try { await openMic(); micOk = true; } catch { micOk = false; }
   $("startBtn").hidden = true;
-  $("targetHint").textContent = "Carregando o som do sax…";
-  await loadSax();
+  $("targetHint").textContent = "Carregando o som do instrumento…";
+  await loadSound(INSTRUMENTS[settings.instrument].sound);
   $("micState").textContent = micOk ? "ouvindo" : "sem microfone";
   $("micWarn").hidden = micOk;
   if (!micOk) $("keyboardHint").textContent = "Sem microfone: responda pelo teclado";
