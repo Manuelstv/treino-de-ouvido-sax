@@ -237,18 +237,20 @@
     button.acao:disabled, .acoes kbd { display: none; }
   }
 
-  .conta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+  .ranking-aba { display: grid; gap: 16px; width: 100%; max-width: 520px; justify-self: center; }
+  .conta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
   .conta b { color: var(--ink); font-weight: 600; }
-  .conta button.acao { padding: 9px 14px; font-size: 14px; }
-  .ranking h2 { margin: 0 0 4px; }
-  .ranking .filtro { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
-  .ranking ol { margin: 0 0 18px; padding: 0; list-style: none; display: grid; gap: 6px; max-height: 50vh; overflow-y: auto; }
-  .ranking li { display: grid; grid-template-columns: 2ch 1fr auto; gap: 10px; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--line); }
-  .ranking li.eu { color: var(--brass); font-weight: 600; }
-  .ranking .pos { font: 500 13px var(--mono); color: var(--muted); }
-  .ranking .nome { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ranking .pts { font: 500 15px var(--mono); font-variant-numeric: tabular-nums; }
-  .ranking .pts small { color: var(--muted); font-size: 11px; margin-left: 6px; }
+  .filtros { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .filtros label { display: grid; gap: 6px; }
+  .lista-ranking { margin: 0; padding: 0; list-style: none; display: grid; }
+  .lista-ranking li { display: grid; grid-template-columns: 3ch 1fr auto; gap: 10px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .lista-ranking li:last-child { border-bottom: 0; }
+  .lista-ranking li.vazio { display: block; color: var(--muted); }
+  .lista-ranking li.eu { color: var(--brass); font-weight: 600; }
+  .lista-ranking .pos { font: 500 13px var(--mono); color: var(--muted); }
+  .lista-ranking .nome { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lista-ranking .pts { font: 500 18px var(--mono); font-variant-numeric: tabular-nums; }
+  .lista-ranking .pts small { color: var(--muted); font-size: 11px; margin-left: 8px; }
   .dica-ios {
     max-width: min(360px, calc(100vw - 32px)); padding: 22px; border: 1px solid var(--line); border-radius: 6px;
     background: var(--surface); color: var(--ink);
@@ -286,10 +288,31 @@
     <button role="tab" id="modeNote" aria-selected="true">Nota</button>
     <button role="tab" id="modeInterval" aria-selected="false">Intervalo</button>
     <button role="tab" id="modeMelody" aria-selected="false">Melodia</button>
+    <button role="tab" id="modeRanking" aria-selected="false">Ranking</button>
     <button role="tab" id="modeTheory" aria-selected="false" hidden>Teoria</button>
   </nav>
 
   <section id="theory" class="teoria" hidden></section>
+
+  <section id="rankingTab" class="ranking-aba" hidden>
+    <div class="painel conta">
+      <span id="accountText">Carregando…</span>
+      <button class="acao principal" id="loginBtn" type="button" hidden>Entrar com Google</button>
+      <button class="acao" id="logoutBtn" type="button" hidden>Sair</button>
+    </div>
+    <div class="painel" id="rankingBoard" hidden>
+      <div class="filtros">
+        <label><span class="rotulo">Modo</span>
+          <select id="rankMode"><option value="note">Nota</option><option value="interval">Intervalo</option><option value="melody">Melodia</option></select>
+        </label>
+        <label><span class="rotulo">Nível</span>
+          <select id="rankLevel"><option value="0">Fácil</option><option value="1">Médio</option><option value="2">Extensão toda</option></select>
+        </label>
+      </div>
+      <p class="rotulo">Melhor sequência</p>
+      <ol class="lista-ranking" id="rankingList"></ol>
+    </div>
+  </section>
 
   <div id="trainer" class="treino">
 
@@ -330,13 +353,6 @@
     <span>acertos<b id="hits">0</b></span>
     <span>em sequência<b id="streak">0</b></span>
     <span>puladas<b id="skips">0</b></span>
-  </div>
-
-  <div class="conta" id="account" hidden>
-    <span id="accountText">Entre pra sua melhor sequência valer no ranking.</span>
-    <button class="acao" id="loginBtn" type="button">Entrar com Google</button>
-    <button class="acao" id="rankingBtn" type="button" hidden>Ranking</button>
-    <button class="acao" id="logoutBtn" type="button" hidden>Sair</button>
   </div>
 
   <button class="acao editar" id="settingsBtn" aria-expanded="false" aria-controls="settingsPanel">Editar ajustes</button>
@@ -382,13 +398,6 @@
     <li>Tire o iPhone do <b>modo silencioso</b> (chave ou botão na lateral). No silencioso, o som da página não toca.</li>
   </ol>
   <form method="dialog"><button class="acao principal">Entendi</button></form>
-</dialog>
-
-<dialog class="dica-ios ranking" id="rankingDialog">
-  <h2>Ranking</h2>
-  <p class="filtro" id="rankingFilter"></p>
-  <ol id="rankingList"></ol>
-  <form method="dialog"><button class="acao principal">Fechar</button></form>
 </dialog>
 
 <script>
@@ -890,10 +899,6 @@ function rankingKey() {
   const level = Math.max(0, INSTRUMENTS[settings.instrument].ranges.findIndex(([v]) => v === settings.range));
   return `${settings.mode}-${level}`;
 }
-function rankingLabel(key) {
-  const [mode, level] = key.split("-");
-  return `${MODE_NAMES[mode]} · ${LEVEL_NAMES[level]}`;
-}
 
 /* ---------- Controles ---------- */
 
@@ -910,13 +915,15 @@ function applySettingsToForm() {
   for (const [id, mode] of MODES) $(id).setAttribute("aria-selected", String(settings.mode === mode));
   $("intervalSettings").hidden = settings.mode !== "interval";
   $("melodySettings").hidden = settings.mode !== "melody";
-  const theory = settings.mode === "theory";
-  $("trainer").hidden = theory; $("theory").hidden = !theory;
+  const theory = settings.mode === "theory", ranking = settings.mode === "ranking";
+  $("trainer").hidden = theory || ranking; $("theory").hidden = !theory; $("rankingTab").hidden = !ranking;
   if (theory) renderTheory();
   for (const b of $("lengthChips").children) b.setAttribute("aria-pressed", String(Number(b.dataset.n) === settings.melodyLength));
 }
 
-const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["modeTheory", "theory"]];
+const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["modeRanking", "ranking"], ["modeTheory", "theory"]];
+/* Modos em que se joga; Ranking e Teoria são abas sem rodada. */
+const isPlayMode = mode => mode in MODE_NAMES;
 
 function buildChips() {
   for (const n of [4, 5, 6]) {
@@ -1017,7 +1024,7 @@ function onSettingChange(apply) {
     saveSettings();
     applySettingsToForm();
     buildKeyboard();
-    if (ctx && settings.mode !== "theory") newRound();
+    if (ctx && isPlayMode(settings.mode)) newRound();
   };
 }
 
@@ -1048,8 +1055,10 @@ $("direction").addEventListener("change", onSettingChange(t => settings.directio
 for (const [id, mode] of MODES) {
   $(id).addEventListener("click", () => {
     if (settings.mode === mode) return;
+    if (mode === "ranking" && isPlayMode(settings.mode)) window.ranking?.preset(rankingKey());
     settings.mode = mode; saveSettings(); applySettingsToForm(); resetStreak();
-    if (mode === "theory") { clearTimeout(nextTimer); round = null; follower = null; }
+    if (mode === "ranking") window.ranking?.show();
+    if (!isPlayMode(mode)) { clearTimeout(nextTimer); round = null; follower = null; }
     else if (ctx) newRound();
   });
 }
@@ -1089,7 +1098,7 @@ function next() {
 }
 
 document.addEventListener("keydown", e => {
-  if (!ctx || settings.mode === "theory" || e.target.closest("select, input")) return;
+  if (!ctx || !isPlayMode(settings.mode) || e.target.closest("select, input")) return;
   if (e.key === " ") { e.preventDefault(); playRound(); }
   else if (e.key === "Enter") { e.preventDefault(); next(); }
   else if (e.key.toLowerCase() === "r") reveal();
@@ -1247,40 +1256,72 @@ const FIREBASE_CONFIG = {
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2";
 
 async function startRanking() {
-  if (!FIREBASE_CONFIG) return;
+  const unavailable = text => { $("accountText").textContent = text; };
+  if (!FIREBASE_CONFIG) return unavailable("Ranking indisponível no momento.");
   let app, auth, fs;
   try {
     app = await import(`${SDK}/firebase-app.js`);
     auth = await import(`${SDK}/firebase-auth.js`);
     fs = await import(`${SDK}/firebase-firestore.js`);
-  } catch { return; }
+  } catch { return unavailable("Não deu pra carregar o ranking. Confira a internet e recarregue a página."); }
   const fb = app.initializeApp(FIREBASE_CONFIG);
   const authApi = auth.getAuth(fb);
   /* A conexão padrão do Firestore pode travar no Safari do iPhone; a
      alternativa mais simples (long polling) funciona em todos os navegadores. */
   const db = fs.initializeFirestore(fb, { experimentalForceLongPolling: true });
-  let user = null, best = {};
+  let user = null, best = {}, request = 0;
 
-  $("account").hidden = false;
   $("loginBtn").addEventListener("click", async () => {
     try { await auth.signInWithPopup(authApi, new auth.GoogleAuthProvider()); }
     catch (e) {
-      if (e?.code === "auth/popup-blocked") $("accountText").textContent = "O navegador bloqueou a janela de login. Libere popups pra esta página e tente de novo.";
+      if (e?.code === "auth/popup-blocked") unavailable("O navegador bloqueou a janela de login. Libere popups pra esta página e tente de novo.");
     }
   });
   $("logoutBtn").addEventListener("click", () => auth.signOut(authApi));
-  $("rankingBtn").addEventListener("click", showRanking);
+  $("rankMode").addEventListener("change", show);
+  $("rankLevel").addEventListener("change", show);
 
   auth.onAuthStateChanged(authApi, async u => {
     user = u; best = {};
-    $("loginBtn").hidden = !!u; $("rankingBtn").hidden = !u; $("logoutBtn").hidden = !u;
-    if (!u) { $("accountText").textContent = "Entre pra sua melhor sequência valer no ranking."; return; }
+    $("loginBtn").hidden = !!u; $("logoutBtn").hidden = !u; $("rankingBoard").hidden = !u;
+    if (!u) { unavailable("Entre com Google pra ver o ranking e ter sua melhor sequência nele."); return; }
     $("accountText").replaceChildren("Jogando como ", Object.assign(document.createElement("b"), { textContent: u.displayName || "você" }));
+    show();
     try {
       const snap = await fs.getDoc(fs.doc(db, "jogadores", u.uid));
       best = snap.exists() ? (snap.data().melhores || {}) : {};
     } catch {}
   });
+
+  /* Mostra as 20 melhores sequências do modo e nível escolhidos. Se a busca
+     não responder em 10 segundos, avisa em vez de ficar carregando. */
+  async function show() {
+    if (!user || settings.mode !== "ranking") return;
+    const key = `${$("rankMode").value}-${$("rankLevel").value}`;
+    const mine = ++request;
+    const list = $("rankingList");
+    const note = text => list.replaceChildren(Object.assign(document.createElement("li"), { className: "vazio", textContent: text }));
+    note("Carregando…");
+    try {
+      const q = fs.query(fs.collection(db, "jogadores"), fs.orderBy(`melhores.${key}`, "desc"), fs.limit(20));
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 10000));
+      const docs = (await Promise.race([fs.getDocs(q), timeout])).docs;
+      if (mine !== request) return;
+      if (!docs.length) return note("Ninguém pontuou aqui ainda. Seja o primeiro!");
+      list.replaceChildren(...docs.map((d, i) => {
+        const p = d.data();
+        const li = document.createElement("li");
+        if (d.id === user.uid) li.className = "eu";
+        const pts = Object.assign(document.createElement("span"), { className: "pts", textContent: p.melhores[key] });
+        pts.append(Object.assign(document.createElement("small"), { textContent: `${p.acertos || 0} acertos` }));
+        li.append(Object.assign(document.createElement("span"), { className: "pos", textContent: `${i + 1}º` }),
+          Object.assign(document.createElement("span"), { className: "nome", textContent: p.nome || "Sem nome" }), pts);
+        return li;
+      }));
+    } catch {
+      if (mine === request) note("Não deu pra carregar o ranking agora. Tente de novo em instantes.");
+    }
+  }
 
   /* Soma o acerto ao total da pessoa e, se a sequência atual passou a melhor
      dela nesse ranking, guarda a nova marca. */
@@ -1291,35 +1332,11 @@ async function startRanking() {
       if (streak > (best[key] || 0)) { best[key] = streak; data.melhores = { [key]: streak }; }
       fs.setDoc(fs.doc(db, "jogadores", user.uid), data, { merge: true }).catch(() => {});
     },
+    /* Abre a aba já no modo e nível que estavam sendo jogados. */
+    preset(key) { const [mode, level] = key.split("-"); $("rankMode").value = mode; $("rankLevel").value = level; },
+    show,
   };
-
-  /* Mostra as 20 melhores sequências do modo e faixa que estão em jogo. */
-  async function showRanking() {
-    const key = rankingKey();
-    $("rankingFilter").textContent = `Melhor sequência em ${rankingLabel(key)}`;
-    const list = $("rankingList");
-    list.replaceChildren(Object.assign(document.createElement("li"), { textContent: "Carregando…" }));
-    $("rankingDialog").showModal();
-    try {
-      const q = fs.query(fs.collection(db, "jogadores"), fs.orderBy(`melhores.${key}`, "desc"), fs.limit(20));
-      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 10000));
-      const docs = (await Promise.race([fs.getDocs(q), timeout])).docs;
-      list.replaceChildren();
-      if (!docs.length) list.append(Object.assign(document.createElement("li"), { textContent: "Ninguém pontuou aqui ainda. Seja o primeiro!" }));
-      docs.forEach((d, i) => {
-        const p = d.data();
-        const li = document.createElement("li");
-        if (d.id === user?.uid) li.className = "eu";
-        const pts = Object.assign(document.createElement("span"), { className: "pts", textContent: p.melhores[key] });
-        pts.append(Object.assign(document.createElement("small"), { textContent: `${p.acertos || 0} acertos` }));
-        li.append(Object.assign(document.createElement("span"), { className: "pos", textContent: i + 1 }),
-          Object.assign(document.createElement("span"), { className: "nome", textContent: p.nome || "Sem nome" }), pts);
-        list.append(li);
-      });
-    } catch {
-      list.replaceChildren(Object.assign(document.createElement("li"), { textContent: "Não deu pra carregar o ranking agora. Tente de novo em instantes." }));
-    }
-  }
+  show();
 }
 startRanking();
 </script>
