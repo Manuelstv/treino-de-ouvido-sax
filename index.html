@@ -52,6 +52,9 @@
   }
 
   .instrumento { display: grid; gap: 4px; min-width: 0; }
+  .lado { display: grid; gap: 6px; justify-items: end; min-width: 0; }
+  .perfil-botao { font: 600 13px/1 var(--body); padding: 6px 2px; border: 0; background: none; color: var(--brass); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .perfil-botao[aria-selected="true"] { color: var(--ink); text-decoration: none; }
 
   .rotulo {
     font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
@@ -255,6 +258,7 @@
   .sugestao textarea, .sugestao input { font: 16px/1.4 var(--body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; width: 100%; box-sizing: border-box; }
   .sugestao textarea { resize: vertical; }
   .sugestao .aviso.ok { color: var(--ok); }
+  .titulo-perfil { margin: 0; font: 700 28px/1 var(--display); text-transform: uppercase; letter-spacing: 0.04em; }
   .ranking-aba { display: grid; gap: 16px; width: 100%; max-width: 520px; justify-self: center; }
   .conta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
   .conta b { color: var(--ink); font-weight: 600; }
@@ -288,6 +292,7 @@
     <div class="marca">
       <h1>Ouvido</h1>
     </div>
+    <div class="lado">
     <label class="instrumento">
       <span class="rotulo">Instrumento</span>
       <select id="instrument">
@@ -300,13 +305,14 @@
         <option value="do">Instrumento em Dó</option>
       </select>
     </label>
+    <button type="button" class="perfil-botao" id="profileBtn">Meu perfil</button>
+    </div>
   </header>
 
   <nav class="modos" role="tablist">
     <button role="tab" id="modeNote" aria-selected="true">Nota</button>
     <button role="tab" id="modeInterval" aria-selected="false">Intervalo</button>
     <button role="tab" id="modeMelody" aria-selected="false">Melodia</button>
-    <button role="tab" id="modeRanking" aria-selected="false">Ranking</button>
     <button role="tab" id="modeSuggest" aria-selected="false">Sugestões</button>
     <button role="tab" id="modeTheory" aria-selected="false" hidden>Teoria</button>
   </nav>
@@ -325,6 +331,7 @@
   </section>
 
   <section id="rankingTab" class="ranking-aba" hidden>
+    <h2 class="titulo-perfil">Meu perfil</h2>
     <div class="painel conta">
       <span id="accountText">Carregando…</span>
       <button class="acao principal" id="loginBtn" type="button" hidden>Entrar com Google</button>
@@ -339,7 +346,7 @@
           <select id="rankLevel"><option value="0">Fácil</option><option value="1">Médio</option><option value="2">Extensão toda</option></select>
         </label>
       </div>
-      <p class="rotulo">Melhor sequência</p>
+      <p class="rotulo">Ranking · melhor sequência</p>
       <ol class="lista-ranking" id="rankingList"></ol>
     </div>
   </section>
@@ -1158,7 +1165,7 @@ for (const [id, style] of [["styleFree", "livre"], ["stylePhases", "fases"]]) {
   });
 }
 
-const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["modeRanking", "ranking"], ["modeSuggest", "suggest"], ["modeTheory", "theory"]];
+const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["profileBtn", "ranking"], ["modeSuggest", "suggest"], ["modeTheory", "theory"]];
 /* Modos em que se joga; Ranking e Teoria são abas sem rodada. */
 const isPlayMode = mode => mode in MODE_NAMES;
 
