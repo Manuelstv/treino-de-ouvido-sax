@@ -705,7 +705,7 @@ function generateMelody(low, high, length, onlyNaturals) {
   return null;
 }
 
-/* Fases do modo Melodia. Cada fase tem 10 melodias fixas de 5 notas que só
+/* Fases do modo Melodia. Cada fase tem 5 melodias fixas de 5 notas que só
    andam pelos intervalos permitidos (em semitons, subindo ou descendo). A
    partir da segunda fase, toda melodia usa ao menos um intervalo novo. */
 const PHASES = [
@@ -723,11 +723,13 @@ const PHASES = [
   { name: "Fase 12", hint: "+ 7ªs", steps: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], must: [10, 11] },
   { name: "Fase 13", hint: "tudo, 6 notas", steps: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], notes: 6 },
 ];
-const PHASE_SIZE = 10, PHASE_NOTES = 5;
+const PHASE_SIZE = 5, PHASE_NOTES = 5;
 /* O progresso salvo tem uma posição por fase; fases novas começam do zero. */
 for (const k of ["phaseProgress", "phaseErrors", "phaseStars"]) {
   settings[k] = Array.from({ length: PHASES.length }, (_, i) => settings[k]?.[i] || 0);
 }
+/* Quem estava no meio de uma fase quando ela tinha mais melodias continua da última. */
+settings.phaseProgress = settings.phaseProgress.map(done => Math.min(done, PHASE_SIZE - 1));
 
 /* Sorteio com semente: os mesmos números dados geram sempre a mesma
    sequência. É o que faz as melodias de uma fase serem sempre as mesmas. */
@@ -740,7 +742,7 @@ function seededRandom(seed) {
   };
 }
 
-/* Monta as 10 melodias da fase dentro da faixa de notas, todas diferentes
+/* Monta as melodias da fase dentro da faixa de notas, todas diferentes
    entre si (inclusive mudando de oitava). Cada uma começa numa nota natural, pra soar menos estranha, e
    nunca repete a nota anterior. Devolve null se a faixa não comportar. */
 const phaseCache = new Map();
@@ -777,8 +779,8 @@ function phaseMelodies(phaseIndex, low, high) {
 const playingPhases = () => settings.mode === "melody" && settings.melodyStyle === "fases";
 const phaseUnlocked = i => i === 0 || settings.phaseStars[i - 1] > 0;
 
-/* Estrelas de uma tentativa completa da fase, pelos erros somados nas 10
-   melodias: nenhum erro vale 5; 1 a 2, 4; 3 a 5, 3; 6 a 9, 2; 10 ou mais, 1. */
+/* Estrelas de uma tentativa completa da fase, pelos erros somados nas
+   melodias dela: nenhum erro vale 5; 1 a 2, 4; 3 a 5, 3; 6 a 9, 2; 10 ou mais, 1. */
 const starsFor = errors => errors === 0 ? 5 : errors <= 2 ? 4 : errors <= 5 ? 3 : errors <= 9 ? 2 : 1;
 const starText = n => "★".repeat(n) + "☆".repeat(5 - n);
 
