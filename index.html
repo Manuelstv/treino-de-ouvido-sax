@@ -236,6 +236,18 @@
     button.acao:disabled, .acoes kbd { display: none; }
   }
 
+  .conta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+  .conta b { color: var(--ink); font-weight: 600; }
+  .conta button.acao { padding: 9px 14px; font-size: 14px; }
+  .ranking h2 { margin: 0 0 4px; }
+  .ranking .filtro { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+  .ranking ol { margin: 0 0 18px; padding: 0; list-style: none; display: grid; gap: 6px; max-height: 50vh; overflow-y: auto; }
+  .ranking li { display: grid; grid-template-columns: 2ch 1fr auto; gap: 10px; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .ranking li.eu { color: var(--brass); font-weight: 600; }
+  .ranking .pos { font: 500 13px var(--mono); color: var(--muted); }
+  .ranking .nome { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ranking .pts { font: 500 15px var(--mono); font-variant-numeric: tabular-nums; }
+  .ranking .pts small { color: var(--muted); font-size: 11px; margin-left: 6px; }
   .dica-ios {
     max-width: min(360px, calc(100vw - 32px)); padding: 22px; border: 1px solid var(--line); border-radius: 6px;
     background: var(--surface); color: var(--ink);
@@ -320,6 +332,13 @@
     <span>puladas<b id="skips">0</b></span>
   </div>
 
+  <div class="conta" id="account" hidden>
+    <span id="accountText">Entre pra sua melhor sequência valer no ranking.</span>
+    <button class="acao" id="loginBtn" type="button">Entrar com Google</button>
+    <button class="acao" id="rankingBtn" type="button" hidden>Ranking</button>
+    <button class="acao" id="logoutBtn" type="button" hidden>Sair</button>
+  </div>
+
   <button class="acao editar" id="settingsBtn" aria-expanded="false" aria-controls="settingsPanel">Editar ajustes</button>
 
   <section class="painel ajustes" id="settingsPanel" hidden>
@@ -363,6 +382,13 @@
     <li>Tire o iPhone do <b>modo silencioso</b> (chave ou botão na lateral). No silencioso, o som da página não toca.</li>
   </ol>
   <form method="dialog"><button class="acao principal">Entendi</button></form>
+</dialog>
+
+<dialog class="dica-ios ranking" id="rankingDialog">
+  <h2>Ranking</h2>
+  <p class="filtro" id="rankingFilter"></p>
+  <ol id="rankingList"></ol>
+  <form method="dialog"><button class="acao principal">Fechar</button></form>
 </dialog>
 
 <script>
@@ -725,6 +751,7 @@ function markSolved() {
   solved = true; revealed = true;
   hits++; streak++;
   $("hits").textContent = hits; $("streak").textContent = streak;
+  window.ranking?.recordHit(rankingKey(), streak);
   setStatus("Acertou!", "ok");
   renderTarget();
   nextTimer = setTimeout(newRound, 1500);
@@ -848,6 +875,22 @@ function listen() {
   requestAnimationFrame(listen);
 }
 
+/* ---------- Ranking ---------- */
+
+const MODE_NAMES = { note: "Nota", interval: "Intervalo", melody: "Melodia" };
+const LEVEL_NAMES = ["Fácil", "Médio", "Extensão toda"];
+
+/* Identifica em qual ranking o jogo atual conta: o modo e o nível da faixa
+   de notas (Fácil, Médio ou Extensão toda), qualquer que seja o instrumento. */
+function rankingKey() {
+  const level = Math.max(0, INSTRUMENTS[settings.instrument].ranges.findIndex(([v]) => v === settings.range));
+  return `${settings.mode}-${level}`;
+}
+function rankingLabel(key) {
+  const [mode, level] = key.split("-");
+  return `${MODE_NAMES[mode]} · ${LEVEL_NAMES[level]}`;
+}
+
 /* ---------- Controles ---------- */
 
 function applySettingsToForm() {
@@ -958,9 +1001,14 @@ function pressKey(m, key) {
   setTimeout(() => key.classList.remove(cls), 350);
 }
 
+/* Zera a sequência. Uma sequência só vale pro ranking se foi feita inteira
+   no mesmo modo, faixa e instrumento. */
+function resetStreak() { streak = 0; $("streak").textContent = 0; }
+
 function onSettingChange(apply) {
   return e => {
     apply(e.target);
+    resetStreak();
     saveSettings();
     applySettingsToForm();
     buildKeyboard();
@@ -995,7 +1043,7 @@ $("direction").addEventListener("change", onSettingChange(t => settings.directio
 for (const [id, mode] of MODES) {
   $(id).addEventListener("click", () => {
     if (settings.mode === mode) return;
-    settings.mode = mode; saveSettings(); applySettingsToForm();
+    settings.mode = mode; saveSettings(); applySettingsToForm(); resetStreak();
     if (mode === "theory") { clearTimeout(nextTimer); round = null; follower = null; }
     else if (ctx) newRound();
   });
@@ -1180,5 +1228,87 @@ if (isIOS && !settings.iosTipSeen && $("iosTip").showModal) {
   $("iosTip").showModal();
 }
 </script>
-</body>
+
+<script type="module">
+/* Conta com login do Google e ranking entre amigos, guardados no Firebase.
+   Sem configuração, ou se o Firebase não carregar, o app segue igual, só
+   sem conta e sem ranking. */
+const FIREBASE_CONFIG = null;
+const SDK = "https://www.gstatic.com/firebasejs/10.12.2";
+
+async function startRanking() {
+  if (!FIREBASE_CONFIG) return;
+  let app, auth, fs;
+  try {
+    app = await import(`${SDK}/firebase-app.js`);
+    auth = await import(`${SDK}/firebase-auth.js`);
+    fs = await import(`${SDK}/firebase-firestore.js`);
+  } catch { return; }
+  const fb = app.initializeApp(FIREBASE_CONFIG);
+  const authApi = auth.getAuth(fb);
+  const db = fs.getFirestore(fb);
+  let user = null, best = {};
+
+  $("account").hidden = false;
+  $("loginBtn").addEventListener("click", async () => {
+    try { await auth.signInWithPopup(authApi, new auth.GoogleAuthProvider()); }
+    catch (e) {
+      if (e?.code === "auth/popup-blocked") $("accountText").textContent = "O navegador bloqueou a janela de login. Libere popups pra esta página e tente de novo.";
+    }
+  });
+  $("logoutBtn").addEventListener("click", () => auth.signOut(authApi));
+  $("rankingBtn").addEventListener("click", showRanking);
+
+  auth.onAuthStateChanged(authApi, async u => {
+    user = u; best = {};
+    $("loginBtn").hidden = !!u; $("rankingBtn").hidden = !u; $("logoutBtn").hidden = !u;
+    if (!u) { $("accountText").textContent = "Entre pra sua melhor sequência valer no ranking."; return; }
+    $("accountText").replaceChildren("Jogando como ", Object.assign(document.createElement("b"), { textContent: u.displayName || "você" }));
+    try {
+      const snap = await fs.getDoc(fs.doc(db, "jogadores", u.uid));
+      best = snap.exists() ? (snap.data().melhores || {}) : {};
+    } catch {}
+  });
+
+  /* Soma o acerto ao total da pessoa e, se a sequência atual passou a melhor
+     dela nesse ranking, guarda a nova marca. */
+  window.ranking = {
+    recordHit(key, streak) {
+      if (!user) return;
+      const data = { nome: user.displayName || "Sem nome", acertos: fs.increment(1), atualizado: fs.serverTimestamp() };
+      if (streak > (best[key] || 0)) { best[key] = streak; data.melhores = { [key]: streak }; }
+      fs.setDoc(fs.doc(db, "jogadores", user.uid), data, { merge: true }).catch(() => {});
+    },
+  };
+
+  /* Mostra as 20 melhores sequências do modo e faixa que estão em jogo. */
+  async function showRanking() {
+    const key = rankingKey();
+    $("rankingFilter").textContent = `Melhor sequência em ${rankingLabel(key)}`;
+    const list = $("rankingList");
+    list.replaceChildren(Object.assign(document.createElement("li"), { textContent: "Carregando…" }));
+    $("rankingDialog").showModal();
+    try {
+      const q = fs.query(fs.collection(db, "jogadores"), fs.orderBy(`melhores.${key}`, "desc"), fs.limit(20));
+      const docs = (await fs.getDocs(q)).docs;
+      list.replaceChildren();
+      if (!docs.length) list.append(Object.assign(document.createElement("li"), { textContent: "Ninguém pontuou aqui ainda. Seja o primeiro!" }));
+      docs.forEach((d, i) => {
+        const p = d.data();
+        const li = document.createElement("li");
+        if (d.id === user?.uid) li.className = "eu";
+        const pts = Object.assign(document.createElement("span"), { className: "pts", textContent: p.melhores[key] });
+        pts.append(Object.assign(document.createElement("small"), { textContent: `${p.acertos || 0} acertos` }));
+        li.append(Object.assign(document.createElement("span"), { className: "pos", textContent: i + 1 }),
+          Object.assign(document.createElement("span"), { className: "nome", textContent: p.nome || "Sem nome" }), pts);
+        list.append(li);
+      });
+    } catch {
+      list.replaceChildren(Object.assign(document.createElement("li"), { textContent: "Não deu pra carregar o ranking agora. Tente de novo em instantes." }));
+    }
+  }
+}
+startRanking();
+</script>
+
 </html>
