@@ -161,8 +161,8 @@
   .estilo button { font: 600 14px/1 var(--body); padding: 9px 18px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer; }
   .estilo button + button { border-left: 1px solid var(--line); }
   .estilo button[aria-pressed="true"] { background: var(--brass-soft); color: var(--ink); }
-  .lista-fases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 480px; }
-  .lista-fases button { display: grid; gap: 2px; justify-items: center; min-width: 0; padding: 8px 6px; border-radius: 4px; cursor: pointer;
+  .lista-fases { display: flex; gap: 8px; width: 100%; max-width: 640px; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 4px; }
+  .lista-fases button { flex: 0 0 116px; scroll-snap-align: center; display: grid; gap: 2px; justify-items: center; padding: 8px 6px; border-radius: 4px; cursor: pointer;
     font: 600 14px/1.2 var(--body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
   .lista-fases button span { font-size: 12px; font-weight: 500; color: var(--muted); }
   .lista-fases button small { font: 500 11px var(--mono); color: var(--muted); }
@@ -695,8 +695,22 @@ const PHASES = [
   { name: "Fase 1", hint: "2ª maior", steps: [2] },
   { name: "Fase 2", hint: "2ª e 3ªs", steps: [2, 3, 4], must: [3, 4] },
   { name: "Fase 3", hint: "2ª, 3ªs e 5ª", steps: [2, 3, 4, 7], must: [7] },
+  { name: "Fase 4", hint: "2ª menor", steps: [1] },
+  { name: "Fase 5", hint: "2ªs maior e menor", steps: [1, 2], must: [1] },
+  { name: "Fase 6", hint: "3ªs", steps: [3, 4] },
+  { name: "Fase 7", hint: "2ªs e 4ª", steps: [1, 2, 5], must: [5] },
+  { name: "Fase 8", hint: "até a 5ª", steps: [1, 2, 3, 4, 5, 7], must: [5, 7] },
+  { name: "Fase 9", hint: "+ 6ªs", steps: [1, 2, 3, 4, 5, 7, 8, 9], must: [8, 9] },
+  { name: "Fase 10", hint: "+ oitava", steps: [1, 2, 3, 4, 5, 7, 8, 9, 12], must: [12] },
+  { name: "Fase 11", hint: "+ trítono", steps: [1, 2, 3, 4, 5, 6, 7, 8, 9, 12], must: [6] },
+  { name: "Fase 12", hint: "+ 7ªs", steps: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], must: [10, 11] },
+  { name: "Fase 13", hint: "tudo, 6 notas", steps: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], notes: 6 },
 ];
 const PHASE_SIZE = 10, PHASE_NOTES = 5;
+/* O progresso salvo tem uma posição por fase; fases novas começam do zero. */
+for (const k of ["phaseProgress", "phaseErrors", "phaseStars"]) {
+  settings[k] = Array.from({ length: PHASES.length }, (_, i) => settings[k]?.[i] || 0);
+}
 
 /* Sorteio com semente: os mesmos números dados geram sempre a mesma
    sequência. É o que faz as melodias de uma fase serem sempre as mesmas. */
@@ -710,7 +724,7 @@ function seededRandom(seed) {
 }
 
 /* Monta as 10 melodias da fase dentro da faixa de notas, todas diferentes
-   entre si. Cada uma começa numa nota natural, pra soar menos estranha, e
+   entre si (inclusive mudando de oitava). Cada uma começa numa nota natural, pra soar menos estranha, e
    nunca repete a nota anterior. Devolve null se a faixa não comportar. */
 const phaseCache = new Map();
 function phaseMelodies(phaseIndex, low, high) {
@@ -724,7 +738,7 @@ function phaseMelodies(phaseIndex, low, high) {
   const list = [], seen = new Set();
   for (let attempt = 0; attempt < 5000 && list.length < PHASE_SIZE; attempt++) {
     const notes = [choose(starts)], moves = [];
-    while (notes.length < PHASE_NOTES) {
+    while (notes.length < (phase.notes || PHASE_NOTES)) {
       const options = [];
       for (const st of phase.steps) for (const dir of [1, -1]) {
         const n = notes[notes.length - 1] + dir * st;
@@ -734,8 +748,9 @@ function phaseMelodies(phaseIndex, low, high) {
       notes.push(n); moves.push(st);
     }
     if (phase.must && !moves.some(st => phase.must.includes(st))) continue;
-    if (seen.has(notes.join())) continue;
-    seen.add(notes.join()); list.push(notes);
+    const names = notes.map(n => n % 12).join();   // mesma melodia em outra oitava conta como repetida
+    if (seen.has(names)) continue;
+    seen.add(names); list.push(notes);
   }
   const result = list.length === PHASE_SIZE ? list : null;
   phaseCache.set(key, result);
@@ -914,6 +929,7 @@ function renderPhases() {
     const status = !phaseUnlocked(i) ? "🔒 bloqueada" : stars ? starText(stars) : `${done} de ${PHASE_SIZE}`;
     b.append(ph.name, Object.assign(document.createElement("span"), { textContent: ph.hint }),
       Object.assign(document.createElement("small"), { textContent: status }));
+    if (i === settings.phase) requestAnimationFrame(() => b.scrollIntoView({ block: "nearest", inline: "center" }));
     b.addEventListener("click", () => {
       if (settings.phase === i) return;
       settings.phase = i; saveSettings(); renderPhases();
