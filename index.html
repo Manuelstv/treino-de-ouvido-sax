@@ -317,8 +317,6 @@
   .ranking-aba { display: grid; gap: 16px; width: 100%; max-width: 520px; justify-self: center; }
   .conta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
   .conta b { color: var(--ink); font-weight: 600; }
-  .filtros { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .filtros label { display: grid; gap: 6px; }
   .lista-ranking { margin: 0; padding: 0; list-style: none; display: grid; }
   .lista-ranking li { display: grid; grid-template-columns: 3ch 1fr auto; gap: 10px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .lista-ranking li:last-child { border-bottom: 0; }
@@ -393,15 +391,7 @@
       <button class="acao" id="logoutBtn" type="button" hidden>Sair</button>
     </div>
     <div class="painel" id="rankingBoard" hidden>
-      <div class="filtros">
-        <label><span class="rotulo">Modo</span>
-          <select id="rankMode"><option value="note">Nota</option><option value="interval">Intervalo</option><option value="melody">Melodia</option></select>
-        </label>
-        <label><span class="rotulo">Nível</span>
-          <select id="rankLevel"><option value="0">Fácil</option><option value="1">Médio</option><option value="2">Extensão toda</option></select>
-        </label>
-      </div>
-      <p class="rotulo">Ranking · melhor sequência</p>
+      <p class="rotulo">Ranking geral · total de acertos</p>
       <ol class="lista-ranking" id="rankingList"></ol>
     </div>
   </section>
@@ -1371,7 +1361,6 @@ $("anyOctave").addEventListener("change", e => { settings.anyOctave = e.target.c
 $("direction").addEventListener("change", onSettingChange(t => settings.direction = t.value));
 function setMode(mode) {
   if (settings.mode === mode) return;
-  if (mode === "ranking" && isPlayMode(settings.mode)) window.ranking?.preset(rankingKey());
   settings.mode = mode; saveSettings(); applySettingsToForm(); resetStreak();
   if (mode === "ranking") window.ranking?.show();
   if (!isPlayMode(mode)) { clearTimeout(nextTimer); round = null; follower = null; }
@@ -1599,13 +1588,11 @@ async function startRanking() {
     }
   });
   $("logoutBtn").addEventListener("click", () => auth.signOut(authApi));
-  $("rankMode").addEventListener("change", show);
-  $("rankLevel").addEventListener("change", show);
 
   auth.onAuthStateChanged(authApi, async u => {
     user = u; best = {};
     $("loginBtn").hidden = !!u; $("logoutBtn").hidden = !u; $("rankingBoard").hidden = !u;
-    if (!u) { unavailable("Entre com Google pra ver o ranking e ter sua melhor sequência nele."); return; }
+    if (!u) { unavailable("Entre com Google pra ver o ranking e somar seus acertos nele."); return; }
     $("accountText").replaceChildren("Jogando como ", Object.assign(document.createElement("b"), { textContent: u.displayName || "você" }));
     show();
     try {
@@ -1614,17 +1601,16 @@ async function startRanking() {
     } catch {}
   });
 
-  /* Mostra as 20 melhores sequências do modo e nível escolhidos. Se a busca
-     não responder em 10 segundos, avisa em vez de ficar carregando. */
+  /* Mostra as 20 pessoas com mais acertos, somando todos os modos e níveis.
+     Se a busca não responder em 10 segundos, avisa em vez de ficar carregando. */
   async function show() {
     if (!user || settings.mode !== "ranking") return;
-    const key = `${$("rankMode").value}-${$("rankLevel").value}`;
     const mine = ++request;
     const list = $("rankingList");
     const note = text => list.replaceChildren(Object.assign(document.createElement("li"), { className: "vazio", textContent: text }));
     note("Carregando…");
     try {
-      const q = fs.query(fs.collection(db, "jogadores"), fs.orderBy(`melhores.${key}`, "desc"), fs.limit(20));
+      const q = fs.query(fs.collection(db, "jogadores"), fs.orderBy("acertos", "desc"), fs.limit(20));
       const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 10000));
       const docs = (await Promise.race([fs.getDocs(q), timeout])).docs;
       if (mine !== request) return;
@@ -1633,8 +1619,7 @@ async function startRanking() {
         const p = d.data();
         const li = document.createElement("li");
         if (d.id === user.uid) li.className = "eu";
-        const pts = Object.assign(document.createElement("span"), { className: "pts", textContent: p.melhores[key] });
-        pts.append(Object.assign(document.createElement("small"), { textContent: `${p.acertos || 0} acertos` }));
+        const pts = Object.assign(document.createElement("span"), { className: "pts", textContent: p.acertos || 0 });
         li.append(Object.assign(document.createElement("span"), { className: "pos", textContent: `${i + 1}º` }),
           Object.assign(document.createElement("span"), { className: "nome", textContent: p.nome || "Sem nome" }), pts);
         return li;
@@ -1657,8 +1642,6 @@ async function startRanking() {
     saveSuggestion(data) {
       return fs.addDoc(fs.collection(db, "sugestoes"), { ...data, criada: fs.serverTimestamp() });
     },
-    /* Abre a aba já no modo e nível que estavam sendo jogados. */
-    preset(key) { const [mode, level] = key.split("-"); $("rankMode").value = mode; $("rankLevel").value = level; },
     show,
   };
   show();
