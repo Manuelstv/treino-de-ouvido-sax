@@ -438,7 +438,7 @@
       <div class="segurar" title="Segure a nota certa até encher"><div id="holdBar"></div></div>
       <div class="status" id="status"></div>
       <button class="discreto" id="revealBtn" disabled>Mostrar resposta<kbd>R</kbd></button>
-      <p class="aviso" id="micWarn" hidden>Microfone não conectado: a página não consegue ouvir seu sax. Permita o microfone no navegador ou toque na engrenagem ⚙&#xFE0E; e ligue "Sem instrumento" pra responder pelo teclado.</p>
+      <p class="aviso" id="micWarn" hidden>Microfone não conectado: a página não consegue ouvir seu sax. Permita o microfone no navegador ou toque no ícone de teclado, no canto do painel, pra responder pelo teclado.</p>
     </div>
   </section>
 
@@ -468,11 +468,6 @@
       <select id="range" aria-label="Faixa de notas"></select>
       <label class="linha"><input type="checkbox" id="naturals"> Só notas naturais (sem # e ♭)</label>
       <label class="linha"><input type="checkbox" id="anyOctave"> Aceitar em qualquer oitava</label>
-    </div>
-
-    <div class="grupo">
-      <span class="rotulo">Abrir teclado</span>
-      <label class="linha"><input type="checkbox" id="noInstrument"> Sem instrumento (mostra o teclado)</label>
     </div>
 
     <div class="grupo" id="melodySettings" hidden>
@@ -550,7 +545,7 @@ const INSTRUMENTS = {
 const $ = id => document.getElementById(id);
 const settings = {
   instrument: "alto", offset: 9, range: "60-84", naturals: false, anyOctave: true,
-  noInstrument: false, iosTipSeen: false, mode: "note", intervals: [3, 4, 5, 7, 12], direction: "up", melodyLength: 5,
+  noInstrument: false, iosTipSeen: false, mode: "note", intervals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], direction: "up", melodyLength: 5,
   melodyStyle: "livre", phase: 0, phaseProgress: [0, 0, 0], phaseErrors: [0, 0, 0], phaseStars: [0, 0, 0],
 };
 let saved = {};
@@ -1204,7 +1199,6 @@ function applySettingsToForm() {
   $("range").value = settings.range;
   $("naturals").checked = settings.naturals;
   $("anyOctave").checked = settings.anyOctave;
-  $("noInstrument").checked = settings.noInstrument;
   $("keyboardPanel").hidden = !settings.noInstrument;
   $("keyboardToggle").setAttribute("aria-pressed", settings.noInstrument);
   document.querySelector(".palco").classList.toggle("sem-afinador", settings.noInstrument);
@@ -1354,8 +1348,7 @@ $("naturals").addEventListener("change", onSettingChange(t => settings.naturals 
 $("settingsBtn").addEventListener("click", () => {
   $("settingsDialog").showModal();
 });
-$("noInstrument").addEventListener("change", e => { settings.noInstrument = e.target.checked; saveSettings(); applySettingsToForm(); });
-/* Mesmo ajuste que "Sem instrumento", à mão no painel. */
+/* Liga e desliga o modo teclado: responder tocando as teclas, sem microfone. */
 $("keyboardToggle").addEventListener("click", () => { settings.noInstrument = !settings.noInstrument; saveSettings(); applySettingsToForm(); });
 $("anyOctave").addEventListener("change", e => { settings.anyOctave = e.target.checked; saveSettings(); });
 $("direction").addEventListener("change", onSettingChange(t => settings.direction = t.value));
