@@ -1,6 +1,6 @@
 {
-  "name": "Treino de ouvido no sax",
-  "short_name": "Ouvido",
+  "name": "De ouvido",
+  "short_name": "De ouvido",
   "description": "A página toca uma nota e você responde no instrumento; o microfone diz se acertou.",
   "lang": "pt-BR",
   "start_url": "./",

@@ -1,4 +1,4 @@
-# Treino de ouvido no sax
+# De ouvido
 
 A página toca uma nota e você responde tocando a mesma no instrumento. O microfone escuta e diz se você acertou.
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Ouvido · treino no sax</title>
+<title>De ouvido · treino no sax</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icones/icone-192.png">
 <link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#0c1413" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Ouvido">
+<meta name="apple-mobile-web-app-title" content="De ouvido">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
@@ -343,7 +343,7 @@
 <main>
   <header>
     <div class="marca">
-      <h1>Ouvido</h1>
+      <h1>De ouvido</h1>
     </div>
     <div class="lado">
     <label class="instrumento">
@@ -1178,7 +1178,7 @@ $("suggestForm").addEventListener("submit", async e => {
   const email = fetch(SUGGEST_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ _subject: "Sugestão pro Treino de Ouvido", _template: "table", ...data, nome: data.nome || "(sem nome)" }),
+    body: JSON.stringify({ _subject: "Sugestão pro De ouvido", _template: "table", ...data, nome: data.nome || "(sem nome)" }),
   }).then(res => { if (!res.ok) throw new Error(res.status); });
   /* Sem conexão o Firebase fica esperando em vez de falhar: 10 segundos bastam. */
   const stored = window.ranking
