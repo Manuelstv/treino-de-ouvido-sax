@@ -4,6 +4,13 @@ A página toca uma nota e você responde tocando a mesma no instrumento. O micro
 
 **Usar:** https://manuelstv.github.io/treino-de-ouvido-sax/ (Chrome, Edge ou Safari; permita o microfone).
 
+**Instalar como app** (sem loja, com ícone e funcionando sem internet):
+
+- **Android:** abrir o link no Chrome → menu ⋮ → **Instalar app**.
+- **iPhone:** abrir o link no **Safari** → Compartilhar → **Adicionar à Tela de Início**.
+
+Sem internet, o app abre e toca os instrumentos já usados antes com conexão. Login e ranking precisam de internet.
+
 - **Nota:** a página toca uma nota e você toca a mesma.
 - **Intervalo:** a página toca duas notas e diz qual é a primeira. Você toca a segunda. Dá pra escolher quais intervalos entram e se eles sobem, descem ou os dois.
 - **Melodia:** a página toca uma frase de 4 a 6 notas num tom maior e você repete na ordem. A tela diz qual é a primeira nota; errar uma nota volta a melodia pro começo. Tem dois jeitos de jogar: **Livre** (melodias sorteadas num tom maior) e **Fases**, com 13 fases de 5 melodias fixas. Cada fase só usa alguns intervalos, que vão aumentando: começa só com 2ª maior e termina com todos os intervalos em melodias de 6 notas. A lista fica em `PHASES`, no `index.html`. Cada fase libera a seguinte e dá de 1 a 5 estrelas pelos erros (nota errada ou resposta mostrada): nenhum erro vale 5; 1 a 2, 4; 3 a 5, 3; 6 a 9, 2; 10 ou mais, 1. Dá pra jogar de novo pra melhorar; fica a melhor marca. O progresso fica guardado no aparelho.
