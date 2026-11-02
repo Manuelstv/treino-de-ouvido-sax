@@ -50,6 +50,10 @@
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
+  /* É um app, não um texto: tocar e segurar não seleciona palavras nem abre o
+     menu de copiar. Os campos de escrever continuam selecionáveis. */
+  body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  input, textarea { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
   main { max-width: 980px; margin: 0 auto; padding-block: 28px 56px; display: grid; gap: 22px; }
 
   header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
@@ -78,14 +82,6 @@
     border: 1px solid var(--line); background: var(--surface); color: var(--ink);
   }
 
-  .modos { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--line); }
-  @media (max-width: 480px) { .modos button { padding: 10px 11px 12px; font-size: 20px; } }
-  .modos button {
-    font: 700 22px/1 var(--display); letter-spacing: 0.06em; text-transform: uppercase;
-    background: none; border: 0; color: var(--muted); cursor: pointer;
-    padding: 10px 18px 12px; border-bottom: 3px solid transparent; margin-bottom: -1px;
-  }
-  .modos button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brass); }
 
   .palco { display: grid; width: 100%; max-width: 480px; justify-self: center; }
   /* Respondendo pelo teclado, o que é do microfone não serve pra nada e some. */
@@ -295,8 +291,6 @@
     .marca h1 { font-size: 44px; }
     .instrumento .rotulo, .so-largo { display: none; }
     .instrumento select { padding: 7px 8px; font-size: 15px; }
-    .modos { flex-wrap: nowrap; }
-    .modos button { flex: 1; padding: 8px 2px 10px; font-size: 18px; }
     .treino { gap: 12px; }
     .palco .painel { padding: 10px; gap: 6px; }
     .nota-alvo .grande { font-size: 30px; }
@@ -370,20 +364,16 @@
       <button type="button" class="perfil-botao" id="profileBtn">Meu perfil</button>
       <button type="button" class="engrenagem" id="settingsBtn" aria-label="Ajustes" title="Ajustes" aria-haspopup="dialog">⚙&#xFE0E;</button>
     </div>
+    <button type="button" class="perfil-botao" id="modeSuggest">Sugestões</button>
+    </div>
     </div>
   </header>
 
-  <nav class="modos" role="tablist">
-    <button role="tab" id="modeNote" aria-selected="true">Nota</button>
-    <button role="tab" id="modeInterval" aria-selected="false">Intervalo</button>
-    <button role="tab" id="modeMelody" aria-selected="false">Melodia</button>
-    <button role="tab" id="modeSuggest" aria-selected="false">Sugestões</button>
-    <button role="tab" id="modeTheory" aria-selected="false" hidden>Teoria</button>
-  </nav>
 
   <section id="theory" class="teoria" hidden></section>
 
   <section id="suggestTab" class="ranking-aba" hidden>
+    <button type="button" class="acao voltar" data-back>← Voltar ao treino</button>
     <form class="painel sugestao" id="suggestForm">
       <span class="rotulo">Mande uma sugestão</span>
       <p>Ideia, problema ou algo que faltou no app. Chega direto pra quem faz o app.</p>
@@ -395,6 +385,7 @@
   </section>
 
   <section id="rankingTab" class="ranking-aba" hidden>
+    <button type="button" class="acao voltar" data-back>← Voltar ao treino</button>
     <h2 class="titulo-perfil">Meu perfil</h2>
     <div class="painel conta">
       <span id="accountText">Carregando…</span>
@@ -1247,7 +1238,8 @@ for (const [id, style] of [["styleFree", "livre"], ["stylePhases", "fases"]]) {
   });
 }
 
-const MODES = [["modeNote", "note"], ["modeInterval", "interval"], ["modeMelody", "melody"], ["profileBtn", "ranking"], ["modeSuggest", "suggest"], ["modeTheory", "theory"]];
+/* Botões que levam a telas fora do treino; os modos de jogo ficam no seletor do painel. */
+const MODES = [["profileBtn", "ranking"], ["modeSuggest", "suggest"]];
 /* Modos em que se joga; Ranking e Teoria são abas sem rodada. */
 const isPlayMode = mode => mode in MODE_NAMES;
 
@@ -1377,22 +1369,18 @@ $("noInstrument").addEventListener("change", e => { settings.noInstrument = e.ta
 $("keyboardToggle").addEventListener("click", () => { settings.noInstrument = !settings.noInstrument; saveSettings(); applySettingsToForm(); });
 $("anyOctave").addEventListener("change", e => { settings.anyOctave = e.target.checked; saveSettings(); });
 $("direction").addEventListener("change", onSettingChange(t => settings.direction = t.value));
-for (const [id, mode] of MODES) {
-  $(id).addEventListener("click", () => {
-    if (settings.mode === mode) return;
-    if (mode === "ranking" && isPlayMode(settings.mode)) window.ranking?.preset(rankingKey());
-    settings.mode = mode; saveSettings(); applySettingsToForm(); resetStreak();
-    if (mode === "ranking") window.ranking?.show();
-    if (!isPlayMode(mode)) { clearTimeout(nextTimer); round = null; follower = null; }
-    else if (ctx) newRound();
-  });
+function setMode(mode) {
+  if (settings.mode === mode) return;
+  if (mode === "ranking" && isPlayMode(settings.mode)) window.ranking?.preset(rankingKey());
+  settings.mode = mode; saveSettings(); applySettingsToForm(); resetStreak();
+  if (mode === "ranking") window.ranking?.show();
+  if (!isPlayMode(mode)) { clearTimeout(nextTimer); round = null; follower = null; }
+  else if (ctx) newRound();
 }
-
-/* O seletor do painel faz o mesmo que clicar na aba do modo. */
-$("modeSelect").addEventListener("change", e => {
-  const tab = MODES.find(([, mode]) => mode === e.target.value)[0];
-  $(tab).click();
-});
+for (const [id, mode] of MODES) $(id).addEventListener("click", () => setMode(mode));
+$("modeSelect").addEventListener("change", e => setMode(e.target.value));
+/* O seletor guarda o último modo de jogo, então voltar cai nele. */
+for (const b of document.querySelectorAll("[data-back]")) b.addEventListener("click", () => setMode($("modeSelect").value));
 
 /* Começa o jogo. Sem microfone (recusado, ausente ou fora de https), o jogo
    segue só com o teclado da tela. */
